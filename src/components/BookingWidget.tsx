@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { MapPin, Calendar, Clock, Users, Search, CarFront } from 'lucide-react';
-import { locations, vehicles, getPrice } from '../data/pricing';
+import { locations, vehicles } from '../data/pricing';
 import { motion } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useData } from '../context/DataContext';
 import CheckoutModal from './CheckoutModal';
 
 export default function BookingWidget() {
@@ -10,15 +11,32 @@ export default function BookingWidget() {
   const [to, setTo] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+  const [returnDate, setReturnDate] = useState('');
+  const [returnTime, setReturnTime] = useState('');
+  const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [pax, setPax] = useState('1');
   
   const [showResults, setShowResults] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<any>(null);
+  const [timeError, setTimeError] = useState('');
   const { language, t } = useLanguage();
+  const { getBasePrice, isTimeBlocked, errorDetails } = useData();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    setTimeError('');
+
+    if (isTimeBlocked(date, time)) {
+      setTimeError(language === 'ru' ? 'Это время недоступно для бронирования' : 'This time is not available for booking');
+      return;
+    }
+
+    if (isRoundTrip && isTimeBlocked(returnDate, returnTime)) {
+      setTimeError(language === 'ru' ? 'Время обратного рейса недоступно' : 'Return time is not available');
+      return;
+    }
+
     if (from && to) {
       setShowResults(true);
     }
@@ -39,11 +57,42 @@ export default function BookingWidget() {
     return t('booking.passenger5');
   };
 
+  const calculateTotalPrice = (basePrice: number) => {
+    return isRoundTrip ? basePrice * 2 : basePrice;
+  };
+
   return (
     <div className="w-full max-w-5xl mx-auto glass-panel rounded-[2rem] shadow-2xl overflow-hidden">
       <div className="p-6 md:p-8">
-        <h2 className="text-2xl font-bold text-white mb-6 tracking-tight">{t('booking.title')}</h2>
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+          <h2 className="text-2xl font-bold text-white tracking-tight">{t('booking.title')}</h2>
+          
+          <div className="flex bg-white/5 p-1 rounded-xl border border-white/10 w-fit">
+            <button
+              onClick={() => setIsRoundTrip(false)}
+              className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${!isRoundTrip ? 'bg-white text-black' : 'text-white/60 hover:text-white'}`}
+            >
+              {t('booking.oneWay')}
+            </button>
+            <button
+              onClick={() => setIsRoundTrip(true)}
+              className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${isRoundTrip ? 'bg-white text-black' : 'text-white/60 hover:text-white'}`}
+            >
+              {t('booking.roundTrip')}
+            </button>
+          </div>
+        </div>
         
+        {errorDetails && (
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+            <p className="font-bold mb-1">Google Sheets Connection Error:</p>
+            <p>{errorDetails}</p>
+            <p className="mt-2 text-xs opacity-80">
+              To fix this: Go to your Google Sheet &rarr; Extensions &rarr; Apps Script &rarr; Deploy &rarr; Manage deployments &rarr; Edit (pencil icon) &rarr; Ensure "Execute as" is "Me" and "Who has access" is "Anyone" &rarr; Deploy.
+            </p>
+          </div>
+        )}
+
         <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="relative md:col-span-2">
             <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">{t('booking.from')}</label>
@@ -139,7 +188,39 @@ export default function BookingWidget() {
             </div>
           </div>
 
-          <div className="relative md:col-span-1 flex items-end">
+          {isRoundTrip && (
+            <>
+              <div className="relative md:col-span-2">
+                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">{t('booking.returnDate')}</label>
+                <div className="relative">
+                  <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 w-5 h-5" />
+                  <input 
+                    type="date" 
+                    value={returnDate}
+                    onChange={(e) => setReturnDate(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl transition-all [color-scheme:dark]"
+                    required={isRoundTrip}
+                  />
+                </div>
+              </div>
+
+              <div className="relative md:col-span-2">
+                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">{t('booking.returnTime')}</label>
+                <div className="relative">
+                  <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 w-5 h-5" />
+                  <input 
+                    type="time" 
+                    value={returnTime}
+                    onChange={(e) => setReturnTime(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl transition-all [color-scheme:dark]"
+                    required={isRoundTrip}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
+          <div className={`relative flex items-end ${isRoundTrip ? 'md:col-span-1' : 'md:col-span-1'}`}>
             <button 
               type="submit"
               className="w-full py-3.5 px-4 bg-white hover:bg-white/90 text-black font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
@@ -148,6 +229,11 @@ export default function BookingWidget() {
               <span>{t('booking.search')}</span>
             </button>
           </div>
+          {timeError && (
+            <div className="md:col-span-5 text-red-400 text-sm mt-1 font-medium">
+              {timeError}
+            </div>
+          )}
         </form>
       </div>
 
@@ -166,8 +252,10 @@ export default function BookingWidget() {
           ) : (
             <div className="space-y-4">
               {vehicles.filter(v => v.pax >= parseInt(pax)).map(vehicle => {
-                const price = getPrice(from, to, vehicle.id);
-                if (!price) return null;
+                const basePrice = getBasePrice(from, to);
+                if (!basePrice) return null;
+                const vehiclePrice = Math.round(basePrice * vehicle.multiplier);
+                const totalPrice = calculateTotalPrice(vehiclePrice);
 
                 return (
                   <div key={vehicle.id} className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 flex flex-col md:flex-row items-center gap-6 hover:bg-white/10 transition-colors">
@@ -182,7 +270,7 @@ export default function BookingWidget() {
                           <p className="text-white/60 text-sm">{vehicle.description[language]}</p>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-bold text-white">€{price}</div>
+                          <div className="text-2xl font-bold text-white">€{totalPrice}</div>
                           <div className="text-xs text-white/40">{t('booking.perVehicle')}</div>
                         </div>
                       </div>
@@ -211,7 +299,7 @@ export default function BookingWidget() {
                 );
               })}
               
-              {!vehicles.some(v => v.pax >= parseInt(pax) && getPrice(from, to, v.id) !== null) && (
+              {!vehicles.some(v => v.pax >= parseInt(pax) && getBasePrice(from, to) !== null) && (
                 <div className="text-center py-8 text-white/50">
                   {t('booking.noOptions')}
                 </div>
@@ -233,8 +321,11 @@ export default function BookingWidget() {
             date,
             time,
             pax,
+            isRoundTrip,
+            returnDate,
+            returnTime
           }}
-          price={getPrice(from, to, selectedVehicle.id) || 0}
+          price={calculateTotalPrice(Math.round((getBasePrice(from, to) || 0) * selectedVehicle.multiplier))}
           vehicleName={selectedVehicle.name[language]}
         />
       )}

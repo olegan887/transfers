@@ -17,6 +17,9 @@ interface CheckoutModalProps {
     date: string;
     time: string;
     pax: string;
+    isRoundTrip: boolean;
+    returnDate: string;
+    returnTime: string;
   };
   price: number;
   vehicleName: string;
@@ -37,12 +40,13 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     setError('');
 
     try {
-      const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec';
+      let GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec';
+      GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
 
       const payload = {
         name,
         phone,
-        email: '', // Not collected in the form currently, but added for completeness
+        email: '', 
         pickup: bookingData.fromName,
         dropoff: bookingData.toName,
         date: bookingData.date,
@@ -50,7 +54,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
         passengers: bookingData.pax,
         vehicle: vehicleName,
         price: price,
-        comments: `Flight: ${flightNumber} | Address: ${address}`
+        comments: `Flight: ${flightNumber} | Address: ${address}${bookingData.isRoundTrip ? ` | ROUND TRIP: Return on ${bookingData.returnDate} at ${bookingData.returnTime}` : ''}`
       };
 
       const response = await fetch(GOOGLE_SCRIPT_URL, {
@@ -107,8 +111,14 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
                   <span className="text-white/60 text-sm">{bookingData.fromName} → {bookingData.toName}</span>
                   <span className="text-white font-bold">€{price}</span>
                 </div>
-                <div className="text-white/40 text-xs flex gap-3">
+                <div className="text-white/40 text-xs flex flex-wrap gap-x-3 gap-y-1">
                   <span>{bookingData.date} {bookingData.time}</span>
+                  {bookingData.isRoundTrip && (
+                    <>
+                      <span className="text-white/20">|</span>
+                      <span className="text-blue-400">Return: {bookingData.returnDate} {bookingData.returnTime}</span>
+                    </>
+                  )}
                   <span>•</span>
                   <span>{bookingData.pax} pax</span>
                   <span>•</span>
