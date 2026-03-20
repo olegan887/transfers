@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cyprus-airport-transfer.co/sitemap.xml

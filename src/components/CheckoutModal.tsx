@@ -189,10 +189,13 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
             </div>
 
             <div className="p-4 md:p-5 border-t border-white/10 bg-black/50">
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-2">
                 <span className="text-white/60 text-sm">{t('booking.total')}</span>
                 <span className="text-xl font-bold text-white">€{price}</span>
               </div>
+              <p className="text-[10px] text-white/40 text-center mb-4">
+                {t('booking.securePayment')}
+              </p>
               <button
                 form="checkout-form"
                 type="submit"

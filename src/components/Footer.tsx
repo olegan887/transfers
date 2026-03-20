@@ -1,9 +1,19 @@
-import React from 'react';
-import { Car, Phone, Mail, MapPin } from 'lucide-react';
+import React, { useState } from 'react';
+import { Car, MessageCircle, Mail, MapPin } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import LegalModal from './LegalModal';
 
 export default function Footer() {
   const { t } = useLanguage();
+  const [legalModal, setLegalModal] = useState<{ isOpen: boolean; type: 'terms' | 'privacy' }>({
+    isOpen: false,
+    type: 'terms'
+  });
+
+  const openLegal = (e: React.MouseEvent, type: 'terms' | 'privacy') => {
+    e.preventDefault();
+    setLegalModal({ isOpen: true, type });
+  };
 
   return (
     <footer className="bg-[#050505] text-white/60 py-20 border-t border-white/10 relative overflow-hidden">
@@ -25,9 +35,9 @@ export default function Footer() {
             <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">{t('footer.contacts')}</h4>
             <ul className="space-y-4 text-sm font-light">
               <li>
-                <a href="tel:+35799123456" className="flex items-center gap-3 hover:text-white transition-colors">
-                  <Phone className="w-4 h-4 text-white/40" />
-                  +357 99 123 456
+                <a href="https://wa.me/35796867289" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#25D366] transition-colors">
+                  <MessageCircle className="w-4 h-4 text-white/40" />
+                  WhatsApp
                 </a>
               </li>
               <li>
@@ -37,8 +47,8 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <MapPin className="w-4 h-4 text-white/40" />
-                Larnaca, Cyprus
+                <MapPin className="w-4 h-4 text-white/40 shrink-0" />
+                26 Neofytou Nikolaidi, Paphos 8011, Cyprus
               </li>
             </ul>
           </div>
@@ -48,7 +58,7 @@ export default function Footer() {
             <ul className="space-y-4 text-sm font-light">
               <li><a href="#destinations" className="hover:text-white transition-colors">{t('nav.destinations')}</a></li>
               <li><a href="#features" className="hover:text-white transition-colors">{t('nav.features')}</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">{t('footer.terms')}</a></li>
+              <li><button onClick={(e) => openLegal(e as any, 'terms')} className="hover:text-white transition-colors text-left">{t('footer.terms')}</button></li>
             </ul>
           </div>
 
@@ -60,7 +70,7 @@ export default function Footer() {
             <div className="flex gap-3">
               <div className="w-12 h-8 glass-panel rounded flex items-center justify-center text-[10px] font-bold text-white">VISA</div>
               <div className="w-12 h-8 glass-panel rounded flex items-center justify-center text-[10px] font-bold text-white">MC</div>
-              <div className="w-12 h-8 glass-panel rounded flex items-center justify-center text-[10px] font-bold text-white">CASH</div>
+              <div className="w-16 h-8 glass-panel rounded flex items-center justify-center text-[10px] font-bold text-white">STRIPE</div>
             </div>
           </div>
 
@@ -69,11 +79,17 @@ export default function Footer() {
         <div className="pt-8 border-t border-white/10 text-xs text-center flex flex-col md:flex-row justify-between items-center gap-4 font-light">
           <p>&copy; {new Date().getFullYear()} Cyprus Airport Transfer .co. {t('footer.rights')}</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-white transition-colors">{t('footer.privacy')}</a>
-            <a href="#" className="hover:text-white transition-colors">{t('footer.terms')}</a>
+            <button onClick={(e) => openLegal(e as any, 'privacy')} className="hover:text-white transition-colors">{t('footer.privacy')}</button>
+            <button onClick={(e) => openLegal(e as any, 'terms')} className="hover:text-white transition-colors">{t('footer.terms')}</button>
           </div>
         </div>
       </div>
+
+      <LegalModal 
+        isOpen={legalModal.isOpen} 
+        type={legalModal.type} 
+        onClose={() => setLegalModal({ ...legalModal, isOpen: false })} 
+      />
     </footer>
   );
 }
