@@ -33,6 +33,9 @@ export default function ContactForm() {
       });
 
       setStatus('success');
+      if (typeof (window as any).gtag_report_conversion === 'function') {
+        (window as any).gtag_report_conversion();
+      }
       setFormData({ name: '', phone: '', email: '', comment: '' });
       
       setTimeout(() => setStatus('idle'), 5000);

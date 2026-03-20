@@ -20,6 +20,13 @@ export default function Header() {
     setLanguage(language === 'ru' ? 'en' : 'ru');
   };
 
+  const handleWhatsAppClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (typeof (window as any).gtag_report_conversion === 'function') {
+      // Don't pass URL so it doesn't redirect, the anchor tag will handle the navigation
+      (window as any).gtag_report_conversion();
+    }
+  };
+
   return (
     <header 
       className={`absolute top-4 md:top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 transition-all duration-500 ${
@@ -30,13 +37,16 @@ export default function Header() {
         isScrolled ? 'glass-panel shadow-2xl shadow-black/50' : 'bg-transparent'
       }`}>
         <div className="flex items-center gap-2">
-          <img src="/logo1.png" alt="Cyprus Airport Transfer" className="h-10 sm:h-12 md:h-24 object-contain" />
+          <a href="/">
+            <img src="/logo1.png" alt="Cyprus Airport Transfer" className="h-10 sm:h-12 md:h-24 object-contain" />
+          </a>
         </div>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
-          <a href="#destinations" className="text-sm font-medium text-white/70 hover:text-white transition-colors">{t('nav.destinations')}</a>
-          <a href="#features" className="text-sm font-medium text-white/70 hover:text-white transition-colors">{t('nav.features')}</a>
+          <a href="/#destinations" className="text-sm font-medium text-white/70 hover:text-white transition-colors">{t('nav.destinations')}</a>
+          <a href="/#features" className="text-sm font-medium text-white/70 hover:text-white transition-colors">{t('nav.features')}</a>
+          <a href="/blog" className="text-sm font-medium text-white/70 hover:text-white transition-colors">{t('nav.blog')}</a>
           
           <div className="flex items-center gap-4 ml-2 pl-6 border-l border-white/10">
             <button 
@@ -46,7 +56,13 @@ export default function Header() {
               <Globe className="w-3.5 h-3.5" />
               {language === 'ru' ? 'EN' : 'RU'}
             </button>
-            <a href="https://wa.me/35796867289" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-semibold text-white bg-[#25D366]/20 hover:bg-[#25D366]/30 text-[#25D366] px-4 py-2 rounded-full transition-colors">
+            <a 
+              href="https://wa.me/35796867289" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onClick={handleWhatsAppClick}
+              className="flex items-center gap-2 text-sm font-semibold text-white bg-[#25D366]/20 hover:bg-[#25D366]/30 text-[#25D366] px-4 py-2 rounded-full transition-colors"
+            >
               <MessageCircle className="w-3.5 h-3.5" />
               WhatsApp
             </a>
@@ -55,7 +71,13 @@ export default function Header() {
 
         {/* Mobile Menu Toggle */}
         <div className="md:hidden flex items-center gap-3 sm:gap-4">
-          <a href="https://wa.me/35796867289" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 bg-[#25D366] text-white rounded-full shadow-lg shadow-[#25D366]/20">
+          <a 
+            href="https://wa.me/35796867289" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            onClick={handleWhatsAppClick}
+            className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 bg-[#25D366] text-white rounded-full shadow-lg shadow-[#25D366]/20"
+          >
             <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
           </a>
           <button 
@@ -90,10 +112,17 @@ export default function Header() {
             className="md:hidden absolute top-full left-0 right-0 mt-4 bg-[#050505]/95 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl"
           >
             <nav className="flex flex-col p-2">
-              <a href="#destinations" className="py-4 px-6 text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors font-medium" onClick={() => setMobileMenuOpen(false)}>{t('nav.destinations')}</a>
-              <a href="#features" className="py-4 px-6 text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors font-medium" onClick={() => setMobileMenuOpen(false)}>{t('nav.features')}</a>
+              <a href="/#destinations" className="py-4 px-6 text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors font-medium" onClick={() => setMobileMenuOpen(false)}>{t('nav.destinations')}</a>
+              <a href="/#features" className="py-4 px-6 text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors font-medium" onClick={() => setMobileMenuOpen(false)}>{t('nav.features')}</a>
+              <a href="/blog" className="py-4 px-6 text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors font-medium" onClick={() => setMobileMenuOpen(false)}>{t('nav.blog')}</a>
               <div className="p-4 mt-2">
-                <a href="https://wa.me/35796867289" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-[#25D366] text-white py-3 rounded-xl font-semibold">
+                <a 
+                  href="https://wa.me/35796867289" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  onClick={handleWhatsAppClick}
+                  className="flex items-center justify-center gap-2 bg-[#25D366] text-white py-3 rounded-xl font-semibold"
+                >
                   <MessageCircle className="w-4 h-4" />
                   WhatsApp
                 </a>

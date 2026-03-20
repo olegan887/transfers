@@ -56,8 +56,9 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">{t('footer.nav')}</h4>
             <ul className="space-y-4 text-sm font-light">
-              <li><a href="#destinations" className="hover:text-white transition-colors">{t('nav.destinations')}</a></li>
-              <li><a href="#features" className="hover:text-white transition-colors">{t('nav.features')}</a></li>
+              <li><a href="/#destinations" className="hover:text-white transition-colors">{t('nav.destinations')}</a></li>
+              <li><a href="/#features" className="hover:text-white transition-colors">{t('nav.features')}</a></li>
+              <li><a href="/blog" className="hover:text-white transition-colors">{t('nav.blog')}</a></li>
               <li><button onClick={(e) => openLegal(e as any, 'terms')} className="hover:text-white transition-colors text-left">{t('footer.terms')}</button></li>
             </ul>
           </div>

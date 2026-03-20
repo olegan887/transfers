@@ -3,6 +3,7 @@ export const translations = {
     nav: {
       destinations: 'Направления',
       features: 'Преимущества',
+      blog: 'Блог',
     },
     hero: {
       title1: 'Трансферы из аэропорта',
@@ -94,12 +95,19 @@ export const translations = {
     },
     seo: {
       article: 'Трансфер из аэропортов Кипра: Пафос (PFO) и Ларнака (LCA). Ищете надежное такси на Кипре? Мы предлагаем комфортные пассажирские перевозки по всему острову. Наши основные направления: трансфер аэропорт Пафос - Лимассол, Ларнака аэропорт - Пафос, такси из аэропорта Пафос в город (Paphos City), а также маршруты Пафос - Ларнака и Ларнака аэропорт - Лимассол. Закажите недорогое такси из аэропорта Пафоса с русскоговорящим водителем. Фиксированные цены, встреча с табличкой, помощь с багажом. Безопасные поездки в Пейю, Корал Бэй, Полис, Айя-Напу и Протарас. Забронировать трансфер на Кипре онлайн.'
+    },
+    blog: {
+      title: 'Наш блог',
+      subtitle: 'Полезные статьи, советы путешественникам и новости Кипра',
+      readMore: 'Читать далее',
+      backToBlog: 'Назад в блог',
     }
   },
   en: {
     nav: {
       destinations: 'Destinations',
       features: 'Features',
+      blog: 'Blog',
     },
     hero: {
       title1: 'Airport Transfers',
@@ -191,6 +199,12 @@ export const translations = {
     },
     seo: {
       article: 'Cyprus Airport Transfers: Paphos (PFO) and Larnaca (LCA). Looking for a reliable taxi in Cyprus? We offer comfortable passenger transportation across the island. Our main routes include: Paphos Airport to Limassol transfer, Larnaca Airport to Paphos, taxi from Paphos Airport to Paphos City, as well as Paphos to Larnaca and Larnaca Airport to Limassol routes. Book an affordable taxi from Paphos airport with professional drivers. Fixed prices, meet and greet service, luggage assistance. Safe trips to Peyia, Coral Bay, Polis, Ayia Napa, and Protaras. Book your Cyprus transfer online.'
+    },
+    blog: {
+      title: 'Our Blog',
+      subtitle: 'Useful articles, travel tips, and Cyprus news',
+      readMore: 'Read more',
+      backToBlog: 'Back to blog',
     }
   }
 };

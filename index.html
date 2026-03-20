@@ -15,6 +15,33 @@
     <meta name="twitter:title" content="Cyprus Airport Transfers | Taxi Paphos & Larnaca" />
     <meta name="twitter:description" content="Reliable airport transfers in Cyprus. Book a taxi from Paphos (PFO) or Larnaca (LCA) to Limassol, Paphos City, Ayia Napa. Fixed prices, comfortable cars." />
     <link rel="canonical" href="https://cyprus-airport-transfer.co/" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17973746217"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'AW-17973746217');
+    </script>
+    <!-- Event snippet for Покупка conversion page -->
+    <script>
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof(url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+          'send_to': 'AW-17973746217/CraTCN2Vs4wcEKm0xvpC',
+          'value': 1.0,
+          'currency': 'EUR',
+          'transaction_id': '',
+          'event_callback': callback
+      });
+      return false;
+    }
+    </script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",

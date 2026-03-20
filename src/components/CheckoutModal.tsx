@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -34,6 +35,17 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -68,7 +80,11 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
 
       // Since mode is 'no-cors', we can't read the JSON response directly.
       // We assume success if the fetch didn't throw a network error.
-      window.location.href = '/success';
+      if (typeof (window as any).gtag_report_conversion === 'function') {
+        (window as any).gtag_report_conversion('/success');
+      } else {
+        window.location.href = '/success';
+      }
       
     } catch (err: any) {
       console.error('Checkout error:', err);
@@ -77,15 +93,15 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     }
   };
 
-  return (
+  const modalContent = (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/90 backdrop-blur-md"
             onClick={onClose}
           />
           
@@ -93,7 +109,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-lg bg-[#111] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-10 max-h-[95vh] flex flex-col"
+            className="relative w-full max-w-lg bg-[#050505] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-10 max-h-[95vh] flex flex-col"
           >
             <div className="flex items-center justify-between p-4 md:p-5 border-b border-white/10">
               <h3 className="text-lg font-bold text-white">{t('booking.checkoutTitle')}</h3>
@@ -217,4 +233,6 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
       )}
     </AnimatePresence>
   );
+
+  return createPortal(modalContent, document.body);
 }
