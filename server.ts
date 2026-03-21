@@ -4,7 +4,6 @@ import Stripe from "stripe";
 import dotenv from "dotenv";
 import path from "path";
 import cors from "cors";
-import nodemailer from "nodemailer";
 
 dotenv.config();
 
@@ -55,48 +54,36 @@ async function startServer() {
       const metadata = session.metadata;
 
       if (metadata) {
+        console.log("Payment successful for session:", session.id);
+        
         try {
-          const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-              user: process.env.SMTP_USER,
-              pass: process.env.SMTP_PASS,
-            },
-          });
+          let GOOGLE_SCRIPT_URL = process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec';
+          GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
 
-          const mailOptions = {
-            from: process.env.SMTP_USER,
-            to: "kvitkakharkiv@gmail.com",
-            subject: `✅ Оплачен трансфер: ${metadata.fromName} -> ${metadata.toName}`,
-            text: `
-Получен новый оплаченный заказ на трансфер!
-
-ДЕТАЛИ МАРШРУТА:
-Откуда: ${metadata.fromName}
-Куда: ${metadata.toName}
-Дата: ${metadata.date}
-Время: ${metadata.time}
-
-ДЕТАЛИ АВТОМОБИЛЯ:
-Класс: ${metadata.vehicleName}
-Количество пассажиров: ${metadata.pax}
-
-ДЕТАЛИ КЛИЕНТА:
-Имя: ${metadata.name}
-Телефон (WhatsApp/Telegram): ${metadata.phone}
-Номер рейса: ${metadata.flightNumber || 'Не указан'}
-Точный адрес: ${metadata.address}
-
-ОПЛАТА:
-Сумма: €${(session.amount_total || 0) / 100}
-Статус: Оплачено
-            `,
+          const payload = {
+            name: metadata.name,
+            phone: metadata.phone,
+            email: '', 
+            pickup: metadata.fromName,
+            dropoff: metadata.toName,
+            date: metadata.date,
+            time: metadata.time,
+            passengers: metadata.pax,
+            vehicle: metadata.vehicleName,
+            price: session.amount_total ? session.amount_total / 100 : 0,
+            comments: `Flight: ${metadata.flightNumber || 'N/A'} | Address: ${metadata.address} | Stripe Session: ${session.id}`
           };
 
-          await transporter.sendMail(mailOptions);
-          console.log("Email notification sent successfully");
-        } catch (emailError) {
-          console.error("Error sending email:", emailError);
+          await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+          console.log("Successfully sent order to Google Sheets from webhook");
+        } catch (error) {
+          console.error("Error sending order to Google Sheets from webhook:", error);
         }
       }
     }
@@ -150,9 +137,26 @@ async function startServer() {
         }
       });
 
-      res.json({ id: session.id });
+      res.json({ id: session.id, url: session.url });
     } catch (error: any) {
       console.error('Stripe error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/verify-session", async (req, res) => {
+    try {
+      const { sessionId } = req.body;
+      const stripe = getStripe();
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+      if (session.payment_status === 'paid') {
+        res.json({ success: true, metadata: session.metadata, amount: session.amount_total });
+      } else {
+        res.json({ success: false, status: session.payment_status });
+      }
+    } catch (error: any) {
+      console.error('Verify session error:', error);
       res.status(500).json({ error: error.message });
     }
   });

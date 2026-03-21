@@ -52,38 +52,43 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     setError('');
 
     try {
-      let GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec';
-      GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
-
-      const payload = {
-        name,
-        phone,
-        email: '', 
-        pickup: bookingData.fromName,
-        dropoff: bookingData.toName,
-        date: bookingData.date,
-        time: bookingData.time,
-        passengers: bookingData.pax,
-        vehicle: vehicleName,
-        price: price,
-        comments: `Flight: ${flightNumber} | Address: ${address}${bookingData.isRoundTrip ? ` | ROUND TRIP: Return on ${bookingData.returnDate} at ${bookingData.returnTime}` : ''}`
-      };
-
-      const response = await fetch(GOOGLE_SCRIPT_URL, {
+      const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
-        mode: 'no-cors', // Required for Google Apps Script to not block the request
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          bookingData: {
+            from: bookingData.from,
+            to: bookingData.to,
+            fromName: bookingData.fromName,
+            toName: bookingData.toName,
+            date: bookingData.date,
+            time: bookingData.time,
+            pax: bookingData.pax,
+            isRoundTrip: bookingData.isRoundTrip,
+            returnDate: bookingData.returnDate,
+            returnTime: bookingData.returnTime,
+            name,
+            phone,
+            flightNumber,
+            address,
+          },
+          price,
+          vehicleName,
+        }),
       });
 
-      // Since mode is 'no-cors', we can't read the JSON response directly.
-      // We assume success if the fetch didn't throw a network error.
-      if (typeof (window as any).gtag_report_conversion === 'function') {
-        (window as any).gtag_report_conversion('/success');
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+
+      if (data.url) {
+        window.location.href = data.url;
       } else {
-        window.location.href = '/success';
+        throw new Error('Failed to get checkout URL');
       }
       
     } catch (err: any) {
