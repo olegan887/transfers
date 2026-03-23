@@ -62,7 +62,7 @@ async function startServer() {
 
           const payload = {
             name: metadata.name,
-            phone: metadata.phone,
+            phone: `${metadata.phone} (${metadata.messenger})`,
             email: '', 
             pickup: metadata.fromName,
             dropoff: metadata.toName,
@@ -70,8 +70,8 @@ async function startServer() {
             time: metadata.time,
             passengers: metadata.pax,
             vehicle: metadata.vehicleName,
-            price: session.amount_total ? session.amount_total / 100 : 0,
-            comments: `Flight: ${metadata.flightNumber || 'N/A'} | Address: ${metadata.address} | Stripe Session: ${session.id}`
+            price: Number(metadata.totalPrice) || (session.amount_total ? session.amount_total / 100 : 0),
+            comments: `Payment: ${metadata.paymentMode === 'deposit' ? `Deposit €20 paid, remaining €${Number(metadata.totalPrice) - 20} in cash` : 'Full amount paid'} | Flight: ${metadata.flightNumber || 'N/A'} | Address: ${metadata.address}${metadata.comment ? ` / ${metadata.comment}` : ''} | Stripe Session: ${session.id}`
           };
 
           await fetch(GOOGLE_SCRIPT_URL, {
@@ -101,7 +101,46 @@ async function startServer() {
   app.post("/api/create-checkout-session", async (req, res) => {
     try {
       const { bookingData, price, vehicleName } = req.body;
+
+      // TEST MODE BYPASS
+      if (bookingData.name === 'TEST 0709') {
+        console.log("Test mode activated. Bypassing Stripe.");
+        let GOOGLE_SCRIPT_URL = process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec';
+        GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
+
+        const payload = {
+          name: bookingData.name,
+          phone: `${bookingData.phone} (${bookingData.messenger})`,
+          email: '', 
+          pickup: bookingData.fromName,
+          dropoff: bookingData.toName,
+          date: bookingData.date,
+          time: bookingData.time,
+          passengers: bookingData.pax,
+          vehicle: vehicleName,
+          price: price,
+          comments: `[TEST ORDER] Payment: ${bookingData.paymentMode === 'deposit' ? `Deposit €20 paid, remaining €${price - 20} in cash` : 'Full amount paid'} | Flight: ${bookingData.flightNumber || 'N/A'} | Address: ${bookingData.address}${bookingData.comment ? ` / ${bookingData.comment}` : ''} | Stripe Session: test_bypass`
+        };
+
+        try {
+          await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+          console.log("Successfully sent TEST order to Google Sheets");
+        } catch (error) {
+          console.error("Error sending TEST order to Google Sheets:", error);
+        }
+
+        return res.json({ id: 'test_session', url: `${req.headers.origin}/success?session_id=test_session` });
+      }
+
       const stripe = getStripe();
+
+      const amountToPay = bookingData.paymentMode === 'deposit' ? 20 : price;
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -111,9 +150,9 @@ async function startServer() {
               currency: 'eur',
               product_data: {
                 name: `Transfer: ${bookingData.fromName} to ${bookingData.toName}`,
-                description: `${vehicleName} | Date: ${bookingData.date} | Time: ${bookingData.time} | Pax: ${bookingData.pax}`,
+                description: `${vehicleName} | Date: ${bookingData.date} | Time: ${bookingData.time} | Pax: ${bookingData.pax}${bookingData.paymentMode === 'deposit' ? ` (Deposit, remaining €${price - 20} in cash)` : ''}`,
               },
-              unit_amount: price * 100, // Stripe expects amounts in cents
+              unit_amount: amountToPay * 100, // Stripe expects amounts in cents
             },
             quantity: 1,
           },
@@ -132,8 +171,12 @@ async function startServer() {
           pax: bookingData.pax,
           name: bookingData.name,
           phone: bookingData.phone,
+          messenger: bookingData.messenger,
           flightNumber: bookingData.flightNumber,
           address: bookingData.address,
+          comment: bookingData.comment,
+          paymentMode: bookingData.paymentMode,
+          totalPrice: price.toString(),
         }
       });
 

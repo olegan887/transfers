@@ -13,19 +13,22 @@ export default function Destinations() {
     return loc ? loc.name[language] : id;
   };
 
-  // Filter routes to only show available ones and limit to 8 for the UI
+  // Filter routes to only show available ones and limit to 9 for the UI
   const displayRoutes = routes
     .filter(route => route.available && getBasePrice(route.from, route.to) !== null)
-    .slice(0, 8);
+    .slice(0, 9);
 
-  // Fallback to some default routes if the spreadsheet is empty or loading
+  // Fallback to default routes if the spreadsheet is empty or loading
   const fallbackRoutes = [
-    { from: 'pfo', to: 'limassol', price: 60, time: 45 },
-    { from: 'lca', to: 'paphos-city', price: 120, time: 90 },
-    { from: 'pfo', to: 'paphos-city', price: 25, time: 25 },
-    { from: 'pfo', to: 'larnaca-city', price: 120, time: 85 },
-    { from: 'lca', to: 'limassol', price: 60, time: 45 },
-    { from: 'pfo', to: 'peyia', price: 35, time: 35 }
+    { from: 'lca', to: 'ayia-napa', price: 55, time: 45 },
+    { from: 'lca', to: 'protaras', price: 65, time: 50 },
+    { from: 'lca', to: 'limassol', price: 65, time: 50 },
+    { from: 'lca', to: 'larnaca-city', price: 25, time: 15 },
+    { from: 'lca', to: 'paphos-city', price: 130, time: 90 },
+    { from: 'lca', to: 'nicosia', price: 60, time: 40 },
+    { from: 'lca', to: 'coral-bay', price: 145, time: 100 },
+    { from: 'lca', to: 'peyia', price: 150, time: 105 },
+    { from: 'lca', to: 'polis', price: 160, time: 120 }
   ];
 
   const routesToShow = displayRoutes.length > 0 ? displayRoutes : fallbackRoutes;

@@ -30,8 +30,11 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
   const { t } = useLanguage();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [messenger, setMessenger] = useState('whatsapp');
   const [flightNumber, setFlightNumber] = useState('');
   const [address, setAddress] = useState('');
+  const [comment, setComment] = useState('');
+  const [paymentMode, setPaymentMode] = useState<'full' | 'deposit'>('full');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -71,8 +74,11 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
             returnTime: bookingData.returnTime,
             name,
             phone,
+            messenger,
             flightNumber,
             address,
+            comment,
+            paymentMode,
           },
           price,
           vehicleName,
@@ -172,13 +178,32 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
                     <label className="block text-[10px] font-semibold text-white/60 uppercase tracking-wider mb-1.5">
                       {t('booking.phone')}
                     </label>
-                    <input
-                      type="tel"
-                      required
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/30 transition-colors"
-                    />
+                    <div className="flex flex-col gap-2">
+                      <input
+                        type="tel"
+                        required
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="+357 99 123456"
+                        className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/30 transition-colors"
+                      />
+                      <div className="flex gap-1.5">
+                        {['whatsapp', 'telegram', 'sms'].map((m) => (
+                          <button
+                            key={m}
+                            type="button"
+                            onClick={() => setMessenger(m)}
+                            className={`flex-1 py-1.5 text-[11px] font-medium rounded-md border transition-colors ${
+                              messenger === m 
+                                ? 'bg-white/20 border-white/30 text-white' 
+                                : 'bg-white/5 border-white/10 text-white/50 hover:bg-white/10 hover:text-white/80'
+                            }`}
+                          >
+                            {m === 'whatsapp' ? 'WhatsApp' : m === 'telegram' ? 'Telegram' : 'SMS'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -206,13 +231,56 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
                     className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/30 transition-colors resize-none"
                   />
                 </div>
+
+                <div>
+                  <label className="block text-[10px] font-semibold text-white/60 uppercase tracking-wider mb-1.5">
+                    {t('booking.comment')}
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/30 transition-colors resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-semibold text-white/60 uppercase tracking-wider mb-1.5">
+                    {t('booking.paymentMode')}
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMode('full')}
+                      className={`p-3 rounded-xl border text-left transition-colors ${
+                        paymentMode === 'full'
+                          ? 'bg-white/10 border-white/30'
+                          : 'bg-white/5 border-white/10 hover:bg-white/10'
+                      }`}
+                    >
+                      <div className="text-sm font-bold text-white mb-1">{t('booking.payFull')}</div>
+                      <div className="text-xs text-white/60">€{price}</div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMode('deposit')}
+                      className={`p-3 rounded-xl border text-left transition-colors ${
+                        paymentMode === 'deposit'
+                          ? 'bg-white/10 border-white/30'
+                          : 'bg-white/5 border-white/10 hover:bg-white/10'
+                      }`}
+                    >
+                      <div className="text-sm font-bold text-white mb-1">{t('booking.payDeposit')}</div>
+                      <div className="text-xs text-white/60">€20 {t('booking.now')}, €{price - 20} {t('booking.cash')}</div>
+                    </button>
+                  </div>
+                </div>
               </form>
             </div>
 
             <div className="p-4 md:p-5 border-t border-white/10 bg-black/50">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-white/60 text-sm">{t('booking.total')}</span>
-                <span className="text-xl font-bold text-white">€{price}</span>
+                <span className="text-white/60 text-sm">{t('booking.totalToPay')}</span>
+                <span className="text-xl font-bold text-white">€{paymentMode === 'full' ? price : 20}</span>
               </div>
               <p className="text-[10px] text-white/40 text-center mb-4">
                 {t('booking.securePayment')}

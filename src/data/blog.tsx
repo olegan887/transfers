@@ -39,7 +39,7 @@ export const blogPosts: BlogPost[] = [
           <p>Traveling from Larnaca Airport (LCA) to Paphos is a common route for many tourists visiting Cyprus. The distance is approximately 135 km, and the journey can take anywhere from 1.5 to 3 hours depending on your chosen method of transportation.</p>
           
           <h2>1. Private Airport Transfer (Recommended)</h2>
-          <p>The most comfortable and stress-free way to reach Paphos is by booking a private airport transfer. A professional driver will meet you at the arrivals hall with a name sign, help you with your luggage, and drive you directly to your hotel or villa.</p>
+          <p>The most comfortable and stress-free way to reach Paphos is by booking a private airport transfer. A professional driver will wait for you at the main exit, help you with your luggage, and drive you directly to your hotel or villa.</p>
           <ul>
             <li><strong>Travel time:</strong> ~1 hour 30 minutes</li>
             <li><strong>Pros:</strong> Fixed price, no waiting, door-to-door service, comfortable vehicles with AC.</li>
@@ -71,7 +71,7 @@ export const blogPosts: BlogPost[] = [
           <p>Поездка из аэропорта Ларнаки (LCA) в Пафос — популярный маршрут среди туристов, посещающих Кипр. Расстояние составляет около 135 км, и дорога может занять от 1,5 до 3 часов в зависимости от выбранного способа передвижения.</p>
           
           <h2>1. Индивидуальный трансфер (Рекомендуем)</h2>
-          <p>Самый комфортный способ добраться до Пафоса — заказать индивидуальный трансфер. Профессиональный водитель встретит вас в зоне прилета с табличкой, поможет с багажом и доставит прямо к дверям вашего отеля или виллы.</p>
+          <p>Самый комфортный способ добраться до Пафоса — заказать индивидуальный трансфер. Профессиональный водитель будет ждать вас у главного выхода аэропорта, поможет с багажом и доставит прямо к дверям вашего отеля или виллы.</p>
           <ul>
             <li><strong>Время в пути:</strong> ~1 час 30 минут</li>
             <li><strong>Плюсы:</strong> Фиксированная цена, отсутствие ожидания, сервис "от двери до двери", комфортные автомобили с кондиционером.</li>
@@ -182,7 +182,7 @@ export const blogPosts: BlogPost[] = [
           <p>Regular taxis in Cyprus use meters. This means the final price depends on traffic, the route taken by the driver, and the time of day (night tariffs apply from 20:30 to 06:00). With a private transfer, you pay a fixed price agreed upon at the time of booking. No surprises, no hidden fees.</p>
 
           <h2>2. Meet and Greet Service</h2>
-          <p>With a private transfer, your driver will be waiting for you in the arrivals hall holding a sign with your name. They will assist you with your luggage and guide you straight to the vehicle. With a regular taxi, you have to find the taxi rank and potentially wait in line, especially during the busy summer months.</p>
+          <p>With a private transfer, your driver will be waiting for you at the main exit. They will contact you in advance, assist you with your luggage and guide you straight to the vehicle. With a regular taxi, you have to find the taxi rank and potentially wait in line, especially during the busy summer months.</p>
 
           <h2>3. Guaranteed Vehicle Type</h2>
           <p>If you are traveling with a large family, lots of luggage, or bulky items like golf clubs or strollers, a standard taxi might not be big enough. When you book a private transfer, you can select the exact vehicle size you need (e.g., a minivan or minibus), ensuring everyone and everything fits comfortably.</p>
@@ -204,8 +204,8 @@ export const blogPosts: BlogPost[] = [
           <h2>1. Фиксированная, прозрачная цена</h2>
           <p>Обычные такси на Кипре используют счетчики. Это означает, что итоговая цена зависит от пробок, маршрута и времени суток (ночной тариф действует с 20:30 до 06:00). При заказе трансфера вы платите фиксированную цену, согласованную при бронировании. Никаких сюрпризов и скрытых платежей.</p>
 
-          <h2>2. Встреча с табличкой</h2>
-          <p>При заказе трансфера водитель будет ждать вас в зоне прилета с табличкой с вашим именем. Он поможет с багажом и проводит прямо к автомобилю. В случае с обычным такси вам придется искать стоянку и, возможно, стоять в очереди, особенно в разгар летнего сезона.</p>
+          <h2>2. Встреча в аэропорту</h2>
+          <p>При заказе трансфера водитель будет ждать вас у главного выхода. Он предварительно свяжется с вами, поможет с багажом и проводит прямо к автомобилю. В случае с обычным такси вам придется искать стоянку и, возможно, стоять в очереди, особенно в разгар летнего сезона.</p>
 
           <h2>3. Гарантированный тип автомобиля</h2>
           <p>Если вы путешествуете большой семьей, с большим количеством багажа или нестандартным грузом (например, клюшки для гольфа или коляски), стандартного такси может оказаться недостаточно. При бронировании трансфера вы выбираете нужный размер автомобиля (например, минивэн или микроавтобус).</p>
@@ -370,7 +370,7 @@ export const blogPosts: BlogPost[] = [
 
           <h2>4. Flight Tracking and Meet & Greet Services</h2>
           <p>Flights get delayed—it's a reality of travel. A professional transfer service will ask for your flight number during booking so they can track your arrival in real-time. This ensures the driver is there when you land, regardless of delays, without charging you extra waiting time.</p>
-          <p>Additionally, look for a "Meet and Greet" service, where the driver waits in the arrivals hall with a nameboard, making them easy to find.</p>
+          <p>Additionally, look for a "Meet and Greet" service, where the driver waits at the main exit and contacts you directly, making them easy to find.</p>
 
           <h2>5. Safety First: Child Seats and Licensing</h2>
           <p>If you are traveling with young children, safety is paramount. In Cyprus, the law requires appropriate child seats. Check if the transfer company provides baby seats or booster seats upon request, and whether there is an additional charge for them.</p>
@@ -417,7 +417,7 @@ export const blogPosts: BlogPost[] = [
 
           <h2>4. Отслеживание рейсов и услуга встречи (Meet & Greet)</h2>
           <p>Рейсы задерживаются — это реальность путешествий. Профессиональный сервис трансфера запросит номер вашего рейса при бронировании, чтобы они могли отслеживать ваше прибытие в режиме реального времени. Это гарантирует, что водитель будет на месте, когда вы приземлитесь, независимо от задержек, без взимания дополнительной платы за ожидание.</p>
-          <p>Кроме того, ищите услугу "Meet and Greet", когда водитель ждет в зале прилета с именной табличкой, что позволяет легко его найти.</p>
+          <p>Кроме того, ищите услугу "Meet and Greet", когда водитель ждет у главного выхода и связывается с вами напрямую, что позволяет легко его найти.</p>
 
           <h2>5. Безопасность прежде всего: детские кресла и лицензирование</h2>
           <p>Если вы путешествуете с маленькими детьми, безопасность имеет первостепенное значение. На Кипре закон требует наличия соответствующих детских кресел. Проверьте, предоставляет ли трансферная компания детские кресла или бустеры по запросу, и взимается ли за них дополнительная плата.</p>

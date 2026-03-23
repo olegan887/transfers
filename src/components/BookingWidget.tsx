@@ -23,24 +23,50 @@ export default function BookingWidget() {
   const { language, t } = useLanguage();
   const { getBasePrice, isTimeBlocked, errorDetails } = useData();
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setTimeError('');
+    const handleSearch = (e: React.FormEvent) => {
+      e.preventDefault();
+      setTimeError('');
 
-    if (isTimeBlocked(date, time)) {
-      setTimeError(language === 'ru' ? 'Это время недоступно для бронирования' : 'This time is not available for booking');
-      return;
-    }
+      if (date && time) {
+        const selectedDateTime = new Date(`${date}T${time}`);
+        const minAllowedTime = new Date();
+        minAllowedTime.setHours(minAllowedTime.getHours() + 18);
 
-    if (isRoundTrip && isTimeBlocked(returnDate, returnTime)) {
-      setTimeError(language === 'ru' ? 'Время обратного рейса недоступно' : 'Return time is not available');
-      return;
-    }
+        if (selectedDateTime < minAllowedTime) {
+          setTimeError(language === 'ru' 
+            ? 'Бронирование онлайн возможно минимум за 18 часов. Для срочного заказа свяжитесь с нами.' 
+            : 'Online booking is possible at least 18 hours in advance. For urgent requests, please contact us.');
+          return;
+        }
+      }
 
-    if (from && to) {
-      setShowResults(true);
-    }
-  };
+      if (isTimeBlocked(date, time)) {
+        setTimeError(language === 'ru' ? 'Это время недоступно для бронирования' : 'This time is not available for booking');
+        return;
+      }
+
+      if (isRoundTrip && returnDate && returnTime) {
+        const selectedReturnDateTime = new Date(`${returnDate}T${returnTime}`);
+        const minAllowedReturnTime = new Date();
+        minAllowedReturnTime.setHours(minAllowedReturnTime.getHours() + 18);
+
+        if (selectedReturnDateTime < minAllowedReturnTime) {
+          setTimeError(language === 'ru' 
+            ? 'Бронирование обратного рейса возможно минимум за 18 часов.' 
+            : 'Return booking is possible at least 18 hours in advance.');
+          return;
+        }
+
+        if (isTimeBlocked(returnDate, returnTime)) {
+          setTimeError(language === 'ru' ? 'Время обратного рейса недоступно' : 'Return time is not available');
+          return;
+        }
+      }
+
+      if (from && to) {
+        setShowResults(true);
+      }
+    };
 
   const handleBook = (vehicle: any) => {
     setSelectedVehicle(vehicle);
@@ -81,6 +107,11 @@ export default function BookingWidget() {
               {t('booking.roundTrip')}
             </button>
           </div>
+        </div>
+
+        <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-200 text-sm flex items-start gap-3">
+          <Clock className="w-5 h-5 shrink-0 text-blue-400" />
+          <p>{t('booking.notice24h')}</p>
         </div>
         
         {errorDetails && (
@@ -170,6 +201,7 @@ export default function BookingWidget() {
                 onChange={(e) => setDate(e.target.value)}
                 className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl transition-all [color-scheme:dark]"
                 required
+                lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
               />
             </div>
           </div>
@@ -184,6 +216,7 @@ export default function BookingWidget() {
                 onChange={(e) => setTime(e.target.value)}
                 className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl transition-all [color-scheme:dark]"
                 required
+                lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
               />
             </div>
           </div>
@@ -200,6 +233,7 @@ export default function BookingWidget() {
                     onChange={(e) => setReturnDate(e.target.value)}
                     className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl transition-all [color-scheme:dark]"
                     required={isRoundTrip}
+                    lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
                   />
                 </div>
               </div>
@@ -214,6 +248,7 @@ export default function BookingWidget() {
                     onChange={(e) => setReturnTime(e.target.value)}
                     className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl transition-all [color-scheme:dark]"
                     required={isRoundTrip}
+                    lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
                   />
                 </div>
               </div>

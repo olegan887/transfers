@@ -23,7 +23,12 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang);
     localStorage.setItem('app_language', lang);
+    document.documentElement.lang = lang === 'ru' ? 'ru-RU' : 'en-GB';
   };
+
+  useEffect(() => {
+    document.documentElement.lang = language === 'ru' ? 'ru-RU' : 'en-GB';
+  }, [language]);
 
   const t = (key: string, params?: Record<string, string | number>) => {
     const keys = key.split('.');

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Clock, CreditCard, ThumbsUp, MapPin, Plane } from 'lucide-react';
+import { ShieldCheck, Clock, CreditCard, ThumbsUp, Luggage, Plane } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Features() {
@@ -31,7 +31,7 @@ export default function Features() {
       className: "md:col-span-1 bg-white/5"
     },
     {
-      icon: <MapPin className="w-8 h-8 text-white" />,
+      icon: <Luggage className="w-8 h-8 text-white" />,
       title: t('features.f5Title'),
       description: t('features.f5Desc'),
       className: "md:col-span-1 bg-white/5"
