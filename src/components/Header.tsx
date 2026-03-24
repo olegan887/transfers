@@ -28,11 +28,17 @@ export default function Header() {
   };
 
   return (
-    <header 
-      className={`absolute top-4 md:top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 transition-all duration-500 ${
-        isScrolled ? 'translate-y-0' : 'translate-y-2'
-      }`}
-    >
+    <>
+      <div className="w-full bg-green-500/20 text-green-400 py-2 text-center text-xs sm:text-sm font-bold tracking-wide border-b border-green-500/30 z-[60] relative">
+        {language === 'ru' 
+          ? '🔥 СПЕЦПРЕДЛОЖЕНИЕ: Скидка 10% при бронировании трансфера туда-обратно!' 
+          : '🔥 SPECIAL OFFER: Get 10% OFF when you book a round-trip transfer!'}
+      </div>
+      <header 
+        className={`absolute top-10 md:top-12 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 transition-all duration-500 ${
+          isScrolled ? 'translate-y-0' : 'translate-y-2'
+        }`}
+      >
       <div className={`transition-all duration-500 rounded-full px-6 py-3 flex items-center justify-between ${
         isScrolled ? 'glass-panel shadow-2xl shadow-black/50' : 'bg-transparent'
       }`}>
@@ -131,6 +137,7 @@ export default function Header() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+      </header>
+    </>
   );
 }

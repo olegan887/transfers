@@ -71,7 +71,8 @@ async function startServer() {
             passengers: metadata.pax,
             vehicle: metadata.vehicleName,
             price: Number(metadata.totalPrice) || (session.amount_total ? session.amount_total / 100 : 0),
-            comments: `Payment: ${metadata.paymentMode === 'deposit' ? `Deposit €20 paid, remaining €${Number(metadata.totalPrice) - 20} in cash` : 'Full amount paid'} | Flight: ${metadata.flightNumber || 'N/A'} | Address: ${metadata.address}${metadata.comment ? ` / ${metadata.comment}` : ''} | Stripe Session: ${session.id}`
+            type: metadata.isRoundTrip === 'true' ? 'Round Trip (В обе стороны)' : 'One Way (В одну сторону)',
+            comments: `Payment: ${metadata.paymentMode === 'deposit' ? `Deposit €20 paid, remaining €${Number(metadata.totalPrice) - 20} in cash` : 'Full amount paid'} | Flight: ${metadata.flightNumber || 'N/A'} | Address: ${metadata.address}${metadata.comment ? ` / ${metadata.comment}` : ''}${metadata.isRoundTrip === 'true' ? ` | ROUND TRIP: Return on ${metadata.returnDate} at ${metadata.returnTime}` : ''} | Stripe Session: ${session.id}`
           };
 
           await fetch(GOOGLE_SCRIPT_URL, {
@@ -119,7 +120,8 @@ async function startServer() {
           passengers: bookingData.pax,
           vehicle: vehicleName,
           price: price,
-          comments: `[TEST ORDER] Payment: ${bookingData.paymentMode === 'deposit' ? `Deposit €20 paid, remaining €${price - 20} in cash` : 'Full amount paid'} | Flight: ${bookingData.flightNumber || 'N/A'} | Address: ${bookingData.address}${bookingData.comment ? ` / ${bookingData.comment}` : ''} | Stripe Session: test_bypass`
+          type: bookingData.isRoundTrip ? 'Round Trip (В обе стороны)' : 'One Way (В одну сторону)',
+          comments: `[TEST ORDER] Payment: ${bookingData.paymentMode === 'deposit' ? `Deposit €20 paid, remaining €${price - 20} in cash` : 'Full amount paid'} | Flight: ${bookingData.flightNumber || 'N/A'} | Address: ${bookingData.address}${bookingData.comment ? ` / ${bookingData.comment}` : ''}${bookingData.isRoundTrip ? ` | ROUND TRIP: Return on ${bookingData.returnDate} at ${bookingData.returnTime}` : ''} | Stripe Session: test_bypass`
         };
 
         try {
@@ -161,22 +163,25 @@ async function startServer() {
         success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/`,
         metadata: {
-          from: bookingData.from,
-          to: bookingData.to,
-          fromName: bookingData.fromName,
-          toName: bookingData.toName,
-          vehicleName: vehicleName,
-          date: bookingData.date,
-          time: bookingData.time,
-          pax: bookingData.pax,
-          name: bookingData.name,
-          phone: bookingData.phone,
-          messenger: bookingData.messenger,
-          flightNumber: bookingData.flightNumber,
-          address: bookingData.address,
-          comment: bookingData.comment,
-          paymentMode: bookingData.paymentMode,
-          totalPrice: price.toString(),
+          from: bookingData.from || '',
+          to: bookingData.to || '',
+          fromName: bookingData.fromName || '',
+          toName: bookingData.toName || '',
+          vehicleName: vehicleName || '',
+          date: bookingData.date || '',
+          time: bookingData.time || '',
+          pax: bookingData.pax?.toString() || '',
+          isRoundTrip: bookingData.isRoundTrip ? 'true' : 'false',
+          returnDate: bookingData.returnDate || '',
+          returnTime: bookingData.returnTime || '',
+          name: bookingData.name || '',
+          phone: bookingData.phone || '',
+          messenger: bookingData.messenger || '',
+          flightNumber: bookingData.flightNumber || '',
+          address: bookingData.address || '',
+          comment: bookingData.comment || '',
+          paymentMode: bookingData.paymentMode || '',
+          totalPrice: price?.toString() || '',
         }
       });
 

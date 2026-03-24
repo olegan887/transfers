@@ -66,3 +66,56 @@ export function getPrice(from: string, to: string, vehicleId: string): number | 
 
   return Math.round(basePrice * vehicle.multiplier);
 }
+
+// Realistic travel times in minutes
+const routeTimes: Record<string, Record<string, number>> = {
+  'lca': {
+    'ayia-napa': 45,
+    'protaras': 50,
+    'limassol': 50,
+    'larnaca-city': 15,
+    'paphos-city': 90,
+    'nicosia': 40,
+    'coral-bay': 100,
+    'peyia': 105,
+    'polis': 120,
+  },
+  'pfo': {
+    'ayia-napa': 120,
+    'protaras': 130,
+    'limassol': 45,
+    'larnaca-city': 90,
+    'paphos-city': 20,
+    'nicosia': 100,
+    'coral-bay': 35,
+    'peyia': 40,
+    'polis': 50,
+  },
+  'limassol': {
+    'paphos-city': 45,
+    'larnaca-city': 50,
+    'ayia-napa': 75,
+    'protaras': 80,
+    'nicosia': 60,
+    'coral-bay': 60,
+    'peyia': 65,
+    'polis': 75,
+  },
+  'nicosia': {
+    'paphos-city': 100,
+    'ayia-napa': 60,
+    'protaras': 65,
+    'coral-bay': 115,
+    'peyia': 120,
+    'polis': 130,
+  }
+};
+
+export function getRouteTime(from: string, to: string): number {
+  if (routeTimes[from] && routeTimes[from][to]) {
+    return routeTimes[from][to];
+  } else if (routeTimes[to] && routeTimes[to][from]) {
+    return routeTimes[to][from];
+  }
+  return 45; // Default fallback
+}

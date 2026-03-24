@@ -4,7 +4,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 import LegalModal from './LegalModal';
 
 export default function Footer() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [legalModal, setLegalModal] = useState<{ isOpen: boolean; type: 'terms' | 'privacy' }>({
     isOpen: false,
     type: 'terms'
@@ -28,6 +28,10 @@ export default function Footer() {
             </div>
             <p className="text-sm leading-relaxed font-light">
               {t('footer.desc')}
+              <br /><br />
+              <span className="text-green-400 font-medium">
+                {language === 'ru' ? '🎁 Скидка 10% на обратный трансфер' : '🎁 10% off return transfers'}
+              </span>
             </p>
           </div>
 

@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Hero() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-20 overflow-hidden">
@@ -37,6 +37,10 @@ export default function Hero() {
             className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto font-light leading-relaxed"
           >
             {t('hero.subtitle')}
+            <br className="hidden md:block" />
+            <span className="text-green-400 font-medium mt-2 inline-block">
+              {language === 'ru' ? '🎁 Скидка 10% при заказе трансфера туда-обратно!' : '🎁 10% Discount on all round-trip bookings!'}
+            </span>
           </motion.p>
         </div>
 

@@ -4,6 +4,7 @@ import { X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { loadStripe } from '@stripe/stripe-js';
+import Autocomplete from 'react-google-autocomplete';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
 
@@ -27,7 +28,7 @@ interface CheckoutModalProps {
 }
 
 export default function CheckoutModal({ isOpen, onClose, bookingData, price, vehicleName }: CheckoutModalProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [messenger, setMessenger] = useState('whatsapp');
@@ -223,12 +224,19 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
                   <label className="block text-[10px] font-semibold text-white/60 uppercase tracking-wider mb-1.5">
                     {t('booking.address')}
                   </label>
-                  <textarea
-                    required
-                    rows={2}
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/30 transition-colors resize-none"
+                  <Autocomplete
+                    apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''}
+                    onPlaceSelected={(place) => {
+                      setAddress(place.formatted_address || place.name || '');
+                    }}
+                    defaultValue={address}
+                    onChange={(e: any) => setAddress(e.target.value)}
+                    options={{
+                      types: ["establishment", "geocode"],
+                      componentRestrictions: { country: "cy" },
+                    }}
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/30 transition-colors"
+                    placeholder={language === 'ru' ? 'Введите отель или адрес...' : 'Enter hotel or address...'}
                   />
                 </div>
 
@@ -297,7 +305,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
                     Processing...
                   </>
                 ) : (
-                  t('booking.book')
+                  t('booking.pay')
                 )}
               </button>
             </div>

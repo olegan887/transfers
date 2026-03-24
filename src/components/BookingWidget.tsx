@@ -84,6 +84,10 @@ export default function BookingWidget() {
   };
 
   const calculateTotalPrice = (basePrice: number) => {
+    return isRoundTrip ? Math.round(basePrice * 2 * 0.9) : basePrice;
+  };
+
+  const calculateOriginalPrice = (basePrice: number) => {
     return isRoundTrip ? basePrice * 2 : basePrice;
   };
 
@@ -91,7 +95,12 @@ export default function BookingWidget() {
     <div className="w-full max-w-5xl mx-auto glass-panel rounded-[2rem] shadow-2xl overflow-hidden">
       <div className="p-6 md:p-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-          <h2 className="text-2xl font-bold text-white tracking-tight">{t('booking.title')}</h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-2xl font-bold text-white tracking-tight">{t('booking.title')}</h2>
+            <span className="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-bold uppercase tracking-wider rounded-full border border-green-500/30">
+              {language === 'ru' ? '-10% на обратный путь' : '10% OFF Round Trip'}
+            </span>
+          </div>
           
           <div className="flex bg-white/5 p-1 rounded-xl border border-white/10 w-fit">
             <button
@@ -291,6 +300,7 @@ export default function BookingWidget() {
                 if (!basePrice) return null;
                 const vehiclePrice = Math.round(basePrice * vehicle.multiplier);
                 const totalPrice = calculateTotalPrice(vehiclePrice);
+                const originalPrice = calculateOriginalPrice(vehiclePrice);
 
                 return (
                   <div key={vehicle.id} className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 flex flex-col md:flex-row items-center gap-6 hover:bg-white/10 transition-colors">
@@ -305,7 +315,10 @@ export default function BookingWidget() {
                           <p className="text-white/60 text-sm">{vehicle.description[language]}</p>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-bold text-white">€{totalPrice}</div>
+                          {isRoundTrip && (
+                            <div className="text-sm text-white/40 line-through mb-0.5">€{originalPrice}</div>
+                          )}
+                          <div className="text-2xl font-bold text-green-400">€{totalPrice}</div>
                           <div className="text-xs text-white/40">{t('booking.perVehicle')}</div>
                         </div>
                       </div>

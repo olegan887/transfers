@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import { locations } from '../data/pricing';
+import { locations, getRouteTime } from '../data/pricing';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useData } from '../context/DataContext';
 
@@ -50,7 +50,7 @@ export default function Destinations() {
             const fromName = getLocationName(route.from);
             const toName = getLocationName(route.to);
             const price = getBasePrice(route.from, route.to) || route.price;
-            const time = (route as any).time || 45; // Default time if not provided by sheet
+            const time = getRouteTime(route.from, route.to);
 
             return (
               <div 
@@ -79,7 +79,9 @@ export default function Destinations() {
                 </div>
 
                 <div className="mt-8 flex items-center justify-between pt-6 border-t border-white/5">
-                  <span className="text-white/30 text-xs font-medium uppercase tracking-widest">Premium Transfer</span>
+                  <span className="text-green-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest bg-green-500/10 px-2 py-1 rounded-md">
+                    {language === 'ru' ? '-10% ОБРАТНО' : '-10% RETURN'}
+                  </span>
                   <button 
                     onClick={() => {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
