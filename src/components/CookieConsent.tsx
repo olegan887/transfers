@@ -49,19 +49,19 @@ export default function CookieConsent() {
             transition={{ type: 'spring', damping: 20, stiffness: 100 }}
             className="fixed bottom-0 left-0 right-0 z-[90] p-4 md:p-6 pointer-events-none"
           >
-            <div className="max-w-4xl mx-auto glass-panel bg-[#050505]/95 rounded-2xl p-4 md:p-6 shadow-2xl pointer-events-auto border border-white/10 flex flex-col md:flex-row items-center gap-4 md:gap-8">
-              <div className="flex-1 text-sm text-white/80 leading-relaxed">
+            <div className="max-w-4xl mx-auto bg-slate-900/95 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-2xl pointer-events-auto border border-slate-800 flex flex-col md:flex-row items-center gap-4 md:gap-8">
+              <div className="flex-1 text-sm text-slate-400 leading-relaxed">
                 {content[language].text}
                 <button 
                   onClick={() => setLegalModal({ isOpen: true, type: 'privacy' })}
-                  className="text-white underline hover:text-blue-400 transition-colors"
+                  className="text-indigo-400 underline hover:text-indigo-300 transition-colors"
                 >
                   {content[language].link}
                 </button>.
               </div>
               <button
                 onClick={acceptCookies}
-                className="w-full md:w-auto whitespace-nowrap px-8 py-3 bg-white text-black font-bold rounded-xl hover:bg-white/90 transition-colors"
+                className="w-full md:w-auto whitespace-nowrap px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors"
               >
                 {content[language].button}
               </button>

@@ -113,7 +113,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/90 backdrop-blur-md"
+            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
             onClick={onClose}
           />
           
@@ -121,30 +121,30 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-lg bg-[#050505] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-10 max-h-[95vh] flex flex-col"
+            className="relative w-full max-w-lg bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden z-10 max-h-[95vh] flex flex-col"
           >
-            <div className="flex items-center justify-between p-4 md:p-5 border-b border-white/10">
-              <h3 className="text-lg font-bold text-white">{t('booking.checkoutTitle')}</h3>
+            <div className="flex items-center justify-between p-4 md:p-5 border-b-4 border-black bg-yellow-400">
+              <h3 className="text-xl font-black text-black uppercase tracking-tight">{t('booking.checkoutTitle')}</h3>
               <button 
                 onClick={onClose}
-                className="p-1.5 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+                className="p-1 text-black hover:bg-black hover:text-white border-2 border-transparent hover:border-black transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6" />
               </button>
             </div>
 
-            <div className="p-4 md:p-5 overflow-y-auto">
-              <div className="mb-4 p-3 bg-white/5 rounded-xl border border-white/10">
-                <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-white/60 text-sm">{bookingData.fromName} → {bookingData.toName}</span>
-                  <span className="text-white font-bold">€{price}</span>
+            <div className="p-4 md:p-6 overflow-y-auto">
+              <div className="mb-6 p-4 bg-gray-50 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-black font-bold text-lg">{bookingData.fromName} → {bookingData.toName}</span>
+                  <span className="text-black font-black text-xl">€{price}</span>
                 </div>
-                <div className="text-white/40 text-xs flex flex-wrap gap-x-3 gap-y-1">
+                <div className="text-gray-600 font-bold text-sm flex flex-wrap gap-x-3 gap-y-1">
                   <span>{bookingData.date} {bookingData.time}</span>
                   {bookingData.isRoundTrip && (
                     <>
-                      <span className="text-white/20">|</span>
-                      <span className="text-blue-400">Return: {bookingData.returnDate} {bookingData.returnTime}</span>
+                      <span className="text-black">|</span>
+                      <span className="text-black">Return: {bookingData.returnDate} {bookingData.returnTime}</span>
                     </>
                   )}
                   <span>•</span>
@@ -155,15 +155,15 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
               </div>
 
               {error && (
-                <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+                <div className="mb-6 p-4 bg-red-100 border-2 border-red-600 text-red-600 font-bold text-sm shadow-[2px_2px_0px_0px_rgba(220,38,38,1)]">
                   {error}
                 </div>
               )}
 
-              <form id="checkout-form" onSubmit={handleSubmit} className="space-y-3">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <form id="checkout-form" onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-[10px] font-semibold text-white/60 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">
                       {t('booking.name')}
                     </label>
                     <input
@@ -171,33 +171,33 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/30 transition-colors"
+                      className="brutal-input w-full px-4 py-3"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-semibold text-white/60 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">
                       {t('booking.phone')}
                     </label>
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-3">
                       <input
                         type="tel"
                         required
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="+357 99 123456"
-                        className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/30 transition-colors"
+                        className="brutal-input w-full px-4 py-3"
                       />
-                      <div className="flex gap-1.5">
+                      <div className="flex gap-2">
                         {['whatsapp', 'telegram', 'sms'].map((m) => (
                           <button
                             key={m}
                             type="button"
                             onClick={() => setMessenger(m)}
-                            className={`flex-1 py-1.5 text-[11px] font-medium rounded-md border transition-colors ${
+                            className={`flex-1 py-2 text-xs font-black uppercase border-2 border-black transition-all ${
                               messenger === m 
-                                ? 'bg-white/20 border-white/30 text-white' 
-                                : 'bg-white/5 border-white/10 text-white/50 hover:bg-white/10 hover:text-white/80'
+                                ? 'bg-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transform translate-x-[1px] translate-y-[1px]' 
+                                : 'bg-white text-black hover:bg-gray-100 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'
                             }`}
                           >
                             {m === 'whatsapp' ? 'WhatsApp' : m === 'telegram' ? 'Telegram' : 'SMS'}
@@ -209,19 +209,19 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-semibold text-white/60 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">
                     {t('booking.flightNumber')}
                   </label>
                   <input
                     type="text"
                     value={flightNumber}
                     onChange={(e) => setFlightNumber(e.target.value)}
-                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/30 transition-colors"
+                    className="brutal-input w-full px-4 py-3"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-semibold text-white/60 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">
                     {t('booking.address')}
                   </label>
                   <Autocomplete
@@ -235,73 +235,73 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
                       types: ["establishment", "geocode"],
                       componentRestrictions: { country: "cy" },
                     }}
-                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/30 transition-colors"
+                    className="brutal-input w-full px-4 py-3"
                     placeholder={language === 'ru' ? 'Введите отель или адрес...' : 'Enter hotel or address...'}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-semibold text-white/60 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">
                     {t('booking.comment')}
                   </label>
                   <textarea
                     rows={2}
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
-                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/30 transition-colors resize-none"
+                    className="brutal-input w-full px-4 py-3 resize-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-semibold text-white/60 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">
                     {t('booking.paymentMode')}
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => setPaymentMode('full')}
-                      className={`p-3 rounded-xl border text-left transition-colors ${
+                      className={`p-4 border-2 border-black text-left transition-all ${
                         paymentMode === 'full'
-                          ? 'bg-white/10 border-white/30'
-                          : 'bg-white/5 border-white/10 hover:bg-white/10'
+                          ? 'bg-yellow-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform -translate-y-1'
+                          : 'bg-white hover:bg-gray-50 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'
                       }`}
                     >
-                      <div className="text-sm font-bold text-white mb-1">{t('booking.payFull')}</div>
-                      <div className="text-xs text-white/60">€{price}</div>
+                      <div className="text-sm font-black text-black uppercase mb-1">{t('booking.payFull')}</div>
+                      <div className="text-sm text-black font-bold">€{price}</div>
                     </button>
                     <button
                       type="button"
                       onClick={() => setPaymentMode('deposit')}
-                      className={`p-3 rounded-xl border text-left transition-colors ${
+                      className={`p-4 border-2 border-black text-left transition-all ${
                         paymentMode === 'deposit'
-                          ? 'bg-white/10 border-white/30'
-                          : 'bg-white/5 border-white/10 hover:bg-white/10'
+                          ? 'bg-yellow-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform -translate-y-1'
+                          : 'bg-white hover:bg-gray-50 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'
                       }`}
                     >
-                      <div className="text-sm font-bold text-white mb-1">{t('booking.payDeposit')}</div>
-                      <div className="text-xs text-white/60">€20 {t('booking.now')}, €{price - 20} {t('booking.cash')}</div>
+                      <div className="text-sm font-black text-black uppercase mb-1">{t('booking.payDeposit')}</div>
+                      <div className="text-sm text-black font-bold">€20 {t('booking.now')}, €{price - 20} {t('booking.cash')}</div>
                     </button>
                   </div>
                 </div>
               </form>
             </div>
 
-            <div className="p-4 md:p-5 border-t border-white/10 bg-black/50">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-white/60 text-sm">{t('booking.totalToPay')}</span>
-                <span className="text-xl font-bold text-white">€{paymentMode === 'full' ? price : 20}</span>
+            <div className="p-4 md:p-6 border-t-4 border-black bg-gray-50">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-black font-black uppercase text-lg">{t('booking.totalToPay')}</span>
+                <span className="text-3xl font-black text-black">€{paymentMode === 'full' ? price : 20}</span>
               </div>
-              <p className="text-[10px] text-white/40 text-center mb-4">
+              <p className="text-xs font-bold text-gray-600 text-center mb-6 uppercase tracking-wider">
                 {t('booking.securePayment')}
               </p>
               <button
                 form="checkout-form"
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-white hover:bg-white/90 disabled:bg-white/50 text-black font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
+                className="brutal-btn w-full py-4 text-xl uppercase flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <Loader2 className="w-6 h-6 animate-spin" />
                     Processing...
                   </>
                 ) : (

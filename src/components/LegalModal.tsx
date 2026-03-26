@@ -126,19 +126,19 @@ export default function LegalModal({ isOpen, onClose, type }: LegalModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
           />
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-3xl max-h-[85vh] bg-[#111] border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+            className="relative w-full max-w-3xl max-h-[85vh] bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col"
           >
-            <div className="flex items-center justify-between p-6 border-b border-white/10">
+            <div className="flex items-center justify-between p-6 border-b border-slate-800">
               <h2 className="text-2xl font-bold text-white">{currentContent.title}</h2>
               <button 
                 onClick={onClose}
-                className="p-2 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+                className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-full transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -147,7 +147,7 @@ export default function LegalModal({ isOpen, onClose, type }: LegalModalProps) {
             <div className="p-6 overflow-y-auto custom-scrollbar">
               <div className="prose prose-invert max-w-none">
                 {currentContent.body.split('\n').map((paragraph, idx) => (
-                  <p key={idx} className="text-white/70 mb-4 leading-relaxed whitespace-pre-line">
+                  <p key={idx} className="text-slate-400 mb-4 leading-relaxed whitespace-pre-line">
                     {paragraph.trim()}
                   </p>
                 ))}

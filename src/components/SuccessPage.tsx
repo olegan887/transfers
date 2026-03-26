@@ -54,27 +54,27 @@ export default function SuccessPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] flex items-center justify-center p-4">
-      <div className="max-w-md w-full glass-panel rounded-3xl p-8 text-center">
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-slate-800 border border-slate-700 shadow-xl rounded-3xl p-8 text-center">
         
         {status === 'loading' && (
           <div className="py-8">
-            <Loader2 className="w-12 h-12 text-blue-500 animate-spin mx-auto mb-4" />
+            <Loader2 className="w-12 h-12 text-indigo-400 animate-spin mx-auto mb-4" />
             <h2 className="text-xl font-bold text-white mb-2">Verifying Payment...</h2>
-            <p className="text-white/60">Please wait while we confirm your order.</p>
+            <p className="text-slate-400">Please wait while we confirm your order.</p>
           </div>
         )}
 
         {status === 'error' && (
           <div className="py-8">
             <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <AlertCircle className="w-10 h-10 text-red-500" />
+              <AlertCircle className="w-10 h-10 text-red-400" />
             </div>
             <h2 className="text-xl font-bold text-white mb-2">Verification Failed</h2>
             <p className="text-red-400 mb-6">{errorMessage}</p>
             <button 
               onClick={() => window.location.href = '/'}
-              className="w-full py-4 bg-white hover:bg-white/90 text-black font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
+              className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
             >
               <Home className="w-5 h-5" />
               {t('booking.backHome') || 'Back to Home'}
@@ -84,27 +84,27 @@ export default function SuccessPage() {
 
         {status === 'success' && (
           <>
-            <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle2 className="w-10 h-10 text-green-500" />
+            <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle2 className="w-10 h-10 text-emerald-400" />
             </div>
             
             <h1 className="text-3xl font-bold text-white mb-4">
               {t('booking.successTitle') || 'Booking Confirmed!'}
             </h1>
             
-            <p className="text-white/60 mb-8">
+            <p className="text-slate-400 mb-8">
               {t('booking.successDesc') || 'Thank you for your booking. We have received your request and will contact you shortly to confirm the details.'}
             </p>
 
             {sessionId && (
-              <div className="text-xs text-white/40 mb-8 break-all">
+              <div className="text-xs text-slate-500 mb-8 break-all">
                 Order ID: {sessionId}
               </div>
             )}
 
             <button 
               onClick={() => window.location.href = '/'}
-              className="w-full py-4 bg-white hover:bg-white/90 text-black font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
+              className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
             >
               <Home className="w-5 h-5" />
               {t('booking.backHome') || 'Back to Home'}

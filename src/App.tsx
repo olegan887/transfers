@@ -68,7 +68,7 @@ export default function App() {
   return (
     <LanguageProvider>
       <DataProvider>
-        <div className="min-h-screen bg-[#050505] font-sans text-white selection:bg-white/20 selection:text-white relative">
+        <div className="min-h-screen font-sans text-black selection:bg-yellow-400 selection:text-black relative">
           <Header />
           {renderContent()}
           <Footer />
@@ -83,7 +83,7 @@ export default function App() {
                 (window as any).gtag_report_conversion();
               }
             }}
-            className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full shadow-lg shadow-[#25D366]/30 hover:scale-110 transition-transform duration-300"
+            className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
             aria-label="Chat on WhatsApp"
           >
             <MessageCircle className="w-7 h-7" />

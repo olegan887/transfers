@@ -1,56 +1,102 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: #050505;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: radial-gradient(#e5e7eb 2px, transparent 2px);
+  background-size: 32px 32px;
+  background-color: #ffffff;
 }
 
-/* Custom scrollbar for premium feel */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: #ffffff;
+  border-left: 2px solid #000000;
 }
 ::-webkit-scrollbar-thumb {
-  background: #222;
-  border-radius: 4px;
+  background: #facc15;
+  border: 2px solid #000000;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #444;
+  background: #eab308;
 }
 
-/* Glassmorphism utilities */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Brutalist utilities */
+.brutal-card {
+  background-color: #ffffff;
+  border: 3px solid #000000;
+  border-radius: 1rem;
+  box-shadow: 6px 6px 0px 0px #000000;
+  transition: all 0.2s ease-in-out;
+}
+.brutal-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px 0px #000000;
 }
 
-.glass-input {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
+.brutal-input {
+  background-color: #ffffff;
+  border: 3px solid #000000;
+  border-radius: 0.75rem;
+  color: #000000;
+  transition: all 0.2s ease;
 }
-.glass-input:focus {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+.brutal-input:focus {
   outline: none;
+  box-shadow: 4px 4px 0px 0px #facc15;
+  transform: translate(-2px, -2px);
 }
-.glass-input option, .glass-input optgroup {
-  background: #111;
-  color: white;
+.brutal-input option, .brutal-input optgroup {
+  background: #ffffff;
+  color: #000000;
+}
+
+.brutal-btn {
+  background-color: #facc15;
+  color: #000000;
+  font-weight: 700;
+  border: 3px solid #000000;
+  border-radius: 0.75rem;
+  box-shadow: 4px 4px 0px 0px #000000;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.brutal-btn:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px #000000;
+}
+.brutal-btn:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px #000000;
+}
+.brutal-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background-color: #e5e7eb;
+}
+
+/* Specific background colors for buttons */
+.brutal-btn-white {
+  background-color: #ffffff;
+}
+.brutal-btn-black {
+  background-color: #000000;
+  color: #ffffff;
 }

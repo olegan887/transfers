@@ -16,76 +16,80 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#050505] text-white/60 py-20 border-t border-white/10 relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
+    <footer className="bg-white text-black py-20 border-t-4 border-black relative overflow-hidden">
+      {/* Background Doodles */}
+      <div className="absolute inset-0 pointer-events-none opacity-10">
+        <div className="absolute top-10 right-1/4 w-32 h-32 border-8 border-black transform rotate-45" />
+        <div className="absolute bottom-10 left-10 w-40 h-40 bg-yellow-400 rounded-full" />
+      </div>
       
       <div className="container mx-auto px-4 max-w-7xl relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-16">
           
           <div className="space-y-6">
-            <div className="flex items-center gap-2 text-white">
-              <img src="/logo1.png" alt="Cyprus Airport Transfer" className="h-20 md:h-28 object-contain" />
+            <div className="flex items-center gap-2 text-black">
+              <img src="/logo1.png" alt="Cyprus Airport Transfer" className="h-20 md:h-28 object-contain filter grayscale contrast-125" />
             </div>
-            <p className="text-sm leading-relaxed font-light">
+            <p className="text-sm leading-relaxed font-bold">
               {t('footer.desc')}
               <br /><br />
-              <span className="text-green-400 font-medium">
+              <span className="bg-black text-white px-2 py-1 font-black inline-block transform -rotate-1">
                 {language === 'ru' ? '🎁 Скидка 10% на обратный трансфер' : '🎁 10% off return transfers'}
               </span>
             </p>
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">{t('footer.contacts')}</h4>
-            <ul className="space-y-4 text-sm font-light">
+            <h4 className="text-black font-black mb-6 uppercase tracking-widest text-sm bg-yellow-400 inline-block px-2 py-1 border-2 border-black transform rotate-1">{t('footer.contacts')}</h4>
+            <ul className="space-y-4 text-sm font-bold">
               <li>
-                <a href="https://wa.me/35796867289" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#25D366] transition-colors">
-                  <MessageCircle className="w-4 h-4 text-white/40" />
+                <a href="https://wa.me/35796867289" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#25D366] transition-colors group">
+                  <MessageCircle className="w-5 h-5 text-black group-hover:text-[#25D366]" />
                   WhatsApp
                 </a>
               </li>
               <li>
-                <a href="mailto:info@cyprus-airport-transfer.co" className="flex items-center gap-3 hover:text-white transition-colors">
-                  <Mail className="w-4 h-4 text-white/40" />
+                <a href="mailto:info@cyprus-airport-transfer.co" className="flex items-center gap-3 hover:text-yellow-500 transition-colors group">
+                  <Mail className="w-5 h-5 text-black group-hover:text-yellow-500" />
                   info@cyprus-airport-transfer.co
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <MapPin className="w-4 h-4 text-white/40 shrink-0" />
+                <MapPin className="w-5 h-5 text-black shrink-0" />
                 26 Neofytou Nikolaidi, Paphos 8011, Cyprus
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">{t('footer.nav')}</h4>
-            <ul className="space-y-4 text-sm font-light">
-              <li><a href="/#destinations" className="hover:text-white transition-colors">{t('nav.destinations')}</a></li>
-              <li><a href="/#features" className="hover:text-white transition-colors">{t('nav.features')}</a></li>
-              <li><a href="/blog" className="hover:text-white transition-colors">{t('nav.blog')}</a></li>
-              <li><button onClick={(e) => openLegal(e as any, 'terms')} className="hover:text-white transition-colors text-left">{t('footer.terms')}</button></li>
+            <h4 className="text-black font-black mb-6 uppercase tracking-widest text-sm bg-yellow-400 inline-block px-2 py-1 border-2 border-black transform -rotate-1">{t('footer.nav')}</h4>
+            <ul className="space-y-4 text-sm font-bold">
+              <li><a href="/#destinations" className="hover:text-yellow-500 transition-colors">{t('nav.destinations')}</a></li>
+              <li><a href="/#features" className="hover:text-yellow-500 transition-colors">{t('nav.features')}</a></li>
+              <li><a href="/blog" className="hover:text-yellow-500 transition-colors">{t('nav.blog')}</a></li>
+              <li><button onClick={(e) => openLegal(e as any, 'terms')} className="hover:text-yellow-500 transition-colors text-left">{t('footer.terms')}</button></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">{t('footer.payment')}</h4>
-            <p className="text-sm mb-6 font-light">
+            <h4 className="text-black font-black mb-6 uppercase tracking-widest text-sm bg-yellow-400 inline-block px-2 py-1 border-2 border-black transform rotate-1">{t('footer.payment')}</h4>
+            <p className="text-sm mb-6 font-bold">
               {t('footer.paymentDesc')}
             </p>
             <div className="flex gap-3">
-              <div className="w-12 h-8 glass-panel rounded flex items-center justify-center text-[10px] font-bold text-white">VISA</div>
-              <div className="w-12 h-8 glass-panel rounded flex items-center justify-center text-[10px] font-bold text-white">MC</div>
-              <div className="w-16 h-8 glass-panel rounded flex items-center justify-center text-[10px] font-bold text-white">STRIPE</div>
+              <div className="w-12 h-8 bg-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center text-[10px] font-black text-black">VISA</div>
+              <div className="w-12 h-8 bg-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center text-[10px] font-black text-black">MC</div>
+              <div className="w-16 h-8 bg-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center text-[10px] font-black text-black">STRIPE</div>
             </div>
           </div>
 
         </div>
 
-        <div className="pt-8 border-t border-white/10 text-xs text-center flex flex-col md:flex-row justify-between items-center gap-4 font-light">
+        <div className="pt-8 border-t-4 border-black text-xs text-center flex flex-col md:flex-row justify-between items-center gap-4 font-bold">
           <p>&copy; {new Date().getFullYear()} Cyprus Airport Transfer .co. {t('footer.rights')}</p>
           <div className="flex gap-6">
-            <button onClick={(e) => openLegal(e as any, 'privacy')} className="hover:text-white transition-colors">{t('footer.privacy')}</button>
-            <button onClick={(e) => openLegal(e as any, 'terms')} className="hover:text-white transition-colors">{t('footer.terms')}</button>
+            <button onClick={(e) => openLegal(e as any, 'privacy')} className="hover:text-yellow-500 transition-colors uppercase">{t('footer.privacy')}</button>
+            <button onClick={(e) => openLegal(e as any, 'terms')} className="hover:text-yellow-500 transition-colors uppercase">{t('footer.terms')}</button>
           </div>
         </div>
       </div>

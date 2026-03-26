@@ -34,18 +34,25 @@ export default function Destinations() {
   const routesToShow = displayRoutes.length > 0 ? displayRoutes : fallbackRoutes;
 
   return (
-    <section id="destinations" className="py-32 relative">
+    <section id="destinations" className="py-32 relative bg-white border-b-4 border-black overflow-hidden">
+      {/* Background Doodles */}
+      <div className="absolute inset-0 pointer-events-none opacity-10">
+        <div className="absolute top-20 right-10 w-40 h-40 border-8 border-black transform rotate-45" />
+        <div className="absolute bottom-10 left-20 w-32 h-32 bg-yellow-400 rounded-full" />
+        <div className="absolute top-1/2 right-1/4 w-24 h-24 border-8 border-black rounded-full" />
+      </div>
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tighter">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-black mb-6 tracking-tighter uppercase inline-block bg-yellow-400 px-6 py-2 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transform rotate-1">
             {t('destinations.title')}
           </h2>
-          <p className="text-lg text-white/60 font-light">
+          <p className="text-xl text-black font-bold mt-8 bg-white inline-block px-4 py-2 border-2 border-black transform -rotate-1">
             {t('destinations.subtitle')}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {routesToShow.map((route, index) => {
             const fromName = getLocationName(route.from);
             const toName = getLocationName(route.to);
@@ -55,41 +62,41 @@ export default function Destinations() {
             return (
               <div 
                 key={index} 
-                className="group rounded-[2rem] overflow-hidden glass-panel hover:border-white/20 transition-all duration-500 p-8 flex flex-col justify-between min-h-[220px]"
+                className="brutal-card bg-white p-8 flex flex-col justify-between min-h-[220px] group"
               >
                 <div>
                   <div className="flex justify-between items-start mb-6">
-                    <div className="text-xs font-semibold text-white/40 tracking-[0.2em] uppercase">
+                    <div className="text-xs font-black text-black tracking-[0.2em] uppercase bg-yellow-400 px-2 py-1 border-2 border-black">
                       {t('destinations.time', { t: time })}
                     </div>
-                    <div className="bg-white/10 text-white px-4 py-1.5 rounded-full font-bold text-sm">
+                    <div className="bg-black text-white px-4 py-1.5 font-black text-sm border-2 border-black transform rotate-2">
                       {t('destinations.from', { p: price })}
                     </div>
                   </div>
                   
-                  <div className="space-y-1">
-                    <div className="text-xl md:text-2xl font-medium text-white/70 flex items-center gap-2">
+                  <div className="space-y-2">
+                    <div className="text-xl md:text-2xl font-bold text-gray-600 flex items-center gap-2">
                       {fromName}
-                      <ArrowRight className="w-5 h-5 md:w-6 md:h-6 opacity-50" />
+                      <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-black stroke-[3px]" />
                     </div>
-                    <div className="text-xl md:text-2xl font-bold text-white tracking-tight group-hover:text-blue-400 transition-colors duration-300">
+                    <div className="text-2xl md:text-3xl font-black text-black tracking-tight uppercase group-hover:text-yellow-500 transition-colors duration-200">
                       {toName}
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-8 flex items-center justify-between pt-6 border-t border-white/5">
-                  <span className="text-green-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest bg-green-500/10 px-2 py-1 rounded-md">
+                <div className="mt-8 flex items-center justify-between pt-6 border-t-4 border-black">
+                  <span className="text-black text-[10px] sm:text-xs font-black uppercase tracking-widest bg-green-400 px-2 py-1 border-2 border-black transform -rotate-2">
                     {language === 'ru' ? '-10% ОБРАТНО' : '-10% RETURN'}
                   </span>
                   <button 
                     onClick={() => {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    className="text-white hover:text-blue-400 font-bold text-sm uppercase tracking-wider transition-all flex items-center gap-2 group/btn"
+                    className="brutal-btn px-4 py-2 text-sm uppercase"
                   >
                     {t('destinations.order')}
-                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </div>

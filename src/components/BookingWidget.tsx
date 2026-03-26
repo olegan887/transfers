@@ -92,42 +92,45 @@ export default function BookingWidget() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto glass-panel rounded-[2rem] shadow-2xl overflow-hidden">
-      <div className="p-6 md:p-8">
+    <div className="w-full max-w-5xl mx-auto bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden relative">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_2px,transparent_2px)] [background-size:16px_16px] opacity-50 pointer-events-none" />
+      
+      <div className="p-6 md:p-8 relative z-10">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
           <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-bold text-white tracking-tight">{t('booking.title')}</h2>
-            <span className="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-bold uppercase tracking-wider rounded-full border border-green-500/30">
+            <h2 className="text-2xl md:text-3xl font-black text-black tracking-tight uppercase bg-yellow-400 px-4 py-1 border-2 border-black transform -rotate-1">{t('booking.title')}</h2>
+            <span className="px-3 py-1 bg-black text-white text-xs font-black uppercase tracking-wider border-2 border-black transform rotate-2">
               {language === 'ru' ? '-10% на обратный путь' : '10% OFF Round Trip'}
             </span>
           </div>
           
-          <div className="flex bg-white/5 p-1 rounded-xl border border-white/10 w-fit">
+          <div className="flex bg-white p-1 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] w-fit">
             <button
               onClick={() => setIsRoundTrip(false)}
-              className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${!isRoundTrip ? 'bg-white text-black' : 'text-white/60 hover:text-white'}`}
+              className={`px-4 py-1.5 text-sm font-black uppercase transition-all ${!isRoundTrip ? 'bg-yellow-400 text-black border-2 border-black' : 'text-gray-500 hover:text-black'}`}
             >
               {t('booking.oneWay')}
             </button>
             <button
               onClick={() => setIsRoundTrip(true)}
-              className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${isRoundTrip ? 'bg-white text-black' : 'text-white/60 hover:text-white'}`}
+              className={`px-4 py-1.5 text-sm font-black uppercase transition-all ${isRoundTrip ? 'bg-yellow-400 text-black border-2 border-black' : 'text-gray-500 hover:text-black'}`}
             >
               {t('booking.roundTrip')}
             </button>
           </div>
         </div>
 
-        <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-200 text-sm flex items-start gap-3">
-          <Clock className="w-5 h-5 shrink-0 text-blue-400" />
+        <div className="mb-6 p-4 bg-yellow-100 border-2 border-black text-black font-bold text-sm flex items-start gap-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+          <Clock className="w-5 h-5 shrink-0 text-black" />
           <p>{t('booking.notice24h')}</p>
         </div>
         
         {errorDetails && (
-          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
-            <p className="font-bold mb-1">Google Sheets Connection Error:</p>
+          <div className="mb-6 p-4 bg-red-100 border-2 border-black text-black font-bold text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <p className="font-black mb-1 uppercase">Google Sheets Connection Error:</p>
             <p>{errorDetails}</p>
-            <p className="mt-2 text-xs opacity-80">
+            <p className="mt-2 text-xs opacity-80 font-medium">
               To fix this: Go to your Google Sheet &rarr; Extensions &rarr; Apps Script &rarr; Deploy &rarr; Manage deployments &rarr; Edit (pencil icon) &rarr; Ensure "Execute as" is "Me" and "Who has access" is "Anyone" &rarr; Deploy.
             </p>
           </div>
@@ -135,13 +138,13 @@ export default function BookingWidget() {
 
         <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="relative md:col-span-2">
-            <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">{t('booking.from')}</label>
+            <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">{t('booking.from')}</label>
             <div className="relative">
-              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 w-5 h-5" />
+              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-black w-5 h-5" />
               <select 
                 value={from}
                 onChange={(e) => setFrom(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl appearance-none transition-all"
+                className="brutal-input w-full pl-12 pr-4 py-3.5 appearance-none"
                 required
               >
                 <option value="" disabled>{t('booking.selectPickup')}</option>
@@ -160,13 +163,13 @@ export default function BookingWidget() {
           </div>
 
           <div className="relative md:col-span-2">
-            <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">{t('booking.to')}</label>
+            <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">{t('booking.to')}</label>
             <div className="relative">
-              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 w-5 h-5" />
+              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-black w-5 h-5" />
               <select 
                 value={to}
                 onChange={(e) => setTo(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl appearance-none transition-all"
+                className="brutal-input w-full pl-12 pr-4 py-3.5 appearance-none"
                 required
               >
                 <option value="" disabled>{t('booking.selectDropoff')}</option>
@@ -185,13 +188,13 @@ export default function BookingWidget() {
           </div>
 
           <div className="relative">
-            <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">{t('booking.passengers')}</label>
+            <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">{t('booking.passengers')}</label>
             <div className="relative">
-              <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 w-5 h-5" />
+              <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-black w-5 h-5" />
               <select 
                 value={pax}
                 onChange={(e) => setPax(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl appearance-none transition-all"
+                className="brutal-input w-full pl-12 pr-4 py-3.5 appearance-none"
               >
                 {[1,2,3,4].map(n => (
                   <option key={n} value={n}>{n} {getPaxText(n)}</option>
@@ -201,14 +204,14 @@ export default function BookingWidget() {
           </div>
 
           <div className="relative md:col-span-2">
-            <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">{t('booking.date')}</label>
+            <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">{t('booking.date')}</label>
             <div className="relative">
-              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 w-5 h-5" />
+              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-black w-5 h-5" />
               <input 
                 type="date" 
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl transition-all [color-scheme:dark]"
+                className="brutal-input w-full pl-12 pr-4 py-3.5"
                 required
                 lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
               />
@@ -216,14 +219,14 @@ export default function BookingWidget() {
           </div>
 
           <div className="relative md:col-span-2">
-            <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">{t('booking.time')}</label>
+            <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">{t('booking.time')}</label>
             <div className="relative">
-              <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 w-5 h-5" />
+              <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-black w-5 h-5" />
               <input 
                 type="time" 
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl transition-all [color-scheme:dark]"
+                className="brutal-input w-full pl-12 pr-4 py-3.5"
                 required
                 lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
               />
@@ -233,14 +236,14 @@ export default function BookingWidget() {
           {isRoundTrip && (
             <>
               <div className="relative md:col-span-2">
-                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">{t('booking.returnDate')}</label>
+                <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">{t('booking.returnDate')}</label>
                 <div className="relative">
-                  <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 w-5 h-5" />
+                  <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-black w-5 h-5" />
                   <input 
                     type="date" 
                     value={returnDate}
                     onChange={(e) => setReturnDate(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl transition-all [color-scheme:dark]"
+                    className="brutal-input w-full pl-12 pr-4 py-3.5"
                     required={isRoundTrip}
                     lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
                   />
@@ -248,14 +251,14 @@ export default function BookingWidget() {
               </div>
 
               <div className="relative md:col-span-2">
-                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">{t('booking.returnTime')}</label>
+                <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">{t('booking.returnTime')}</label>
                 <div className="relative">
-                  <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 w-5 h-5" />
+                  <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-black w-5 h-5" />
                   <input 
                     type="time" 
                     value={returnTime}
                     onChange={(e) => setReturnTime(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3.5 glass-input rounded-xl transition-all [color-scheme:dark]"
+                    className="brutal-input w-full pl-12 pr-4 py-3.5"
                     required={isRoundTrip}
                     lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
                   />
@@ -267,14 +270,14 @@ export default function BookingWidget() {
           <div className={`relative flex items-end ${isRoundTrip ? 'md:col-span-1' : 'md:col-span-1'}`}>
             <button 
               type="submit"
-              className="w-full py-3.5 px-4 bg-white hover:bg-white/90 text-black font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
+              className="brutal-btn w-full py-3.5 px-4 flex items-center justify-center gap-2"
             >
               <Search className="w-5 h-5" />
               <span>{t('booking.search')}</span>
             </button>
           </div>
           {timeError && (
-            <div className="md:col-span-5 text-red-400 text-sm mt-1 font-medium">
+            <div className="md:col-span-5 text-red-600 bg-red-100 border-2 border-red-600 p-2 text-sm mt-1 font-bold shadow-[2px_2px_0px_0px_rgba(220,38,38,1)]">
               {timeError}
             </div>
           )}
@@ -285,16 +288,16 @@ export default function BookingWidget() {
         <motion.div 
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className="bg-white/5 border-t border-white/10 p-6 md:p-8"
+          className="bg-gray-50 border-t-4 border-black p-6 md:p-8 relative z-10"
         >
-          <h3 className="text-xl font-semibold text-white mb-6">{t('booking.results')}</h3>
+          <h3 className="text-2xl font-black text-black mb-6 uppercase tracking-tight">{t('booking.results')}</h3>
           
           {from === to ? (
-            <div className="text-center py-8 text-white/50">
+            <div className="text-center py-8 text-black font-bold border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               {t('booking.sameLocation')}
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {vehicles.filter(v => v.pax >= parseInt(pax)).map(vehicle => {
                 const basePrice = getBasePrice(from, to);
                 if (!basePrice) return null;
@@ -303,32 +306,32 @@ export default function BookingWidget() {
                 const originalPrice = calculateOriginalPrice(vehiclePrice);
 
                 return (
-                  <div key={vehicle.id} className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 flex flex-col md:flex-row items-center gap-6 hover:bg-white/10 transition-colors">
-                    <div className="w-full md:w-48 h-32 rounded-xl overflow-hidden shrink-0 bg-black/50">
-                      <img src={vehicle.image} alt={vehicle.name[language]} className="w-full h-full object-cover opacity-80" />
+                  <div key={vehicle.id} className="brutal-card bg-white p-4 md:p-6 flex flex-col md:flex-row items-center gap-6">
+                    <div className="w-full md:w-48 h-32 border-4 border-black overflow-hidden shrink-0 bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                      <img src={vehicle.image} alt={vehicle.name[language]} className="w-full h-full object-cover" />
                     </div>
                     
                     <div className="flex-1 w-full">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h4 className="text-lg font-bold text-white">{vehicle.name[language]}</h4>
-                          <p className="text-white/60 text-sm">{vehicle.description[language]}</p>
+                          <h4 className="text-xl font-black text-black uppercase">{vehicle.name[language]}</h4>
+                          <p className="text-gray-600 font-bold text-sm">{vehicle.description[language]}</p>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right bg-yellow-400 border-2 border-black px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transform rotate-2">
                           {isRoundTrip && (
-                            <div className="text-sm text-white/40 line-through mb-0.5">€{originalPrice}</div>
+                            <div className="text-sm text-black line-through mb-0.5 font-bold">€{originalPrice}</div>
                           )}
-                          <div className="text-2xl font-bold text-green-400">€{totalPrice}</div>
-                          <div className="text-xs text-white/40">{t('booking.perVehicle')}</div>
+                          <div className="text-2xl font-black text-black">€{totalPrice}</div>
+                          <div className="text-xs text-black font-bold uppercase">{t('booking.perVehicle')}</div>
                         </div>
                       </div>
                       
-                      <div className="flex gap-4 text-sm text-white/60 mb-4">
-                        <div className="flex items-center gap-1">
+                      <div className="flex gap-4 text-sm text-black font-bold mb-6">
+                        <div className="flex items-center gap-1 bg-white border-2 border-black px-2 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                           <Users className="w-4 h-4" />
                           <span>{t('booking.upToPax', { n: vehicle.pax })}</span>
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1 bg-white border-2 border-black px-2 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                           <CarFront className="w-4 h-4" />
                           <span>{t('booking.upToBags', { n: vehicle.bags })}</span>
                         </div>
@@ -337,7 +340,7 @@ export default function BookingWidget() {
                       <div className="flex justify-end">
                         <button 
                           onClick={() => handleBook(vehicle)}
-                          className="px-6 py-2 bg-white hover:bg-white/90 text-black rounded-lg font-bold transition-colors"
+                          className="brutal-btn px-8 py-2 text-lg uppercase"
                         >
                           {t('booking.book')}
                         </button>
@@ -348,7 +351,7 @@ export default function BookingWidget() {
               })}
               
               {!vehicles.some(v => v.pax >= parseInt(pax) && getBasePrice(from, to) !== null) && (
-                <div className="text-center py-8 text-white/50">
+                <div className="text-center py-8 text-black font-bold border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                   {t('booking.noOptions')}
                 </div>
               )}

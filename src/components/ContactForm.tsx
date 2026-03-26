@@ -47,17 +47,24 @@ export default function ContactForm() {
   };
 
   return (
-    <section className="py-20 bg-[#050505] border-t border-white/5" id="contact">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 bg-yellow-400 border-y-4 border-black relative overflow-hidden" id="contact">
+      {/* Background Doodles */}
+      <div className="absolute inset-0 pointer-events-none opacity-10">
+        <div className="absolute top-10 left-10 w-32 h-32 border-8 border-black rounded-full" />
+        <div className="absolute bottom-20 right-20 w-40 h-40 bg-black transform rotate-12" />
+        <div className="absolute top-1/2 left-1/4 w-20 h-20 border-8 border-black transform -rotate-12" />
+      </div>
+
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('contact.title')}</h2>
-          <p className="text-white/60">{t('contact.subtitle')}</p>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-black mb-4 tracking-tighter uppercase inline-block bg-white px-6 py-2 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transform -rotate-2">{t('contact.title')}</h2>
+          <p className="text-black font-bold mt-6 bg-white/50 inline-block px-4 py-2 border-2 border-black transform rotate-1">{t('contact.subtitle')}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-6 md:p-8 space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="brutal-card bg-white p-6 md:p-8 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
+              <label className="block text-sm font-black text-black uppercase tracking-wider mb-2">
                 {t('contact.name')}
               </label>
               <input
@@ -65,11 +72,11 @@ export default function ContactForm() {
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-white/30 transition-colors"
+                className="brutal-input w-full px-4 py-3"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
+              <label className="block text-sm font-black text-black uppercase tracking-wider mb-2">
                 {t('contact.phone')}
               </label>
               <input
@@ -77,13 +84,13 @@ export default function ContactForm() {
                 required
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-white/30 transition-colors"
+                className="brutal-input w-full px-4 py-3"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
+            <label className="block text-sm font-black text-black uppercase tracking-wider mb-2">
               {t('contact.email')}
             </label>
             <input
@@ -91,12 +98,12 @@ export default function ContactForm() {
               required
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-white/30 transition-colors"
+              className="brutal-input w-full px-4 py-3"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
+            <label className="block text-sm font-black text-black uppercase tracking-wider mb-2">
               {t('contact.comment')}
             </label>
             <textarea
@@ -104,32 +111,32 @@ export default function ContactForm() {
               rows={4}
               value={formData.comment}
               onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-white/30 transition-colors resize-none"
+              className="brutal-input w-full px-4 py-3 resize-none"
             />
           </div>
 
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="w-full py-4 bg-white hover:bg-white/90 disabled:bg-white/50 text-black font-bold rounded-xl transition-colors flex items-center justify-center gap-2 mt-6"
+            className="brutal-btn w-full py-4 text-lg mt-8"
           >
             {status === 'loading' ? (
-              <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+              <div className="w-6 h-6 border-4 border-black/20 border-t-black rounded-full animate-spin mx-auto" />
             ) : status === 'success' ? (
-              <>
-                <CheckCircle2 className="w-5 h-5 text-green-600" />
+              <div className="flex items-center justify-center gap-2">
+                <CheckCircle2 className="w-6 h-6 text-green-600" />
                 <span className="text-green-600">{t('contact.success')}</span>
-              </>
+              </div>
             ) : status === 'error' ? (
-              <>
-                <AlertCircle className="w-5 h-5 text-red-600" />
+              <div className="flex items-center justify-center gap-2">
+                <AlertCircle className="w-6 h-6 text-red-600" />
                 <span className="text-red-600">{t('contact.error')}</span>
-              </>
+              </div>
             ) : (
-              <>
-                <Send className="w-5 h-5" />
+              <div className="flex items-center justify-center gap-2">
+                <Send className="w-6 h-6" />
                 {t('contact.submit')}
-              </>
+              </div>
             )}
           </button>
         </form>

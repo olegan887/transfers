@@ -7,69 +7,59 @@ export default function Features() {
 
   const features = [
     {
-      icon: <Plane className="w-8 h-8 text-white" />,
+      icon: <Plane className="w-7 h-7" />,
       title: t('features.f1Title'),
-      description: t('features.f1Desc'),
-      className: "md:col-span-2 bg-gradient-to-br from-blue-900/40 to-black"
+      description: t('features.f1Desc')
     },
     {
-      icon: <Clock className="w-8 h-8 text-white" />,
+      icon: <Clock className="w-7 h-7" />,
       title: t('features.f2Title'),
-      description: t('features.f2Desc'),
-      className: "md:col-span-1 bg-white/5"
+      description: t('features.f2Desc')
     },
     {
-      icon: <CreditCard className="w-8 h-8 text-white" />,
+      icon: <CreditCard className="w-7 h-7" />,
       title: t('features.f3Title'),
-      description: t('features.f3Desc'),
-      className: "md:col-span-1 bg-white/5"
+      description: t('features.f3Desc')
     },
     {
-      icon: <ShieldCheck className="w-8 h-8 text-white" />,
+      icon: <ShieldCheck className="w-7 h-7" />,
       title: t('features.f4Title'),
-      description: t('features.f4Desc'),
-      className: "md:col-span-1 bg-white/5"
+      description: t('features.f4Desc')
     },
     {
-      icon: <Luggage className="w-8 h-8 text-white" />,
+      icon: <Luggage className="w-7 h-7" />,
       title: t('features.f5Title'),
-      description: t('features.f5Desc'),
-      className: "md:col-span-1 bg-white/5"
+      description: t('features.f5Desc')
     },
     {
-      icon: <ThumbsUp className="w-8 h-8 text-white" />,
+      icon: <ThumbsUp className="w-7 h-7" />,
       title: t('features.f6Title'),
-      description: t('features.f6Desc'),
-      className: "md:col-span-3 bg-gradient-to-r from-white/5 via-blue-900/20 to-white/5"
+      description: t('features.f6Desc')
     }
   ];
 
   return (
-    <section id="features" className="py-32 relative">
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tighter">
-            {t('features.title')}
-          </h2>
-          <p className="text-lg text-white/60 font-light">
-            {t('features.subtitle')}
-          </p>
-        </div>
+    <section id="features" className="py-32 relative bg-yellow-400 border-y-4 border-black overflow-hidden">
+      {/* Background Doodles */}
+      <div className="absolute inset-0 pointer-events-none opacity-10">
+        <div className="absolute top-10 left-10 w-32 h-32 border-8 border-black rounded-full" />
+        <div className="absolute bottom-20 right-20 w-40 h-40 bg-black transform rotate-12" />
+        <div className="absolute top-1/2 left-1/4 w-20 h-20 border-8 border-black transform -rotate-12" />
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto auto-rows-[minmax(250px,auto)]">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {features.map((feature, index) => (
             <div 
               key={index} 
-              className={`p-8 rounded-[2rem] border border-white/10 hover:border-white/20 transition-all duration-300 flex flex-col justify-between group overflow-hidden relative ${feature.className}`}
+              className="brutal-card bg-white p-8 flex flex-col group"
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-8 bg-white/10 border border-white/10 group-hover:scale-110 transition-transform duration-500 relative z-10">
+              <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-yellow-400 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-black transition-all duration-200">
                 {feature.icon}
               </div>
-              <div className="relative z-10">
-                <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">{feature.title}</h3>
-                <p className="text-white/60 leading-relaxed font-light">
+              <div>
+                <h3 className="text-2xl font-black text-black mb-4 uppercase tracking-tight">{feature.title}</h3>
+                <p className="text-black font-medium leading-relaxed text-lg">
                   {feature.description}
                 </p>
               </div>

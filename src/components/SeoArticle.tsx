@@ -5,7 +5,7 @@ export default function SeoArticle() {
   const { t } = useLanguage();
 
   return (
-    <section className="bg-[#050505] py-4">
+    <section className="bg-slate-900 py-4">
       <div className="container mx-auto px-4">
         {/* Visually hidden but accessible to screen readers and search engines */}
         <div className="sr-only">
@@ -15,7 +15,7 @@ export default function SeoArticle() {
         
         {/* Subtle visible version to avoid search engine penalties for hidden text */}
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-[10px] leading-relaxed text-white/20 font-light">
+          <p className="text-[10px] leading-relaxed text-slate-400 font-light">
             {t('seo.article')}
           </p>
         </div>
