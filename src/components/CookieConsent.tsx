@@ -49,19 +49,19 @@ export default function CookieConsent() {
             transition={{ type: 'spring', damping: 20, stiffness: 100 }}
             className="fixed bottom-0 left-0 right-0 z-[90] p-4 md:p-6 pointer-events-none"
           >
-            <div className="max-w-4xl mx-auto bg-slate-900/95 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-2xl pointer-events-auto border border-slate-800 flex flex-col md:flex-row items-center gap-4 md:gap-8">
-              <div className="flex-1 text-sm text-slate-400 leading-relaxed">
+            <div className="max-w-4xl mx-auto bg-white border-4 border-black p-4 md:p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] pointer-events-auto flex flex-col md:flex-row items-center gap-4 md:gap-8 transform -rotate-1">
+              <div className="flex-1 text-sm text-black font-bold leading-relaxed">
                 {content[language].text}
                 <button 
                   onClick={() => setLegalModal({ isOpen: true, type: 'privacy' })}
-                  className="text-indigo-400 underline hover:text-indigo-300 transition-colors"
+                  className="text-black bg-yellow-400 px-1 border-2 border-black hover:bg-white transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 >
                   {content[language].link}
                 </button>.
               </div>
               <button
                 onClick={acceptCookies}
-                className="w-full md:w-auto whitespace-nowrap px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors"
+                className="brutal-btn w-full md:w-auto whitespace-nowrap px-8 py-3 text-sm uppercase"
               >
                 {content[language].button}
               </button>

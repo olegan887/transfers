@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Car, MessageCircle, Mail, MapPin } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import LegalModal from './LegalModal';
+import Logo from './Logo';
 
 export default function Footer() {
   const { t, language } = useLanguage();
@@ -27,8 +28,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-16">
           
           <div className="space-y-6">
-            <div className="flex items-center gap-2 text-black">
-              <img src="/logo1.png" alt="Cyprus Airport Transfer" className="h-20 md:h-28 object-contain filter grayscale contrast-125" />
+            <div className="flex items-center gap-2 text-black mb-8">
+              <Logo className="scale-125 md:scale-150 origin-left" />
             </div>
             <p className="text-sm leading-relaxed font-bold">
               {t('footer.desc')}

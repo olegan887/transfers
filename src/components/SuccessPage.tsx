@@ -54,29 +54,35 @@ export default function SuccessPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-slate-800 border border-slate-700 shadow-xl rounded-3xl p-8 text-center">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Doodles */}
+      <div className="absolute inset-0 pointer-events-none opacity-10">
+        <div className="absolute top-10 right-1/4 w-32 h-32 border-8 border-black transform rotate-45" />
+        <div className="absolute bottom-10 left-10 w-40 h-40 bg-yellow-400 rounded-full" />
+      </div>
+
+      <div className="max-w-md w-full bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-8 text-center relative z-10">
         
         {status === 'loading' && (
           <div className="py-8">
-            <Loader2 className="w-12 h-12 text-indigo-400 animate-spin mx-auto mb-4" />
-            <h2 className="text-xl font-bold text-white mb-2">Verifying Payment...</h2>
-            <p className="text-slate-400">Please wait while we confirm your order.</p>
+            <Loader2 className="w-16 h-16 text-black animate-spin mx-auto mb-6" />
+            <h2 className="text-2xl font-black text-black uppercase tracking-tight mb-2">Verifying Payment...</h2>
+            <p className="text-black font-bold">Please wait while we confirm your order.</p>
           </div>
         )}
 
         {status === 'error' && (
           <div className="py-8">
-            <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <AlertCircle className="w-10 h-10 text-red-400" />
+            <div className="w-24 h-24 bg-red-400 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-full flex items-center justify-center mx-auto mb-8 transform -rotate-6">
+              <AlertCircle className="w-12 h-12 text-black" />
             </div>
-            <h2 className="text-xl font-bold text-white mb-2">Verification Failed</h2>
-            <p className="text-red-400 mb-6">{errorMessage}</p>
+            <h2 className="text-2xl font-black text-black uppercase tracking-tight mb-4 bg-red-400 inline-block px-4 py-1 border-2 border-black transform rotate-2">Verification Failed</h2>
+            <p className="text-black font-bold mb-8 bg-gray-100 p-4 border-2 border-black">{errorMessage}</p>
             <button 
               onClick={() => window.location.href = '/'}
-              className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
+              className="brutal-btn w-full py-4 text-xl uppercase flex items-center justify-center gap-2"
             >
-              <Home className="w-5 h-5" />
+              <Home className="w-6 h-6" />
               {t('booking.backHome') || 'Back to Home'}
             </button>
           </div>
@@ -84,29 +90,29 @@ export default function SuccessPage() {
 
         {status === 'success' && (
           <>
-            <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle2 className="w-10 h-10 text-emerald-400" />
+            <div className="w-24 h-24 bg-green-400 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-full flex items-center justify-center mx-auto mb-8 transform rotate-6">
+              <CheckCircle2 className="w-12 h-12 text-black" />
             </div>
             
-            <h1 className="text-3xl font-bold text-white mb-4">
+            <h1 className="text-3xl font-black text-black uppercase tracking-tight mb-6 bg-yellow-400 inline-block px-4 py-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform -rotate-2">
               {t('booking.successTitle') || 'Booking Confirmed!'}
             </h1>
             
-            <p className="text-slate-400 mb-8">
+            <p className="text-black font-bold text-lg mb-8 leading-relaxed">
               {t('booking.successDesc') || 'Thank you for your booking. We have received your request and will contact you shortly to confirm the details.'}
             </p>
 
             {sessionId && (
-              <div className="text-xs text-slate-500 mb-8 break-all">
+              <div className="text-xs font-bold text-black bg-gray-100 p-3 border-2 border-black mb-8 break-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transform rotate-1">
                 Order ID: {sessionId}
               </div>
             )}
 
             <button 
               onClick={() => window.location.href = '/'}
-              className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
+              className="brutal-btn w-full py-4 text-xl uppercase flex items-center justify-center gap-2"
             >
-              <Home className="w-5 h-5" />
+              <Home className="w-6 h-6" />
               {t('booking.backHome') || 'Back to Home'}
             </button>
           </>

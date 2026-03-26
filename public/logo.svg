@@ -1,0 +1,47 @@
+<svg width="220" height="60" viewBox="0 0 220 60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;900&amp;display=swap');
+      .text-cyprus { font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 900; font-size: 24px; fill: #000; text-transform: uppercase; letter-spacing: -1px; }
+      .text-transfer { font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 10px; fill: #000; text-transform: uppercase; letter-spacing: 1.5px; }
+    </style>
+  </defs>
+  
+  <!-- Group for the icon, rotated -3 deg -->
+  <g transform="translate(15, 15) rotate(-3)">
+    <!-- Shadow -->
+    <rect x="3" y="3" width="40" height="40" fill="#000" />
+    <!-- Box -->
+    <rect x="0" y="0" width="40" height="40" fill="#facc15" stroke="#000" stroke-width="2" />
+    
+    <!-- CarFront Icon (centered in 40x40 box -> 24x24 icon means offset 8,8) -->
+    <g transform="translate(8, 8)" stroke="#000" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m21 8-2 2-1.5-3.7A2 2 0 0 0 15.646 5H8.4a2 2 0 0 0-1.903 1.257L5 10 3 8"/>
+      <path d="M7 14h.01"/>
+      <path d="M17 14h.01"/>
+      <rect width="18" height="8" x="3" y="10" rx="2"/>
+      <path d="M5 18v2"/>
+      <path d="M19 18v2"/>
+    </g>
+    
+    <!-- Plane Icon (w-5 h-5 = 20x20, -top-2 -right-2 = offset x=28, y=-8, rotated 45 deg) -->
+    <!-- Note: 20/24 scale = 0.833 -->
+    <g transform="translate(28, -8) rotate(45) scale(0.833)" stroke="#000" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.2-1.1.7l-1.3 2.6c-.2.4-.1 1 .3 1.3L9 14l-2 2-3-1c-.4-.1-.8 0-1.1.3l-1.4 1.4c-.3.3-.3.8 0 1.1l4 4c.3.3.8.3 1.1 0l1.4-1.4c.3-.3.4-.7.3-1.1l-1-3 2-2 3.2 6.3c.3.4.9.5 1.3.3l2.6-1.3c.5-.2.8-.6.7-1.1Z"/>
+    </g>
+  </g>
+  
+  <!-- Group for the text, rotated 1 deg -->
+  <g transform="translate(65, 30) rotate(1)">
+    <text x="0" y="0" class="text-cyprus">CYPRUS</text>
+    
+    <!-- Transfer Badge -->
+    <g transform="translate(0, 6)">
+      <!-- Shadow -->
+      <rect x="1" y="1" width="70" height="16" fill="#000" />
+      <!-- Box -->
+      <rect x="0" y="0" width="70" height="16" fill="#fff" stroke="#000" stroke-width="1" />
+      <text x="4" y="11" class="text-transfer">TRANSFER</text>
+    </g>
+  </g>
+</svg>

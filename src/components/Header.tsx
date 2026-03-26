@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Car, Menu, X, MessageCircle, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
+import Logo from './Logo';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -43,8 +44,8 @@ export default function Header() {
         isScrolled ? 'bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-transparent'
       }`}>
         <div className="flex items-center gap-2">
-          <a href="/">
-            <img src="/logo1.png" alt="Cyprus Airport Transfer" className="h-10 sm:h-12 md:h-24 object-contain" />
+          <a href="/" className="hover:opacity-90 transition-opacity">
+            <Logo />
           </a>
         </div>
 
