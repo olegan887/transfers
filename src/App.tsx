@@ -16,6 +16,7 @@ import SeoArticle from './components/SeoArticle';
 import CookieConsent from './components/CookieConsent';
 import BlogList from './components/BlogList';
 import BlogPost from './components/BlogPost';
+import ExitIntentPopup from './components/ExitIntentPopup';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { DataProvider } from './context/DataContext';
 
@@ -90,6 +91,7 @@ export default function App() {
           </a>
           
           <CookieConsent />
+          <ExitIntentPopup />
         </div>
       </DataProvider>
     </LanguageProvider>

@@ -91,6 +91,16 @@ export default function BookingWidget() {
     return isRoundTrip ? basePrice * 2 : basePrice;
   };
 
+  const handleInvalid = (e: React.FormEvent<HTMLFormElement>) => {
+    const firstInvalidElement = e.currentTarget.querySelector(':invalid') as HTMLElement;
+    if (firstInvalidElement) {
+      setTimeout(() => {
+        firstInvalidElement.focus();
+        firstInvalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    }
+  };
+
   return (
     <div className="w-full max-w-5xl mx-auto bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden relative">
       {/* Background Pattern */}
@@ -136,7 +146,7 @@ export default function BookingWidget() {
           </div>
         )}
 
-        <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <form onSubmit={handleSearch} onInvalid={handleInvalid} className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="relative md:col-span-2">
             <label className="block text-xs font-black text-black uppercase tracking-wider mb-2">{t('booking.from')}</label>
             <div className="relative">
@@ -144,7 +154,7 @@ export default function BookingWidget() {
               <select 
                 value={from}
                 onChange={(e) => setFrom(e.target.value)}
-                className="brutal-input w-full pl-12 pr-4 py-3.5 appearance-none"
+                className="brutal-input w-full pl-12 pr-4 h-14 appearance-none text-base bg-white"
                 required
               >
                 <option value="" disabled>{t('booking.selectPickup')}</option>
@@ -169,7 +179,7 @@ export default function BookingWidget() {
               <select 
                 value={to}
                 onChange={(e) => setTo(e.target.value)}
-                className="brutal-input w-full pl-12 pr-4 py-3.5 appearance-none"
+                className="brutal-input w-full pl-12 pr-4 h-14 appearance-none text-base bg-white"
                 required
               >
                 <option value="" disabled>{t('booking.selectDropoff')}</option>
@@ -194,7 +204,7 @@ export default function BookingWidget() {
               <select 
                 value={pax}
                 onChange={(e) => setPax(e.target.value)}
-                className="brutal-input w-full pl-12 pr-4 py-3.5 appearance-none"
+                className="brutal-input w-full pl-12 pr-4 h-14 appearance-none text-base bg-white"
               >
                 {[1,2,3,4].map(n => (
                   <option key={n} value={n}>{n} {getPaxText(n)}</option>
@@ -211,7 +221,7 @@ export default function BookingWidget() {
                 type="date" 
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="brutal-input w-full pl-12 pr-4 py-3.5"
+                className="brutal-input w-full pl-12 pr-4 h-14 text-base bg-white"
                 required
                 lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
               />
@@ -226,7 +236,7 @@ export default function BookingWidget() {
                 type="time" 
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
-                className="brutal-input w-full pl-12 pr-4 py-3.5"
+                className="brutal-input w-full pl-12 pr-4 h-14 text-base bg-white"
                 required
                 lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
               />
@@ -243,7 +253,7 @@ export default function BookingWidget() {
                     type="date" 
                     value={returnDate}
                     onChange={(e) => setReturnDate(e.target.value)}
-                    className="brutal-input w-full pl-12 pr-4 py-3.5"
+                    className="brutal-input w-full pl-12 pr-4 h-14 text-base bg-white"
                     required={isRoundTrip}
                     lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
                   />
@@ -258,7 +268,7 @@ export default function BookingWidget() {
                     type="time" 
                     value={returnTime}
                     onChange={(e) => setReturnTime(e.target.value)}
-                    className="brutal-input w-full pl-12 pr-4 py-3.5"
+                    className="brutal-input w-full pl-12 pr-4 h-14 text-base bg-white"
                     required={isRoundTrip}
                     lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
                   />
@@ -270,7 +280,7 @@ export default function BookingWidget() {
           <div className={`relative flex items-end ${isRoundTrip ? 'md:col-span-1' : 'md:col-span-1'}`}>
             <button 
               type="submit"
-              className="brutal-btn w-full py-3.5 px-4 flex items-center justify-center gap-2"
+              className="brutal-btn w-full h-14 px-4 flex items-center justify-center gap-2"
             >
               <Search className="w-5 h-5" />
               <span>{t('booking.search')}</span>

@@ -46,6 +46,16 @@ export default function ContactForm() {
     }
   };
 
+  const handleInvalid = (e: React.FormEvent<HTMLFormElement>) => {
+    const firstInvalidElement = e.currentTarget.querySelector(':invalid') as HTMLElement;
+    if (firstInvalidElement) {
+      setTimeout(() => {
+        firstInvalidElement.focus();
+        firstInvalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    }
+  };
+
   return (
     <section className="py-20 bg-yellow-400 border-y-4 border-black relative overflow-hidden" id="contact">
       {/* Background Doodles */}
@@ -61,7 +71,7 @@ export default function ContactForm() {
           <p className="text-black font-bold mt-6 bg-white/50 inline-block px-4 py-2 border-2 border-black transform rotate-1">{t('contact.subtitle')}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="brutal-card bg-white p-6 md:p-8 space-y-6">
+        <form onSubmit={handleSubmit} onInvalid={handleInvalid} className="brutal-card bg-white p-6 md:p-8 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-black text-black uppercase tracking-wider mb-2">
@@ -72,7 +82,7 @@ export default function ContactForm() {
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="brutal-input w-full px-4 py-3"
+                className="brutal-input w-full px-4 h-14 text-base"
               />
             </div>
             <div>
@@ -84,7 +94,7 @@ export default function ContactForm() {
                 required
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="brutal-input w-full px-4 py-3"
+                className="brutal-input w-full px-4 h-14 text-base"
               />
             </div>
           </div>
@@ -98,7 +108,7 @@ export default function ContactForm() {
               required
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="brutal-input w-full px-4 py-3"
+              className="brutal-input w-full px-4 h-14 text-base"
             />
           </div>
 
@@ -111,14 +121,14 @@ export default function ContactForm() {
               rows={4}
               value={formData.comment}
               onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
-              className="brutal-input w-full px-4 py-3 resize-none"
+              className="brutal-input w-full px-4 py-4 text-base resize-none min-h-[120px]"
             />
           </div>
 
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="brutal-btn w-full py-4 text-lg mt-8"
+            className="brutal-btn w-full h-14 text-lg mt-8"
           >
             {status === 'loading' ? (
               <div className="w-6 h-6 border-4 border-black/20 border-t-black rounded-full animate-spin mx-auto" />

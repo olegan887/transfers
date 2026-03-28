@@ -55,6 +55,9 @@ body {
   border-radius: 0.75rem;
   color: #000000;
   transition: all 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  opacity: 1;
 }
 .brutal-input:focus {
   outline: none;
@@ -64,6 +67,12 @@ body {
 .brutal-input option, .brutal-input optgroup {
   background: #ffffff;
   color: #000000;
+}
+input[type="date"].brutal-input,
+input[type="time"].brutal-input {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .brutal-btn {

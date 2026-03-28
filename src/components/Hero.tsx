@@ -18,7 +18,6 @@ const BackgroundDoodles = () => (
     <Building className="absolute top-1/3 left-1/4 w-8 h-8 text-black opacity-80" strokeWidth={1.5} />
     <Sun className="absolute top-24 right-1/3 w-12 h-12 text-yellow-400 opacity-80 animate-[spin_10s_linear_infinite]" strokeWidth={2} />
     {/* Memphis Shapes */}
-    <div className="absolute top-1/4 right-10 w-16 h-16 border-4 border-black rounded-full" />
     <div className="absolute bottom-1/3 left-10 w-8 h-8 bg-yellow-400 border-2 border-black rounded-full" />
     <div className="absolute top-1/2 right-1/4 flex gap-2">
       <div className="w-3 h-3 bg-black rounded-full" />
