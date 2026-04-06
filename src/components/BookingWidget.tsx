@@ -15,6 +15,8 @@ export default function BookingWidget() {
   const [returnTime, setReturnTime] = useState('');
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [pax, setPax] = useState('1');
+  const [dateFocused, setDateFocused] = useState(false);
+  const [returnDateFocused, setReturnDateFocused] = useState(false);
   
   const [showResults, setShowResults] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -64,6 +66,21 @@ export default function BookingWidget() {
       }
 
       if (from && to) {
+        // Log the search as a lead
+        fetch('/api/log-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            status: 'Searched Route',
+            pickup: locations.find(l => l.id === from)?.name[language as keyof typeof locations[0]['name']] || from,
+            dropoff: locations.find(l => l.id === to)?.name[language as keyof typeof locations[0]['name']] || to,
+            date: date,
+            time: time,
+            passengers: pax,
+            comments: `RoundTrip: ${isRoundTrip}`
+          })
+        }).catch(err => console.error('Failed to log search lead', err));
+
         setShowResults(true);
       }
     };
@@ -218,12 +235,14 @@ export default function BookingWidget() {
             <div className="relative">
               <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-black w-5 h-5" />
               <input 
-                type="date" 
+                type={(dateFocused || date) ? "date" : "text"}
+                placeholder="DD/MM/YYYY"
+                onFocus={() => setDateFocused(true)}
+                onBlur={() => setDateFocused(false)}
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 className="brutal-input w-full pl-12 pr-4 h-14 text-base bg-white"
                 required
-                lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
               />
             </div>
           </div>
@@ -250,12 +269,14 @@ export default function BookingWidget() {
                 <div className="relative">
                   <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-black w-5 h-5" />
                   <input 
-                    type="date" 
+                    type={(returnDateFocused || returnDate) ? "date" : "text"}
+                    placeholder="DD/MM/YYYY"
+                    onFocus={() => setReturnDateFocused(true)}
+                    onBlur={() => setReturnDateFocused(false)}
                     value={returnDate}
                     onChange={(e) => setReturnDate(e.target.value)}
                     className="brutal-input w-full pl-12 pr-4 h-14 text-base bg-white"
                     required={isRoundTrip}
-                    lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
                   />
                 </div>
               </div>

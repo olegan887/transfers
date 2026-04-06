@@ -99,6 +99,29 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
+  app.post("/api/log-lead", async (req, res) => {
+    try {
+      const leadData = req.body;
+      let GOOGLE_SCRIPT_URL = process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec';
+      GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
+
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'log_lead',
+          ...leadData
+        }),
+      });
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error logging lead to Google Sheets:", error);
+      res.status(500).json({ error: "Failed to log lead" });
+    }
+  });
+
   app.post("/api/create-checkout-session", async (req, res) => {
     try {
       const { bookingData, price, vehicleName } = req.body;

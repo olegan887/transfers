@@ -41,6 +41,30 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const handleClose = () => {
+    // Log abandoned checkout if they entered at least a name or phone
+    if (name || phone) {
+      fetch('/api/log-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          status: 'Abandoned Modal',
+          name: name,
+          phone: `${phone} (${messenger})`,
+          pickup: bookingData.fromName,
+          dropoff: bookingData.toName,
+          date: bookingData.date,
+          time: bookingData.time,
+          passengers: bookingData.pax,
+          vehicle: vehicleName,
+          price: price,
+          comments: `Flight: ${flightNumber} | Address: ${address} | Comment: ${comment} | RoundTrip: ${bookingData.isRoundTrip}`
+        })
+      }).catch(err => console.error('Failed to log abandoned lead', err));
+    }
+    onClose();
+  };
+
   useEffect(() => {
     // Removed auto-apply logic
   }, []);
@@ -91,6 +115,25 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     e.preventDefault();
     setIsLoading(true);
     setError('');
+
+    // Log the lead before redirecting to Stripe
+    fetch('/api/log-lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        status: 'Redirected to Stripe',
+        name: name,
+        phone: `${phone} (${messenger})`,
+        pickup: bookingData.fromName,
+        dropoff: bookingData.toName,
+        date: bookingData.date,
+        time: bookingData.time,
+        passengers: bookingData.pax,
+        vehicle: vehicleName,
+        price: price,
+        comments: `Flight: ${flightNumber} | Address: ${address} | Comment: ${comment} | RoundTrip: ${bookingData.isRoundTrip}`
+      })
+    }).catch(err => console.error('Failed to log checkout lead', err));
 
     try {
       const response = await fetch('/api/create-checkout-session', {
@@ -152,7 +195,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
-            onClick={onClose}
+            onClick={handleClose}
           />
           
           <motion.div
@@ -164,7 +207,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
             <div className="flex items-center justify-between p-3 border-b-4 border-black bg-yellow-400 shrink-0">
               <h3 className="text-lg font-black text-black uppercase tracking-tight">{t('booking.checkoutTitle')}</h3>
               <button 
-                onClick={onClose}
+                onClick={handleClose}
                 className="p-1 text-black hover:bg-black hover:text-white border-2 border-transparent hover:border-black transition-colors"
               >
                 <X className="w-5 h-5" />
