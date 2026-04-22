@@ -52,16 +52,22 @@ function doGet(e) {
     }
 
     // 2. Get Blocked Times
-    const blockedSheet = sheet.getSheetByName('BlockedTimes');
+    const blockedSheet = sheet.getSheetByName('BlockedTimes') || sheet.getSheetByName('Blocked Times');
     const blockedData = blockedSheet ? blockedSheet.getDataRange().getValues() : [];
     const blocked = [];
     
     // Assuming BlockedTimes sheet has headers: Date | Time
     if (blockedData.length > 1) {
       for (let i = 1; i < blockedData.length; i++) {
+        const dateCell = blockedData[i][0];
+        const timeCell = blockedData[i][1];
+        
+        // Skip completely empty rows
+        if (!dateCell) continue;
+
         blocked.push({
-          date: blockedData[i][0] instanceof Date ? Utilities.formatDate(blockedData[i][0], Session.getScriptTimeZone(), "yyyy-MM-dd") : String(blockedData[i][0]),
-          time: blockedData[i][1] instanceof Date ? Utilities.formatDate(blockedData[i][1], Session.getScriptTimeZone(), "HH:mm") : String(blockedData[i][1])
+          date: dateCell instanceof Date ? Utilities.formatDate(dateCell, Session.getScriptTimeZone(), "yyyy-MM-dd") : String(dateCell),
+          time: timeCell instanceof Date ? Utilities.formatDate(timeCell, Session.getScriptTimeZone(), "HH:mm") : (timeCell ? String(timeCell) : "")
         });
       }
     }

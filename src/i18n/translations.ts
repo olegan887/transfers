@@ -102,7 +102,7 @@ export const translations = {
       error: 'Произошла ошибка. Пожалуйста, попробуйте позже.',
     },
     seo: {
-      article: 'Трансфер из аэропортов Кипра: Пафос (PFO) и Ларнака (LCA). Ищете надежное такси на Кипре? Мы предлагаем комфортные пассажирские перевозки по всему острову. Наши основные направления: трансфер аэропорт Пафос - Лимассол, Ларнака аэропорт - Пафос, такси из аэропорта Пафос в город (Paphos City), а также маршруты Пафос - Ларнака и Ларнака аэропорт - Лимассол. Закажите недорогое такси из аэропорта Пафоса с русскоговорящим водителем. Фиксированные цены, встреча у главного выхода, помощь с багажом. Безопасные поездки в Пейю, Корал Бэй, Полис, Айя-Напу и Протарас. Забронировать трансфер на Кипре онлайн.'
+      article: 'Трансфер из аэропортов Кипра: надежное такси из Пафоса (PFO) и Ларнаки (LCA). Ищете дешевое такси на Кипре или комфортный трансфер из аэропорта? Мы предлагаем безопасные пассажирские перевозки по всему острову. Наши приоритетные и самые популярные маршруты: трансфер из аэропорта Ларнаки в Лимассол, такси Ларнака - Айя-Напа, Ларнака - Протарас и Ларнака - Никосия. Также мы специализируемся на маршрутах из Пафоса: трансфер аэропорт Пафос - Лимассол, такси из Пафоса в Корал Бэй и Пафос Сити (Paphos City). Нужен ли вам трансфер из Ларнаки или такси из аэропорта Пафоса, мы гарантируем фиксированные цены, отсутствие скрытых платежей и бесплатную встречу с табличкой по прилету. Закажите такси на Кипре дешево и онлайн 24/7. Комфортные поездки в Пейю, Полис, Айя-Напу, Протарас, Никосию и Лимассол с профессиональными русскоговорящими водителями. Надежный трансфер на Кипре по лучшей цене.'
     },
     blog: {
       title: 'Наш блог',
@@ -214,7 +214,7 @@ export const translations = {
       error: 'An error occurred. Please try again later.',
     },
     seo: {
-      article: 'Cyprus Airport Transfers: Paphos (PFO) and Larnaca (LCA). Looking for a reliable taxi in Cyprus? We offer comfortable passenger transportation across the island. Our main routes include: Paphos Airport to Limassol transfer, Larnaca Airport to Paphos, taxi from Paphos Airport to Paphos City, as well as Paphos to Larnaca and Larnaca Airport to Limassol routes. Book an affordable taxi from Paphos airport with professional drivers. Fixed prices, meet and greet service, luggage assistance. Safe trips to Peyia, Coral Bay, Polis, Ayia Napa, and Protaras. Book your Cyprus transfer online.'
+      article: 'Cyprus Airport Transfers: Reliable Taxi from Paphos (PFO) and Larnaca (LCA). Are you looking for a cheap taxi in Cyprus or a premium airport transfer? We offer comfortable, safe, and reliable passenger transportation across the entire island. Our priority routes include: Larnaca Airport to Limassol, Larnaca Airport to Ayia Napa, Larnaca Airport to Protaras, and Larnaca Airport to Nicosia. We also specialize in transfers from Paphos Airport to Limassol, Paphos Airport to Coral Bay, and taxi from Paphos Airport to Paphos City. Whether you need a Larnaca airport transfer or a Paphos airport taxi, we guarantee fixed prices, no hidden fees, and a free meet and greet service at the arrivals hall. Book your Cyprus airport taxi online 24/7. Enjoy a stress-free ride to popular destinations like Peyia, Polis, Ayia Napa, Protaras, and Nicosia with our professional drivers. Cheap taxi Cyprus, reliable transfer, and premium service – all in one place.'
     },
     blog: {
       title: 'Our Blog',

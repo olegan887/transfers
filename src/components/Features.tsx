@@ -39,7 +39,7 @@ export default function Features() {
   ];
 
   return (
-    <section id="features" className="py-32 relative bg-yellow-400 border-y-4 border-black overflow-hidden">
+    <section id="features" className="py-32 relative bg-white border-y-4 border-black overflow-hidden">
       {/* Background Doodles */}
       <div className="absolute inset-0 pointer-events-none opacity-10">
         <div className="absolute top-10 left-10 w-32 h-32 border-8 border-black rounded-full" />
