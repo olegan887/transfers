@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Car, MessageCircle, Mail, MapPin } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { getLinkPath } from '../lib/utils';
 import LegalModal from './LegalModal';
 import Logo from './Logo';
 
@@ -65,9 +66,9 @@ export default function Footer() {
           <div>
             <h4 className="text-black font-black mb-6 uppercase tracking-widest text-sm bg-yellow-400 inline-block px-2 py-1 border-2 border-black transform -rotate-1">{t('footer.nav')}</h4>
             <ul className="space-y-4 text-sm font-bold">
-              <li><a href="/#destinations" className="hover:text-yellow-500 transition-colors">{t('nav.destinations')}</a></li>
-              <li><a href="/#features" className="hover:text-yellow-500 transition-colors">{t('nav.features')}</a></li>
-              <li><a href="/blog" className="hover:text-yellow-500 transition-colors">{t('nav.blog')}</a></li>
+              <li><a href={getLinkPath('/#destinations')} className="hover:text-yellow-500 transition-colors">{t('nav.destinations')}</a></li>
+              <li><a href={getLinkPath('/#features')} className="hover:text-yellow-500 transition-colors">{t('nav.features')}</a></li>
+              <li><a href={getLinkPath('/blog')} className="hover:text-yellow-500 transition-colors">{t('nav.blog')}</a></li>
               <li><button onClick={(e) => openLegal(e as any, 'terms')} className="hover:text-yellow-500 transition-colors text-left">{t('footer.terms')}</button></li>
             </ul>
           </div>

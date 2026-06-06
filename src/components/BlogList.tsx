@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { blogPosts } from '../data/blog';
+import { getLinkPath } from '../lib/utils';
 import { ArrowRight, Calendar } from 'lucide-react';
 
 export default function BlogList() {
@@ -37,7 +38,7 @@ export default function BlogList() {
           {blogPosts.map((post) => (
             <a 
               key={post.id} 
-              href={`/blog/${post.slug}`}
+              href={getLinkPath(`/blog/${post.slug}`)}
               className="group bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:-translate-x-1 transition-all duration-200 flex flex-col"
             >
               <div className="h-48 overflow-hidden border-b-4 border-black relative">

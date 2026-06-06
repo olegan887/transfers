@@ -173,7 +173,8 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
       const data = await response.json();
 
       if (data.result === 'success') {
-        window.location.href = `/success?direct_success=true&name=${encodeURIComponent(name)}&pickup=${encodeURIComponent(bookingData.fromName)}&dropoff=${encodeURIComponent(bookingData.toName)}`;
+        const basePath = window.location.pathname.replace(/\/$/, '').replace(/\/success$/, '');
+        window.location.href = `${basePath}/success?direct_success=true&name=${encodeURIComponent(name)}&pickup=${encodeURIComponent(bookingData.fromName)}&dropoff=${encodeURIComponent(bookingData.toName)}`;
       } else {
         throw new Error(data.message || 'Failed to submit order directly');
       }

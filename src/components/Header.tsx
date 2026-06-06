@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Car, Menu, X, MessageCircle, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { getLinkPath } from '../lib/utils';
 import Logo from './Logo';
 
 export default function Header() {
@@ -44,16 +45,16 @@ export default function Header() {
         isScrolled ? 'bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-transparent'
       }`}>
         <div className="flex items-center gap-2">
-          <a href="/" className="hover:opacity-90 transition-opacity">
+          <a href={getLinkPath('/')} className="hover:opacity-90 transition-opacity">
             <Logo />
           </a>
         </div>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
-          <a href="/#destinations" className="text-sm font-bold text-black hover:text-yellow-500 transition-colors">{t('nav.destinations')}</a>
-          <a href="/#features" className="text-sm font-bold text-black hover:text-yellow-500 transition-colors">{t('nav.features')}</a>
-          <a href="/blog" className="text-sm font-bold text-black hover:text-yellow-500 transition-colors">{t('nav.blog')}</a>
+          <a href={getLinkPath('/#destinations')} className="text-sm font-bold text-black hover:text-yellow-500 transition-colors">{t('nav.destinations')}</a>
+          <a href={getLinkPath('/#features')} className="text-sm font-bold text-black hover:text-yellow-500 transition-colors">{t('nav.features')}</a>
+          <a href={getLinkPath('/blog')} className="text-sm font-bold text-black hover:text-yellow-500 transition-colors">{t('nav.blog')}</a>
           
           <div className="flex items-center gap-4 ml-2 pl-6 border-l-2 border-black">
             <button 
@@ -119,9 +120,9 @@ export default function Header() {
             className="md:hidden absolute top-full left-0 right-0 mt-4 bg-white border-2 border-black rounded-2xl overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
           >
             <nav className="flex flex-col p-2">
-              <a href="/#destinations" className="py-4 px-6 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold" onClick={() => setMobileMenuOpen(false)}>{t('nav.destinations')}</a>
-              <a href="/#features" className="py-4 px-6 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold" onClick={() => setMobileMenuOpen(false)}>{t('nav.features')}</a>
-              <a href="/blog" className="py-4 px-6 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold" onClick={() => setMobileMenuOpen(false)}>{t('nav.blog')}</a>
+              <a href={getLinkPath('/#destinations')} className="py-4 px-6 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold" onClick={() => setMobileMenuOpen(false)}>{t('nav.destinations')}</a>
+              <a href={getLinkPath('/#features')} className="py-4 px-6 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold" onClick={() => setMobileMenuOpen(false)}>{t('nav.features')}</a>
+              <a href={getLinkPath('/blog')} className="py-4 px-6 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold" onClick={() => setMobileMenuOpen(false)}>{t('nav.blog')}</a>
               <div className="p-4 mt-2">
                 <a 
                   href="https://wa.me/35796867289" 

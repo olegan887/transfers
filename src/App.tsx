@@ -24,7 +24,28 @@ export default function App() {
   const [currentPath, setCurrentPath] = useState('');
 
   useEffect(() => {
-    setCurrentPath(window.location.pathname);
+    // Normalizing pathname to support GitHub Pages subfolders
+    let path = window.location.pathname;
+    
+    // Strip trailing slashes for consistency
+    if (path.endsWith('/') && path.length > 1) {
+      path = path.slice(0, -1);
+    }
+    
+    if (path.endsWith('/success')) {
+      setCurrentPath('/success');
+    } else if (path.endsWith('/blog')) {
+      setCurrentPath('/blog');
+    } else if (path.includes('/blog/')) {
+      const match = path.match(/\/blog\/(.+)$/);
+      if (match) {
+        setCurrentPath(`/blog/${match[1]}`);
+      } else {
+        setCurrentPath('/');
+      }
+    } else {
+      setCurrentPath('/');
+    }
   }, []);
 
   useEffect(() => {

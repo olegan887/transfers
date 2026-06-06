@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { blogPosts } from '../data/blog';
+import { getLinkPath } from '../lib/utils';
 import { ArrowLeft, Calendar } from 'lucide-react';
 
 interface BlogPostProps {
@@ -31,7 +32,7 @@ export default function BlogPost({ slug }: BlogPostProps) {
           <div className="text-center bg-white border-4 border-black p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transform -rotate-1 relative z-10">
             <h1 className="text-6xl font-black mb-4 uppercase tracking-tighter bg-red-400 inline-block px-4 py-2 border-4 border-black transform rotate-2">404</h1>
             <p className="text-xl font-bold mb-8">Article not found</p>
-            <a href="/blog" className="brutal-btn inline-block px-8 py-4 text-xl uppercase">
+            <a href={getLinkPath('/blog')} className="brutal-btn inline-block px-8 py-4 text-xl uppercase">
               {t('blog.backToBlog')}
             </a>
           </div>
@@ -50,7 +51,7 @@ export default function BlogPost({ slug }: BlogPostProps) {
 
         <div className="container mx-auto px-4 relative z-10 max-w-3xl">
           <a 
-            href="/blog" 
+            href={getLinkPath('/blog')} 
             className="inline-flex items-center text-black font-bold hover:text-yellow-500 mb-8 transition-colors bg-white border-2 border-black px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform -rotate-1"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
