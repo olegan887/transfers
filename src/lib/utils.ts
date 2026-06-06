@@ -28,3 +28,13 @@ export function getLinkPath(targetPath: string) {
   
   return `${base}${formattedTarget}`;
 }
+
+export function getGoogleScriptUrl() {
+  if (typeof window === 'undefined') {
+    return 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec';
+  }
+  const storedUrl = localStorage.getItem('VITE_GOOGLE_SCRIPT_URL');
+  const envUrl = (import.meta.env as any).VITE_GOOGLE_SCRIPT_URL;
+  const rawUrl = storedUrl || envUrl || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec';
+  return rawUrl.trim().replace(/^["']|["']$/g, '');
+}

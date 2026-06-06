@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { basePrices } from '../data/pricing';
+import { getGoogleScriptUrl } from '../lib/utils';
 
 type RouteData = { from: string; to: string; price: number; available: boolean };
 type BlockedTime = { date: string; time: string };
@@ -11,6 +12,8 @@ interface DataContextType {
   errorDetails: string | null;
   getBasePrice: (from: string, to: string) => number | null;
   isTimeBlocked: (date: string, time: string) => boolean;
+  googleScriptUrl: string;
+  updateGoogleScriptUrl: (url: string) => Promise<boolean>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -20,15 +23,21 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [blockedTimes, setBlockedTimes] = useState<BlockedTime[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorDetails, setErrorDetails] = useState<string | null>(null);
+  const [googleScriptUrl, setGoogleScriptUrl] = useState(getGoogleScriptUrl());
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
-      let GOOGLE_SCRIPT_URL = '';
+      setLoading(true);
+      setErrorDetails(null);
+      let GOOGLE_SCRIPT_URL = googleScriptUrl;
       try {
-        GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec';
-        
         // Clean up the URL in case it was pasted with quotes or spaces
         GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
+
+        if (!GOOGLE_SCRIPT_URL) {
+          throw new Error('Google Apps Script URL is empty');
+        }
 
         // Add cache buster to prevent browser from caching the old script response
         const separator = GOOGLE_SCRIPT_URL.includes('?') ? '&' : '?';
@@ -58,7 +67,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     fetchData();
-  }, []);
+  }, [googleScriptUrl, refreshTrigger]);
+
+  const updateGoogleScriptUrl = async (url: string): Promise<boolean> => {
+    const cleanedUrl = url.trim().replace(/^["']|["']$/g, '');
+    localStorage.setItem('VITE_GOOGLE_SCRIPT_URL', cleanedUrl);
+    setGoogleScriptUrl(cleanedUrl);
+    setRefreshTrigger(prev => prev + 1);
+    return true;
+  };
 
   const getBasePrice = (from: string, to: string): number | null => {
     const dynamicRoute = routes.find(r => 
@@ -172,7 +189,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <DataContext.Provider value={{ routes, blockedTimes, loading, errorDetails, getBasePrice, isTimeBlocked }}>
+    <DataContext.Provider value={{ routes, blockedTimes, loading, errorDetails, getBasePrice, isTimeBlocked, googleScriptUrl, updateGoogleScriptUrl }}>
       {children}
     </DataContext.Provider>
   );

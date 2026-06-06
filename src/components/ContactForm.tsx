@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { getGoogleScriptUrl } from '../lib/utils';
 
 export default function ContactForm() {
   const { t } = useLanguage();
@@ -12,8 +13,7 @@ export default function ContactForm() {
     setStatus('loading');
 
     try {
-      let GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec';
-      GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
+      const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
       
       const payload = {
         type: 'contact',

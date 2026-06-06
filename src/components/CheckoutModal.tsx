@@ -4,6 +4,7 @@ import { X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { loadStripe } from '@stripe/stripe-js';
+import { getGoogleScriptUrl } from '../lib/utils';
 import Autocomplete from 'react-google-autocomplete';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
@@ -44,7 +45,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
   const handleClose = () => {
     // Log abandoned checkout directly to Google Sheets if they entered at least a name or phone
     if (name || phone) {
-      const GOOGLE_SCRIPT_URL = (import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec').trim().replace(/^["']|["']$/g, '');
+      const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
       
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
@@ -119,7 +120,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     setIsLoading(true);
     setError('');
 
-    const GOOGLE_SCRIPT_URL = (import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec').trim().replace(/^["']|["']$/g, '');
+    const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
 
     // Log the lead before redirecting
     fetch(GOOGLE_SCRIPT_URL, {
