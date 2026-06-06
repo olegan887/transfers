@@ -17,6 +17,7 @@ import CookieConsent from './components/CookieConsent';
 import BlogList from './components/BlogList';
 import BlogPost from './components/BlogPost';
 import ExitIntentPopup from './components/ExitIntentPopup';
+import AdminPanel from './components/AdminPanel';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { DataProvider } from './context/DataContext';
 
@@ -113,6 +114,7 @@ export default function App() {
           
           <CookieConsent />
           <ExitIntentPopup />
+          <AdminPanel />
         </div>
       </DataProvider>
     </LanguageProvider>
