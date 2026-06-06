@@ -66,11 +66,14 @@ export default function BookingWidget() {
       }
 
       if (from && to) {
-        // Log the search as a lead
-        fetch('/api/log-lead', {
+        // Log the search as a lead directly to Google Sheets (Serverless)
+        const GOOGLE_SCRIPT_URL = (import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec').trim().replace(/^["']|["']$/g, '');
+        
+        fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Google Apps Script handles text/plain well to avoid preflight CORS restrictions
           body: JSON.stringify({
+            action: 'log_lead',
             status: 'Searched Route',
             pickup: locations.find(l => l.id === from)?.name[language as keyof typeof locations[0]['name']] || from,
             dropoff: locations.find(l => l.id === to)?.name[language as keyof typeof locations[0]['name']] || to,
@@ -79,7 +82,7 @@ export default function BookingWidget() {
             passengers: pax,
             comments: `RoundTrip: ${isRoundTrip}`
           })
-        }).catch(err => console.error('Failed to log search lead', err));
+        }).catch(err => console.error('Failed to log search lead directly', err));
 
         setShowResults(true);
       }

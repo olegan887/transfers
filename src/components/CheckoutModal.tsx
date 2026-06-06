@@ -42,12 +42,15 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
   const [error, setError] = useState('');
 
   const handleClose = () => {
-    // Log abandoned checkout if they entered at least a name or phone
+    // Log abandoned checkout directly to Google Sheets if they entered at least a name or phone
     if (name || phone) {
-      fetch('/api/log-lead', {
+      const GOOGLE_SCRIPT_URL = (import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec').trim().replace(/^["']|["']$/g, '');
+      
+      fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
+          action: 'log_lead',
           status: 'Abandoned Modal',
           name: name,
           phone: `${phone} (${messenger})`,
@@ -60,7 +63,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
           price: price,
           comments: `Flight: ${flightNumber} | Address: ${address} | Comment: ${comment} | RoundTrip: ${bookingData.isRoundTrip}`
         })
-      }).catch(err => console.error('Failed to log abandoned lead', err));
+      }).catch(err => console.error('Failed to log abandoned lead directly', err));
     }
     onClose();
   };
@@ -116,12 +119,15 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     setIsLoading(true);
     setError('');
 
-    // Log the lead before redirecting to Stripe
-    fetch('/api/log-lead', {
+    const GOOGLE_SCRIPT_URL = (import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec').trim().replace(/^["']|["']$/g, '');
+
+    // Log the lead before redirecting
+    fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({
-        status: 'Redirected to Stripe',
+        action: 'log_lead',
+        status: 'Initiated checkout',
         name: name,
         phone: `${phone} (${messenger})`,
         pickup: bookingData.fromName,
@@ -130,53 +136,46 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
         time: bookingData.time,
         passengers: bookingData.pax,
         vehicle: vehicleName,
-        price: price,
+        price: finalPrice,
         comments: `Flight: ${flightNumber} | Address: ${address} | Comment: ${comment} | RoundTrip: ${bookingData.isRoundTrip}`
       })
-    }).catch(err => console.error('Failed to log checkout lead', err));
+    }).catch(err => console.error('Failed to log checkout lead directly', err));
 
     try {
-      const response = await fetch('/api/create-checkout-session', {
+      // Build the standard completed order payload for google-apps-script.js
+      const payload = {
+        name: name,
+        phone: `${phone} (${messenger})`,
+        email: '', 
+        pickup: bookingData.fromName,
+        dropoff: bookingData.toName,
+        date: bookingData.date,
+        time: bookingData.time,
+        passengers: bookingData.pax,
+        vehicle: vehicleName,
+        price: finalPrice,
+        type: bookingData.isRoundTrip ? 'Round Trip (В обе стороны)' : 'One Way (В одну сторону)',
+        comments: `Payment: Cash to driver / Оплата наличными водителю (${paymentMode === 'deposit' ? 'with deposit agreement' : 'Full amount in cash'}) | Flight: ${flightNumber || 'N/A'} | Address: ${address}${comment ? ` / ${comment}` : ''}${bookingData.isRoundTrip ? ` | ROUND TRIP: Return on ${bookingData.returnDate} at ${bookingData.returnTime}` : ''}`
+      };
+
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/plain;charset=utf-8',
         },
-        body: JSON.stringify({
-          bookingData: {
-            from: bookingData.from,
-            to: bookingData.to,
-            fromName: bookingData.fromName,
-            toName: bookingData.toName,
-            date: bookingData.date,
-            time: bookingData.time,
-            pax: bookingData.pax,
-            isRoundTrip: bookingData.isRoundTrip,
-            returnDate: bookingData.returnDate,
-            returnTime: bookingData.returnTime,
-            name,
-            phone,
-            messenger,
-            flightNumber,
-            address,
-            comment,
-            paymentMode,
-            promoCode: discount > 0 ? promoCode : undefined,
-          },
-          price: finalPrice,
-          vehicleName,
-        }),
+        body: JSON.stringify(payload),
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit order directly to Google Sheets');
+      }
 
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create checkout session');
-      }
-
-      if (data.url) {
-        window.location.href = data.url;
+      if (data.result === 'success') {
+        window.location.href = `/success?direct_success=true&name=${encodeURIComponent(name)}&pickup=${encodeURIComponent(bookingData.fromName)}&dropoff=${encodeURIComponent(bookingData.toName)}`;
       } else {
-        throw new Error('Failed to get checkout URL');
+        throw new Error(data.message || 'Failed to submit order directly');
       }
       
     } catch (err: any) {

@@ -12,9 +12,17 @@ export default function SuccessPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const sid = params.get('session_id');
-    setSessionId(sid);
+    const isDirectSuccess = params.get('direct_success') === 'true';
 
-    if (sid && !processedRef.current) {
+    if (isDirectSuccess) {
+      setSessionId(`LIMO-${new Date().getTime().toString().slice(-6)}`);
+      // Trigger Google Ads Conversion if applicable
+      if (typeof (window as any).gtag_report_conversion === 'function') {
+        (window as any).gtag_report_conversion();
+      }
+      setStatus('success');
+    } else if (sid && !processedRef.current) {
+      setSessionId(sid);
       processedRef.current = true;
       verifyAndProcessOrder(sid);
     } else if (!sid) {
