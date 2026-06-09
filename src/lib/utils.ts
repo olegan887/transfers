@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { DEFAULT_GOOGLE_SCRIPT_URL } from "../config";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -31,10 +32,10 @@ export function getLinkPath(targetPath: string) {
 
 export function getGoogleScriptUrl() {
   if (typeof window === 'undefined') {
-    return 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec';
+    return DEFAULT_GOOGLE_SCRIPT_URL;
   }
   const storedUrl = localStorage.getItem('VITE_GOOGLE_SCRIPT_URL');
   const envUrl = (import.meta.env as any).VITE_GOOGLE_SCRIPT_URL;
-  const rawUrl = storedUrl || envUrl || 'https://script.google.com/macros/s/AKfycby6Z_J5r00-EsbLlNZ3OlQFi_RNTU8eVOOTWTMFx4aIN_nBVt-743oxAmYLLBwmxKo/exec';
+  const rawUrl = storedUrl || envUrl || DEFAULT_GOOGLE_SCRIPT_URL;
   return rawUrl.trim().replace(/^["']|["']$/g, '');
 }

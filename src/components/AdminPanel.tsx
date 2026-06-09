@@ -187,6 +187,24 @@ export default function AdminPanel() {
                   </div>
                 )}
 
+                {/* Multi-browser Warning / Call to Action */}
+                <div id="multi-browser-tip" className="mt-6 p-4 bg-yellow-50 border-2 border-dashed border-yellow-600 rounded-lg text-xs leading-normal">
+                  <p className="font-bold uppercase text-yellow-800 mb-1.5 flex items-center gap-1.5">
+                    <Database className="w-4 h-4 shrink-0 text-yellow-700" />
+                    {language === 'ru' ? 'Как сделать эту ссылку постоянной для всех посетителей?' : 'How to make this link default for all visitors?'}
+                  </p>
+                  <p className="text-gray-700 mb-2">
+                    {language === 'ru' 
+                      ? 'Кнопка выше сохраняет ссылку только на вашем текущем устройстве и браузере (в localStorage). При открытии в другом браузере или у клиентов сайта ссылка сбросится на стандартную.' 
+                      : 'The button above saves the URL only inside your current browser (localStorage). Other devices, browsers, and layout visitors will fall back to the default URL.'}
+                  </p>
+                  <p className="text-gray-900 font-bold">
+                    {language === 'ru'
+                      ? '👉 Чтобы настроить раз и навсегда для всех: Просто скопируйте вашу ссылку на Web App и отправьте её ИИ-помощнику в чат! Он мгновенно пропишет её в файл src/config.ts и опубликует рабочую версию для всех посетителей автоматически.'
+                      : '👉 To make it default for everyone: Simply copy your final App Script URL and reply with it here in this chat! The AI assistant will update src/config.ts and build+redeploy the site automatically.'}
+                  </p>
+                </div>
+
                 {/* Setup FAQ */}
                 <div className="mt-8 border-t-2 border-black pt-6">
                   <h4 className="font-black text-sm uppercase mb-3 flex items-center gap-1.5">
