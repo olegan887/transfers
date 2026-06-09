@@ -77,12 +77,15 @@ export default function BookingWidget() {
       }
 
       if (from && to) {
-        // Log the search as a lead directly to Google Sheets (Serverless)
+        // Log the search as a lead directly to Google Sheets via Express proxy
         const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
         
-        fetch(GOOGLE_SCRIPT_URL, {
+        fetch('/api/google-proxy', {
           method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Google Apps Script handles text/plain well to avoid preflight CORS restrictions
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-Google-Script-Url': GOOGLE_SCRIPT_URL
+          },
           body: JSON.stringify({
             action: 'log_lead',
             status: 'Searched Route',

@@ -39,11 +39,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           throw new Error('Google Apps Script URL is empty');
         }
 
-        // Add cache buster to prevent browser from caching the old script response
-        const separator = GOOGLE_SCRIPT_URL.includes('?') ? '&' : '?';
-        const fetchUrl = `${GOOGLE_SCRIPT_URL}${separator}t=${new Date().getTime()}`;
-
-        const response = await fetch(fetchUrl);
+        // Call via Express backend proxy to bypass any CORS/ad-blocker blocks
+        const response = await fetch('/api/google-proxy', {
+          headers: {
+            'X-Google-Script-Url': GOOGLE_SCRIPT_URL
+          }
+        });
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

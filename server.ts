@@ -57,7 +57,7 @@ async function startServer() {
         console.log("Payment successful for session:", session.id);
         
         try {
-          let GOOGLE_SCRIPT_URL = process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbxwwfZI69flEry9JRACIu-M48fAA2C9A_oBDfumPaZTwp8NEd6yeSwOYcIHNv7yNEZI/exec';
+          let GOOGLE_SCRIPT_URL = process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbyRfIswYifcjHxMtoTJidzftEvVEJkOv-8kPowYGckT21gXiLkXY2OE4v6_FG278Jlp/exec';
           GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
 
           const payload = {
@@ -99,10 +99,72 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
+  app.all("/api/google-proxy", async (req, res) => {
+    try {
+      const targetHeader = req.headers["x-google-script-url"] as string;
+      let GOOGLE_SCRIPT_URL = targetHeader || process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbyRfIswYifcjHxMtoTJidzftEvVEJkOv-8kPowYGckT21gXiLkXY2OE4v6_FG278Jlp/exec';
+      GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
+
+      let urlObject = new URL(GOOGLE_SCRIPT_URL);
+
+      if (req.method === "GET") {
+        urlObject.searchParams.set("t", Date.now().toString());
+        for (const [key, val] of Object.entries(req.query)) {
+          urlObject.searchParams.set(key, val as string);
+        }
+
+        const response = await fetch(urlObject.toString(), {
+          method: "GET",
+          redirect: "follow",
+        });
+
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await response.json();
+          return res.json(data);
+        } else {
+          const text = await response.text();
+          try {
+            return res.json(JSON.parse(text));
+          } catch {
+            return res.send(text);
+          }
+        }
+      } else if (req.method === "POST") {
+        const response = await fetch(urlObject.toString(), {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8",
+          },
+          body: JSON.stringify(req.body),
+          redirect: "follow",
+        });
+
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await response.json();
+          return res.json(data);
+        } else {
+          const text = await response.text();
+          try {
+            return res.json(JSON.parse(text));
+          } catch {
+            return res.send(text);
+          }
+        }
+      } else {
+        return res.status(405).json({ error: "Method Not Allowed" });
+      }
+    } catch (error: any) {
+      console.error("Google proxy error:", error);
+      return res.status(500).json({ result: "error", message: error.message });
+    }
+  });
+
   app.post("/api/log-lead", async (req, res) => {
     try {
       const leadData = req.body;
-      let GOOGLE_SCRIPT_URL = process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbxwwfZI69flEry9JRACIu-M48fAA2C9A_oBDfumPaZTwp8NEd6yeSwOYcIHNv7yNEZI/exec';
+      let GOOGLE_SCRIPT_URL = process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbyRfIswYifcjHxMtoTJidzftEvVEJkOv-8kPowYGckT21gXiLkXY2OE4v6_FG278Jlp/exec';
       GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
 
       await fetch(GOOGLE_SCRIPT_URL, {
@@ -129,7 +191,7 @@ async function startServer() {
       // TEST MODE BYPASS
       if (bookingData.name === 'TEST 0709') {
         console.log("Test mode activated. Bypassing Stripe.");
-        let GOOGLE_SCRIPT_URL = process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbxwwfZI69flEry9JRACIu-M48fAA2C9A_oBDfumPaZTwp8NEd6yeSwOYcIHNv7yNEZI/exec';
+        let GOOGLE_SCRIPT_URL = process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbyRfIswYifcjHxMtoTJidzftEvVEJkOv-8kPowYGckT21gXiLkXY2OE4v6_FG278Jlp/exec';
         GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
 
         const payload = {

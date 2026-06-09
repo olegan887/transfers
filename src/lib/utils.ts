@@ -34,7 +34,15 @@ export function getGoogleScriptUrl() {
   if (typeof window === 'undefined') {
     return DEFAULT_GOOGLE_SCRIPT_URL;
   }
-  const storedUrl = localStorage.getItem('VITE_GOOGLE_SCRIPT_URL');
+  let storedUrl = localStorage.getItem('VITE_GOOGLE_SCRIPT_URL');
+  
+  // If the user has the old script URL cached in localStorage, clear it so they use the new default
+  const oldUrl = 'https://script.google.com/macros/s/AKfycbxwwfZI69flEry9JRACIu-M48fAA2C9A_oBDfumPaZTwp8NEd6yeSwOYcIHNv7yNEZI/exec';
+  if (storedUrl && (storedUrl.trim().replace(/^["']|["']$/g, '') === oldUrl)) {
+    localStorage.removeItem('VITE_GOOGLE_SCRIPT_URL');
+    storedUrl = null;
+  }
+
   const envUrl = (import.meta.env as any).VITE_GOOGLE_SCRIPT_URL;
   const rawUrl = storedUrl || envUrl || DEFAULT_GOOGLE_SCRIPT_URL;
   return rawUrl.trim().replace(/^["']|["']$/g, '');

@@ -23,14 +23,18 @@ export default function ContactForm() {
         comments: formData.comment
       };
 
-      const response = await fetch(GOOGLE_SCRIPT_URL, {
+      const response = await fetch('/api/google-proxy', {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
+          'X-Google-Script-Url': GOOGLE_SCRIPT_URL
         },
         body: JSON.stringify(payload),
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to send contact form');
+      }
 
       setStatus('success');
       if (typeof (window as any).gtag_report_conversion === 'function') {

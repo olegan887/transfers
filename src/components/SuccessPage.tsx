@@ -35,10 +35,13 @@ export default function SuccessPage() {
   const verifyAndProcessOrder = async (sid: string) => {
     try {
       const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
-      // 1. Verify session directly with Google Apps Script
-      const verifyRes = await fetch(GOOGLE_SCRIPT_URL, {
+      // 1. Verify session via Express backend proxy to bypass any CORS/ad-blocker blocks
+      const verifyRes = await fetch('/api/google-proxy', {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-Google-Script-Url': GOOGLE_SCRIPT_URL 
+        },
         body: JSON.stringify({ 
           action: 'verify_stripe_session',
           sessionId: sid 

@@ -44,9 +44,12 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     if (name || phone) {
       const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
       
-      fetch(GOOGLE_SCRIPT_URL, {
+      fetch('/api/google-proxy', {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-Google-Script-Url': GOOGLE_SCRIPT_URL
+        },
         body: JSON.stringify({
           action: 'log_lead',
           status: 'Abandoned Modal',
@@ -120,9 +123,12 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
 
     // Log the lead before redirecting
-    fetch(GOOGLE_SCRIPT_URL, {
+    fetch('/api/google-proxy', {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-Google-Script-Url': GOOGLE_SCRIPT_URL
+      },
       body: JSON.stringify({
         action: 'log_lead',
         status: 'Initiated checkout',
@@ -140,10 +146,13 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     }).catch(err => console.error('Failed to log checkout lead directly', err));
 
     try {
-      // Call Google Apps Script with action to create Stripe checkout session!
-      const response = await fetch(GOOGLE_SCRIPT_URL, {
+      // Call Google Apps Script via our backend proxy to bypass any CORS/ad-blocker restrictions!
+      const response = await fetch('/api/google-proxy', {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-Google-Script-Url': GOOGLE_SCRIPT_URL
+        },
         body: JSON.stringify({
           action: 'create_stripe_session',
           bookingData: {
