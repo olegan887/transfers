@@ -3,11 +3,8 @@ import { createPortal } from 'react-dom';
 import { X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { loadStripe } from '@stripe/stripe-js';
 import { getGoogleScriptUrl, getApiUrl } from '../lib/utils';
 import Autocomplete from 'react-google-autocomplete';
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -182,6 +179,12 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
       if (data.result === 'success' && data.url) {
         // Redirect directly to Stripe Checkout url!
         window.location.href = data.url;
+      } else if (data.result === 'success' && !data.url) {
+        throw new Error(
+          language === 'ru'
+            ? 'Похоже, в Google Apps Script загружена старая версия кода! Шаг 1: скопируйте новый код в Apps Script из файла google-apps-script.js. Шаг 2: пропишите STRIPE_SECRET_KEY в свойствах проекта. Шаг 3: обязательно сделайте «Новое развертывание» (New Deployment).'
+            : 'It looks like the old version of Google Apps Script is loaded! Step 1: Copy the new code from google-apps-script.js. Step 2: Configure STRIPE_SECRET_KEY in Script Properties. Step 3: Be sure to deploy it as a "New Deployment".'
+        );
       } else {
         throw new Error(data.message || 'Error occurred starting checkout. Please try again.');
       }

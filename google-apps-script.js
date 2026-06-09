@@ -43,8 +43,8 @@
  * 6. Authorize the application and copy your final Web App URL.
  */
 
-const TELEGRAM_BOT_TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN';
-const TELEGRAM_CHAT_ID = 'YOUR_TELEGRAM_CHAT_ID';
+const TELEGRAM_BOT_TOKEN = '8715085806:AAGOT47PlW6y_t8MMnIQzJN84zXqZ8itwTY';
+const TELEGRAM_CHAT_ID = '8529666732';
 
 // Helper function to get or create a sheet with headers
 function getOrCreateSheet(spreadsheet, sheetName, headers) {
