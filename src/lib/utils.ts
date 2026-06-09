@@ -55,3 +55,59 @@ export function getApiUrl(path: string) {
   }
   return `https://ais-pre-eamemo4u5k7i6q4xkkj7a5-636191656390.europe-west2.run.app${cleanPath}`;
 }
+
+export async function safeFetchGoogleScript(
+  url: string,
+  options?: {
+    method?: 'GET' | 'POST';
+    body?: any;
+    headers?: Record<string, string>;
+  }
+): Promise<Response> {
+  const method = options?.method || 'GET';
+  const googleScriptUrl = url.trim().replace(/^["']|["']$/g, '');
+
+  // 1. Try to fetch via Express backend proxy (which bypasses ad-blockers and CORS)
+  try {
+    const proxyUrl = getApiUrl('/api/google-proxy');
+    const headers: Record<string, string> = {
+      'X-Google-Script-Url': googleScriptUrl,
+      ...(options?.headers || {}),
+    };
+    if (method === 'POST') {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    const response = await fetch(proxyUrl, {
+      method,
+      headers,
+      body: options?.body ? JSON.stringify(options.body) : undefined,
+    });
+
+    if (response.ok) {
+      return response;
+    }
+    
+    console.warn(`Proxy request returned status ${response.status}, falling back to direct fetch`);
+  } catch (proxyError) {
+    console.error('Proxy request failed, falling back to direct fetch:', proxyError);
+  }
+
+  // 2. Fallback: Direct Fetch to Google Apps Script.
+  // Google Apps Script doesn't support preflight CORS for application/json POST requests,
+  // so we must send text/plain for POSTs to bypass CORS preflight.
+  const fetchUrl = method === 'GET' 
+    ? `${googleScriptUrl}${googleScriptUrl.includes('?') ? '&' : '?'}t=${Date.now()}`
+    : googleScriptUrl;
+
+  const directHeaders: Record<string, string> = {};
+  if (method === 'POST') {
+    directHeaders['Content-Type'] = 'text/plain;charset=utf-8';
+  }
+
+  return fetch(fetchUrl, {
+    method,
+    headers: directHeaders,
+    body: options?.body ? JSON.stringify(options.body) : undefined,
+  });
+}

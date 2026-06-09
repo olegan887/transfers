@@ -4,7 +4,7 @@ import { locations, vehicles } from '../data/pricing';
 import { motion } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useData } from '../context/DataContext';
-import { getGoogleScriptUrl } from '../lib/utils';
+import { getGoogleScriptUrl, safeFetchGoogleScript } from '../lib/utils';
 import CheckoutModal from './CheckoutModal';
 
 export default function BookingWidget() {
@@ -80,13 +80,9 @@ export default function BookingWidget() {
         // Log the search as a lead directly to Google Sheets via Express proxy
         const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
         
-        fetch('/api/google-proxy', {
+        safeFetchGoogleScript(GOOGLE_SCRIPT_URL, {
           method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'X-Google-Script-Url': GOOGLE_SCRIPT_URL
-          },
-          body: JSON.stringify({
+          body: {
             action: 'log_lead',
             status: 'Searched Route',
             pickup: locations.find(l => l.id === from)?.name[language as keyof typeof locations[0]['name']] || from,
@@ -95,7 +91,7 @@ export default function BookingWidget() {
             time: time,
             passengers: pax,
             comments: `RoundTrip: ${isRoundTrip}`
-          })
+          }
         }).catch(err => console.error('Failed to log search lead directly', err));
 
         setShowResults(true);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { getGoogleScriptUrl } from '../lib/utils';
+import { getGoogleScriptUrl, safeFetchGoogleScript } from '../lib/utils';
 
 export default function ContactForm() {
   const { t } = useLanguage();
@@ -23,13 +23,9 @@ export default function ContactForm() {
         comments: formData.comment
       };
 
-      const response = await fetch('/api/google-proxy', {
+      const response = await safeFetchGoogleScript(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Google-Script-Url': GOOGLE_SCRIPT_URL
-        },
-        body: JSON.stringify(payload),
+        body: payload,
       });
 
       if (!response.ok) {

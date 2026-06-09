@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { getGoogleScriptUrl, getApiUrl } from '../lib/utils';
+import { getGoogleScriptUrl, getApiUrl, safeFetchGoogleScript } from '../lib/utils';
 import Autocomplete from 'react-google-autocomplete';
 
 interface CheckoutModalProps {
@@ -44,13 +44,9 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     if (name || phone) {
       const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
       
-      fetch('/api/google-proxy', {
+      safeFetchGoogleScript(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'X-Google-Script-Url': GOOGLE_SCRIPT_URL
-        },
-        body: JSON.stringify({
+        body: {
           action: 'log_lead',
           status: 'Abandoned Modal',
           name: name,
@@ -63,7 +59,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
           vehicle: vehicleName,
           price: price,
           comments: `Flight: ${flightNumber} | Address: ${address} | Comment: ${comment} | RoundTrip: ${bookingData.isRoundTrip}`
-        })
+        }
       }).catch(err => console.error('Failed to log abandoned lead directly', err));
     }
     onClose();
@@ -123,13 +119,9 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
 
     // Log the lead before redirecting
-    fetch('/api/google-proxy', {
+    safeFetchGoogleScript(GOOGLE_SCRIPT_URL, {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'X-Google-Script-Url': GOOGLE_SCRIPT_URL
-      },
-      body: JSON.stringify({
+      body: {
         action: 'log_lead',
         status: 'Initiated checkout',
         name: name,
@@ -142,18 +134,14 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
         vehicle: vehicleName,
         price: finalPrice,
         comments: `Flight: ${flightNumber} | Address: ${address} | Comment: ${comment} | RoundTrip: ${bookingData.isRoundTrip}`
-      })
+      }
     }).catch(err => console.error('Failed to log checkout lead directly', err));
 
     try {
-      // Call Google Apps Script via our backend proxy to bypass any CORS/ad-blocker restrictions!
-      const response = await fetch('/api/google-proxy', {
+      // Call Google Apps Script via safeFetchGoogleScript (proxies but has direct fallback)
+      const response = await safeFetchGoogleScript(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'X-Google-Script-Url': GOOGLE_SCRIPT_URL
-        },
-        body: JSON.stringify({
+        body: {
           action: 'create_stripe_session',
           bookingData: {
             from: bookingData.from,
@@ -177,7 +165,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
           price: finalPrice,
           vehicleName: vehicleName,
           originUrl: window.location.origin + window.location.pathname.replace(/\/$/, '')
-        })
+        }
       });
 
       if (!response.ok) {

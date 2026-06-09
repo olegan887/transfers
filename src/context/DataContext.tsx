@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { basePrices } from '../data/pricing';
-import { getGoogleScriptUrl } from '../lib/utils';
+import { getGoogleScriptUrl, safeFetchGoogleScript } from '../lib/utils';
 
 type RouteData = { from: string; to: string; price: number; available: boolean };
 type BlockedTime = { date: string; time: string };
@@ -39,12 +39,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           throw new Error('Google Apps Script URL is empty');
         }
 
-        // Call via Express backend proxy to bypass any CORS/ad-blocker blocks
-        const response = await fetch('/api/google-proxy', {
-          headers: {
-            'X-Google-Script-Url': GOOGLE_SCRIPT_URL
-          }
-        });
+        // Fetch using safeFetchGoogleScript which automatically falls back to direct call on failure
+        const response = await safeFetchGoogleScript(GOOGLE_SCRIPT_URL);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

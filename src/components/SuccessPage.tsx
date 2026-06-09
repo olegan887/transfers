@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { CheckCircle2, Home, Loader2, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { getGoogleScriptUrl } from '../lib/utils';
+import { getGoogleScriptUrl, safeFetchGoogleScript } from '../lib/utils';
 
 export default function SuccessPage() {
   const { t } = useLanguage();
@@ -35,17 +35,13 @@ export default function SuccessPage() {
   const verifyAndProcessOrder = async (sid: string) => {
     try {
       const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
-      // 1. Verify session via Express backend proxy to bypass any CORS/ad-blocker blocks
-      const verifyRes = await fetch('/api/google-proxy', {
+      // 1. Verify session via safeFetchGoogleScript (tries proxy but falls back to direct call)
+      const verifyRes = await safeFetchGoogleScript(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'X-Google-Script-Url': GOOGLE_SCRIPT_URL 
-        },
-        body: JSON.stringify({ 
+        body: { 
           action: 'verify_stripe_session',
           sessionId: sid 
-        })
+        }
       });
       
       if (!verifyRes.ok) {
