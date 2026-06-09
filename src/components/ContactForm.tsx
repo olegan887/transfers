@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { getGoogleScriptUrl, safeFetchGoogleScript } from '../lib/utils';
+import { reportConversion } from '../lib/analytics';
+import { handleInvalid } from '../lib/formUtils';
 
 export default function ContactForm() {
   const { t } = useLanguage();
@@ -33,9 +35,7 @@ export default function ContactForm() {
       }
 
       setStatus('success');
-      if (typeof (window as any).gtag_report_conversion === 'function') {
-        (window as any).gtag_report_conversion();
-      }
+      reportConversion();
       setFormData({ name: '', phone: '', email: '', comment: '' });
       
       setTimeout(() => setStatus('idle'), 5000);
@@ -43,16 +43,6 @@ export default function ContactForm() {
       console.error('Contact form error:', error);
       setStatus('error');
       setTimeout(() => setStatus('idle'), 5000);
-    }
-  };
-
-  const handleInvalid = (e: React.FormEvent<HTMLFormElement>) => {
-    const firstInvalidElement = e.currentTarget.querySelector(':invalid') as HTMLElement;
-    if (firstInvalidElement) {
-      setTimeout(() => {
-        firstInvalidElement.focus();
-        firstInvalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 50);
     }
   };
 

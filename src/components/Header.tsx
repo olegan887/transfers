@@ -3,6 +3,8 @@ import { Car, Menu, X, MessageCircle, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { getLinkPath } from '../lib/utils';
+import { WHATSAPP_NUMBER } from '../config';
+import { reportConversion } from '../lib/analytics';
 import Logo from './Logo';
 
 export default function Header() {
@@ -23,10 +25,7 @@ export default function Header() {
   };
 
   const handleWhatsAppClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (typeof (window as any).gtag_report_conversion === 'function') {
-      // Don't pass URL so it doesn't redirect, the anchor tag will handle the navigation
-      (window as any).gtag_report_conversion();
-    }
+    reportConversion();
   };
 
   return (
@@ -65,12 +64,13 @@ export default function Header() {
               {language === 'ru' ? 'EN' : 'RU'}
             </button>
             <a 
-              href="https://wa.me/35796867289" 
+              href={`https://wa.me/${WHATSAPP_NUMBER}`} 
               target="_blank" 
               rel="noopener noreferrer" 
               onClick={handleWhatsAppClick}
               className="brutal-btn px-4 py-2 text-sm"
             >
+
               <MessageCircle className="w-4 h-4 mr-2" />
               WhatsApp
             </a>
@@ -80,12 +80,13 @@ export default function Header() {
         {/* Mobile Menu Toggle */}
         <div className="md:hidden flex items-center gap-3 sm:gap-4">
           <a 
-            href="https://wa.me/35796867289" 
+            href={`https://wa.me/${WHATSAPP_NUMBER}`} 
             target="_blank" 
             rel="noopener noreferrer" 
             onClick={handleWhatsAppClick}
             className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 bg-[#25D366] text-white rounded-full border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
           >
+
             <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
           </a>
           <button 
@@ -125,12 +126,13 @@ export default function Header() {
               <a href={getLinkPath('/blog')} className="py-4 px-6 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold" onClick={() => setMobileMenuOpen(false)}>{t('nav.blog')}</a>
               <div className="p-4 mt-2">
                 <a 
-                  href="https://wa.me/35796867289" 
+                  href={`https://wa.me/${WHATSAPP_NUMBER}`} 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   onClick={handleWhatsAppClick}
                   className="brutal-btn w-full py-3 text-base"
                 >
+
                   <MessageCircle className="w-5 h-5 mr-2" />
                   WhatsApp
                 </a>

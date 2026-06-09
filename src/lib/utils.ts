@@ -6,6 +6,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function cleanUrl(url: string): string {
+  return url.trim().replace(/^["']|["']$/g, '');
+}
+
+export function getBidirectional<T>(map: Record<string, Record<string, T>>, from: string, to: string): T | null {
+  if (map[from]?.[to] !== undefined) return map[from][to];
+  if (map[to]?.[from] !== undefined) return map[to][from];
+  return null;
+}
+
 export function getBasePath() {
   if (typeof window === 'undefined') return '';
   const path = window.location.pathname;
@@ -45,15 +55,16 @@ export function getGoogleScriptUrl() {
 
   const envUrl = (import.meta.env as any).VITE_GOOGLE_SCRIPT_URL;
   const rawUrl = storedUrl || envUrl || DEFAULT_GOOGLE_SCRIPT_URL;
-  return rawUrl.trim().replace(/^["']|["']$/g, '');
+  return cleanUrl(rawUrl);
 }
 
 export function getApiUrl(path: string) {
-  const cleanPath = path.startsWith('/') ? path : `/${path}`;
-  if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('run.app'))) {
-    return cleanPath;
+  if (typeof window === 'undefined') {
+    return path.startsWith('/') ? path : `/${path}`;
   }
-  return `https://ais-pre-eamemo4u5k7i6q4xkkj7a5-636191656390.europe-west2.run.app${cleanPath}`;
+  const base = getBasePath();
+  const formattedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${window.location.protocol}//${window.location.host}${base}${formattedPath}`;
 }
 
 export async function safeFetchGoogleScript(
@@ -65,7 +76,7 @@ export async function safeFetchGoogleScript(
   }
 ): Promise<Response> {
   const method = options?.method || 'GET';
-  const googleScriptUrl = url.trim().replace(/^["']|["']$/g, '');
+  const googleScriptUrl = cleanUrl(url);
 
   // 1. Try to fetch via Express backend proxy (which bypasses ad-blockers and CORS)
   try {
@@ -84,11 +95,12 @@ export async function safeFetchGoogleScript(
       body: options?.body ? JSON.stringify(options.body) : undefined,
     });
 
-    if (response.ok) {
+    const contentType = response.headers.get('content-type') || '';
+    if (response.ok && !contentType.includes('text/html')) {
       return response;
     }
     
-    console.warn(`Proxy request returned status ${response.status}, falling back to direct fetch`);
+    console.warn(`Proxy request returned invalid response (status: ${response.status}, content-type: ${contentType}), falling back to direct fetch`);
   } catch (proxyError) {
     console.error('Proxy request failed, falling back to direct fetch:', proxyError);
   }

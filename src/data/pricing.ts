@@ -1,3 +1,5 @@
+import { getBidirectional } from '../lib/utils';
+
 export const locations = [
   { id: 'lca', name: { ru: 'Аэропорт Ларнака (LCA)', en: 'Larnaca Airport (LCA)' }, type: 'airport' },
   { id: 'pfo', name: { ru: 'Аэропорт Пафос (PFO)', en: 'Paphos Airport (PFO)' }, type: 'airport' },
@@ -51,14 +53,7 @@ export const basePrices: Record<string, Record<string, number>> = {
 };
 
 export function getPrice(from: string, to: string, vehicleId: string): number | null {
-  let basePrice = null;
-  
-  if (basePrices[from] && basePrices[from][to]) {
-    basePrice = basePrices[from][to];
-  } else if (basePrices[to] && basePrices[to][from]) {
-    basePrice = basePrices[to][from];
-  }
-
+  const basePrice = getBidirectional(basePrices, from, to);
   if (!basePrice) return null;
 
   const vehicle = vehicles.find(v => v.id === vehicleId);
@@ -66,6 +61,7 @@ export function getPrice(from: string, to: string, vehicleId: string): number | 
 
   return Math.round(basePrice * vehicle.multiplier);
 }
+
 
 // Realistic travel times in minutes
 const routeTimes: Record<string, Record<string, number>> = {
@@ -112,10 +108,7 @@ const routeTimes: Record<string, Record<string, number>> = {
 };
 
 export function getRouteTime(from: string, to: string): number {
-  if (routeTimes[from] && routeTimes[from][to]) {
-    return routeTimes[from][to];
-  } else if (routeTimes[to] && routeTimes[to][from]) {
-    return routeTimes[to][from];
-  }
-  return 45; // Default fallback
+  const time = getBidirectional(routeTimes, from, to);
+  return time !== null ? time : 45; // Default fallback
 }
+

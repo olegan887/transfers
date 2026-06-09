@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Car, MessageCircle, Mail, MapPin } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { getLinkPath } from '../lib/utils';
+import { WHATSAPP_NUMBER } from '../config';
 import LegalModal from './LegalModal';
 import Logo from './Logo';
 
@@ -45,7 +46,7 @@ export default function Footer() {
             <h4 className="text-black font-black mb-6 uppercase tracking-widest text-sm bg-yellow-400 inline-block px-2 py-1 border-2 border-black transform rotate-1">{t('footer.contacts')}</h4>
             <ul className="space-y-4 text-sm font-bold">
               <li>
-                <a href="https://wa.me/35796867289" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#25D366] transition-colors group">
+                <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#25D366] transition-colors group">
                   <MessageCircle className="w-5 h-5 text-black group-hover:text-[#25D366]" />
                   WhatsApp
                 </a>

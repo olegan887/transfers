@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { X, Tag, Copy, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { DEFAULT_PROMO_CODE } from '../config';
 
 export default function ExitIntentPopup() {
   const [isVisible, setIsVisible] = useState(false);
@@ -60,7 +61,7 @@ export default function ExitIntentPopup() {
   }, []);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText('DONTGO5');
+    navigator.clipboard.writeText(DEFAULT_PROMO_CODE);
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
@@ -77,7 +78,7 @@ export default function ExitIntentPopup() {
       title: "WAIT! DON'T LEAVE! 🚕💨",
       text: "We were just starting to like you! Let us bribe you to stay. Grab 5% OFF your next transfer right now.",
       codeLabel: "USE PROMO CODE:",
-      code: "DONTGO5",
+      code: DEFAULT_PROMO_CODE,
       btnCopy: "COPY CODE & STAY",
       btnCopied: "COPIED!",
       btnClose: "No thanks, I prefer paying full price"
@@ -86,12 +87,13 @@ export default function ExitIntentPopup() {
       title: "ПОСТОЙТЕ! НЕ УХОДИТЕ! 🚕💨",
       text: "Вы нам только начали нравиться! Позвольте нам вас подкупить. Держите скидку 5% на ваш трансфер прямо сейчас.",
       codeLabel: "ИСПОЛЬЗУЙТЕ ПРОМОКОД:",
-      code: "DONTGO5",
+      code: DEFAULT_PROMO_CODE,
       btnCopy: "СКОПИРОВАТЬ И ОСТАТЬСЯ",
       btnCopied: "СКОПИРОВАНО!",
       btnClose: "Нет, спасибо, я люблю платить полную цену"
     }
   };
+
 
   const currentContent = content[language];
 

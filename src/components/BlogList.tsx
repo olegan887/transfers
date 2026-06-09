@@ -1,19 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { blogPosts } from '../data/blog';
 import { getLinkPath } from '../lib/utils';
+import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import { ArrowRight, Calendar } from 'lucide-react';
 
 export default function BlogList() {
   const { language, t } = useLanguage();
 
-  useEffect(() => {
-    document.title = `${t('blog.title')} | Cyprus Airport Transfers`;
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', t('blog.subtitle'));
-    }
-  }, [language, t]);
+  useDocumentMeta(
+    `${t('blog.title')} | Cyprus Airport Transfers`,
+    t('blog.subtitle')
+  );
 
   return (
     <section className="py-32 relative min-h-screen bg-white overflow-hidden">

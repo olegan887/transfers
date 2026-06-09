@@ -4,6 +4,8 @@ import { X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { getGoogleScriptUrl, getApiUrl, safeFetchGoogleScript } from '../lib/utils';
+import { DEFAULT_PROMO_CODE, DEPOSIT_AMOUNT } from '../config';
+import { handleInvalid } from '../lib/formUtils';
 import Autocomplete from 'react-google-autocomplete';
 
 interface CheckoutModalProps {
@@ -69,15 +71,22 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     // Removed auto-apply logic
   }, []);
 
-  // Calculate final price with discount
   const finalPrice = Math.round(price * (1 - discount));
+  const canPayDeposit = finalPrice >= DEPOSIT_AMOUNT;
+
+  useEffect(() => {
+    if (!canPayDeposit && paymentMode === 'deposit') {
+      setPaymentMode('full');
+    }
+  }, [canPayDeposit, paymentMode]);
 
   const handlePromoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPromoCode(e.target.value.toUpperCase());
   };
 
+
   const handlePromoApply = () => {
-    if (promoCode === 'DONTGO5') {
+    if (promoCode === DEFAULT_PROMO_CODE) {
       setDiscount(0.05);
       setError('');
     } else if (promoCode) {
@@ -88,6 +97,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
       setError('');
     }
   };
+
 
   useEffect(() => {
     if (isOpen) {
@@ -100,18 +110,8 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     };
   }, [isOpen]);
 
-  const handleInvalid = (e: React.FormEvent<HTMLFormElement>) => {
-    const firstInvalidElement = e.currentTarget.querySelector(':invalid') as HTMLElement;
-    if (firstInvalidElement) {
-      // Delay the scroll to let the browser's native validation popup show first
-      setTimeout(() => {
-        firstInvalidElement.focus();
-        firstInvalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 50);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
+
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -355,18 +355,22 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
                       </button>
                       <button
                         type="button"
+                        disabled={!canPayDeposit}
                         onClick={() => setPaymentMode('deposit')}
                         className={`p-3 border-2 border-black text-left transition-all h-full flex flex-col justify-between ${
-                          paymentMode === 'deposit'
+                          !canPayDeposit
+                            ? 'opacity-40 cursor-not-allowed bg-gray-100 shadow-none'
+                            : paymentMode === 'deposit'
                             ? 'bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transform -translate-y-0.5'
                             : 'bg-white hover:bg-gray-50 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'
                         }`}
                       >
                         <div className="text-[10px] font-black text-black uppercase mb-1">{t('booking.payDeposit')}</div>
-                        <div className="text-xs text-black font-bold leading-tight">€20 {t('booking.now')}<br/>€{finalPrice - 20} {t('booking.cash')}</div>
+                        <div className="text-xs text-black font-bold leading-tight">€{DEPOSIT_AMOUNT} {t('booking.now')}<br/>€{Math.max(0, finalPrice - DEPOSIT_AMOUNT)} {t('booking.cash')}</div>
                       </button>
                     </div>
                   </div>
+
 
                   <div>
                     <label className="block text-[10px] font-black text-black uppercase tracking-wider mb-1">
@@ -409,8 +413,9 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
             <div className="p-3 md:p-4 border-t-4 border-black bg-gray-50 shrink-0">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-black font-black uppercase text-sm">{t('booking.totalToPay')}</span>
-                <span className="text-2xl font-black text-black">€{paymentMode === 'full' ? finalPrice : 20}</span>
+                <span className="text-2xl font-black text-black">€{paymentMode === 'full' ? finalPrice : Math.min(finalPrice, DEPOSIT_AMOUNT)}</span>
               </div>
+
               <p className="text-[10px] font-bold text-gray-600 text-center mb-3 uppercase tracking-wider">
                 {t('booking.securePayment')}
               </p>

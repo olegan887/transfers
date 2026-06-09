@@ -7,6 +7,8 @@ import cors from "cors";
 
 dotenv.config();
 
+const DEFAULT_GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyRfIswYifcjHxMtoTJidzftEvVEJkOv-8kPowYGckT21gXiLkXY2OE4v6_FG278Jlp/exec';
+
 let stripeClient: Stripe | null = null;
 
 function getStripe(): Stripe {
@@ -22,11 +24,88 @@ function getStripe(): Stripe {
   return stripeClient;
 }
 
+function cleanUrl(url: string): string {
+  return url.trim().replace(/^["']|["']$/g, '');
+}
+
+function getGoogleScriptUrl(customUrl?: string): string {
+  const envUrl = process.env.VITE_GOOGLE_SCRIPT_URL;
+  const rawUrl = customUrl || envUrl || DEFAULT_GOOGLE_SCRIPT_URL;
+  return cleanUrl(rawUrl);
+}
+
+interface OrderPayload {
+  name: string;
+  phone: string;
+  email: string;
+  pickup: string;
+  dropoff: string;
+  date: string;
+  time: string;
+  passengers: string | number;
+  vehicle: string;
+  price: number;
+  type: string;
+  comments: string;
+}
+
+function buildOrderComments(
+  paymentMode: string,
+  totalPrice: number,
+  flightNumber?: string,
+  address?: string,
+  comment?: string,
+  isRoundTrip?: boolean | string,
+  returnDate?: string,
+  returnTime?: string,
+  sessionId?: string,
+  isTest: boolean = false
+): string {
+  const remaining = totalPrice - 20;
+  const paymentStr = paymentMode === 'deposit'
+    ? `Deposit €20 paid, remaining €${remaining} in cash`
+    : 'Full amount paid';
+  
+  const header = isTest ? '[TEST ORDER] ' : '';
+  const roundTripStr = (isRoundTrip === true || isRoundTrip === 'true')
+    ? ` | ROUND TRIP: Return on ${returnDate} at ${returnTime}`
+    : '';
+  
+  return `${header}Payment: ${paymentStr} | Flight: ${flightNumber || 'N/A'} | Address: ${address || 'N/A'}${comment ? ` / ${comment}` : ''}${roundTripStr} | Stripe Session: ${sessionId || 'N/A'}`;
+}
+
+function buildOrderPayload(bookingData: any, price: number, vehicleName: string, comments: string): OrderPayload {
+  return {
+    name: bookingData.name,
+    phone: `${bookingData.phone} (${bookingData.messenger})`,
+    email: bookingData.email || '',
+    pickup: bookingData.fromName,
+    dropoff: bookingData.toName,
+    date: bookingData.date,
+    time: bookingData.time,
+    passengers: bookingData.pax,
+    vehicle: vehicleName,
+    price: price,
+    type: (bookingData.isRoundTrip === true || bookingData.isRoundTrip === 'true') 
+      ? 'Round Trip (В обе стороны)' 
+      : 'One Way (В одну сторону)',
+    comments: comments
+  };
+}
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  app.use(cors());
+  // Safe CORS Configuration allowing all origins to prevent preview/iframe CORS failures
+  app.use(cors({
+    origin: (origin, callback) => {
+      callback(null, true);
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Google-Script-Url"],
+    credentials: true
+  }));
 
   // Stripe webhook must use raw body, so it comes BEFORE express.json()
   app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, res) => {
@@ -57,32 +136,58 @@ async function startServer() {
         console.log("Payment successful for session:", session.id);
         
         try {
-          let GOOGLE_SCRIPT_URL = process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbyRfIswYifcjHxMtoTJidzftEvVEJkOv-8kPowYGckT21gXiLkXY2OE4v6_FG278Jlp/exec';
-          GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
-
-          const payload = {
+          const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
+          
+          // Reconstruct bookingData mapping from metadata
+          const bookingData = {
             name: metadata.name,
-            phone: `${metadata.phone} (${metadata.messenger})`,
-            email: '', 
-            pickup: metadata.fromName,
-            dropoff: metadata.toName,
+            phone: metadata.phone,
+            messenger: metadata.messenger,
+            email: metadata.email || '',
+            fromName: metadata.fromName,
+            toName: metadata.toName,
             date: metadata.date,
             time: metadata.time,
-            passengers: metadata.pax,
-            vehicle: metadata.vehicleName,
-            price: Number(metadata.totalPrice) || (session.amount_total ? session.amount_total / 100 : 0),
-            type: metadata.isRoundTrip === 'true' ? 'Round Trip (В обе стороны)' : 'One Way (В одну сторону)',
-            comments: `Payment: ${metadata.paymentMode === 'deposit' ? `Deposit €20 paid, remaining €${Number(metadata.totalPrice) - 20} in cash` : 'Full amount paid'} | Flight: ${metadata.flightNumber || 'N/A'} | Address: ${metadata.address}${metadata.comment ? ` / ${metadata.comment}` : ''}${metadata.isRoundTrip === 'true' ? ` | ROUND TRIP: Return on ${metadata.returnDate} at ${metadata.returnTime}` : ''} | Stripe Session: ${session.id}`
+            pax: metadata.pax,
+            isRoundTrip: metadata.isRoundTrip === 'true'
           };
+          
+          const price = Number(metadata.totalPrice) || (session.amount_total ? session.amount_total / 100 : 0);
+          
+          // Call with specialized record_stripe_order action to enforce deduplication on Apps Script side
+          const comments = buildOrderComments(
+            metadata.paymentMode,
+            price,
+            metadata.flightNumber,
+            metadata.address,
+            metadata.comment,
+            metadata.isRoundTrip,
+            metadata.returnDate,
+            metadata.returnTime,
+            session.id
+          );
+          
+          const orderPayload = buildOrderPayload(bookingData, price, metadata.vehicleName, comments);
 
           await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(payload),
+            body: JSON.stringify({
+              action: 'record_stripe_order',
+              session: {
+                id: session.id,
+                metadata: {
+                  ...metadata,
+                  comments: comments,
+                  price: price.toString()
+                }
+              },
+              ...orderPayload
+            }),
           });
-          console.log("Successfully sent order to Google Sheets from webhook");
+          console.log("Successfully sent order to Google Sheets from webhook with deduplication action");
         } catch (error) {
           console.error("Error sending order to Google Sheets from webhook:", error);
         }
@@ -101,9 +206,15 @@ async function startServer() {
 
   app.all("/api/google-proxy", async (req, res) => {
     try {
+      if (req.method === "OPTIONS") {
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Google-Script-Url");
+        return res.status(204).end();
+      }
+
       const targetHeader = req.headers["x-google-script-url"] as string;
-      let GOOGLE_SCRIPT_URL = targetHeader || process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbyRfIswYifcjHxMtoTJidzftEvVEJkOv-8kPowYGckT21gXiLkXY2OE4v6_FG278Jlp/exec';
-      GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
+      const GOOGLE_SCRIPT_URL = getGoogleScriptUrl(targetHeader);
 
       let urlObject = new URL(GOOGLE_SCRIPT_URL);
 
@@ -164,8 +275,7 @@ async function startServer() {
   app.post("/api/log-lead", async (req, res) => {
     try {
       const leadData = req.body;
-      let GOOGLE_SCRIPT_URL = process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbyRfIswYifcjHxMtoTJidzftEvVEJkOv-8kPowYGckT21gXiLkXY2OE4v6_FG278Jlp/exec';
-      GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
+      const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
 
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
@@ -188,26 +298,25 @@ async function startServer() {
     try {
       const { bookingData, price, vehicleName } = req.body;
 
-      // TEST MODE BYPASS
-      if (bookingData.name === 'TEST 0709') {
+      // TEST MODE BYPASS (Only allowed in non-production environments)
+      if (process.env.NODE_ENV !== 'production' && bookingData.name === 'TEST 0709') {
         console.log("Test mode activated. Bypassing Stripe.");
-        let GOOGLE_SCRIPT_URL = process.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbyRfIswYifcjHxMtoTJidzftEvVEJkOv-8kPowYGckT21gXiLkXY2OE4v6_FG278Jlp/exec';
-        GOOGLE_SCRIPT_URL = GOOGLE_SCRIPT_URL.trim().replace(/^["']|["']$/g, '');
+        const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
 
-        const payload = {
-          name: bookingData.name,
-          phone: `${bookingData.phone} (${bookingData.messenger})`,
-          email: '', 
-          pickup: bookingData.fromName,
-          dropoff: bookingData.toName,
-          date: bookingData.date,
-          time: bookingData.time,
-          passengers: bookingData.pax,
-          vehicle: vehicleName,
-          price: price,
-          type: bookingData.isRoundTrip ? 'Round Trip (В обе стороны)' : 'One Way (В одну сторону)',
-          comments: `[TEST ORDER] Payment: ${bookingData.paymentMode === 'deposit' ? `Deposit €20 paid, remaining €${price - 20} in cash` : 'Full amount paid'} | Flight: ${bookingData.flightNumber || 'N/A'} | Address: ${bookingData.address}${bookingData.comment ? ` / ${bookingData.comment}` : ''}${bookingData.isRoundTrip ? ` | ROUND TRIP: Return on ${bookingData.returnDate} at ${bookingData.returnTime}` : ''} | Stripe Session: test_bypass`
-        };
+        const comments = buildOrderComments(
+          bookingData.paymentMode,
+          price,
+          bookingData.flightNumber,
+          bookingData.address,
+          bookingData.comment,
+          bookingData.isRoundTrip,
+          bookingData.returnDate,
+          bookingData.returnTime,
+          'test_bypass',
+          true
+        );
+
+        const payload = buildOrderPayload(bookingData, price, vehicleName, comments);
 
         try {
           await fetch(GOOGLE_SCRIPT_URL, {

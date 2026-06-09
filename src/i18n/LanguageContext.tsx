@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { translations, Language } from './translations';
 
 interface LanguageContextType {
@@ -30,25 +30,27 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     document.documentElement.lang = language === 'ru' ? 'ru-RU' : 'en-GB';
   }, [language]);
 
-  const t = (key: string, params?: Record<string, string | number>) => {
+  const t = useCallback((key: string, params?: Record<string, string | number>) => {
     const keys = key.split('.');
     let value: any = translations[language];
     
     for (const k of keys) {
-      if (value === undefined) return key;
+      if (value === undefined || value === null) {
+        return key;
+      }
       value = value[k];
     }
     
-    let result = value || key;
+    let result = (value !== undefined && value !== null) ? value : key;
     
     if (params && typeof result === 'string') {
       Object.entries(params).forEach(([k, v]) => {
-        result = result.replace(`{${k}}`, String(v));
+        result = result.replaceAll(`{${k}}`, String(v));
       });
     }
     
     return result;
-  };
+  }, [language]);
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t }}>

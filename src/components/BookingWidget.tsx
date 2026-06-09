@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useData } from '../context/DataContext';
 import { getGoogleScriptUrl, safeFetchGoogleScript } from '../lib/utils';
+import { handleInvalid } from '../lib/formUtils';
 import CheckoutModal from './CheckoutModal';
 
 export default function BookingWidget() {
@@ -24,17 +25,7 @@ export default function BookingWidget() {
   const [selectedVehicle, setSelectedVehicle] = useState<any>(null);
   const [timeError, setTimeError] = useState('');
   const { language, t } = useLanguage();
-  const { getBasePrice, isTimeBlocked, errorDetails, googleScriptUrl, updateGoogleScriptUrl } = useData();
-  const [customUrlInput, setCustomUrlInput] = useState(googleScriptUrl);
-  const [saveStatus, setSaveStatus] = useState('');
-
-  const handleSaveUrl = async () => {
-    if (customUrlInput.trim()) {
-      await updateGoogleScriptUrl(customUrlInput);
-      setSaveStatus(language === 'ru' ? 'URL Таблицы успешно сохранен! Данные загружаются...' : 'URL saved successfully! Reloading...');
-      setTimeout(() => setSaveStatus(''), 4000);
-    }
-  };
+  const { getBasePrice, isTimeBlocked } = useData();
 
     const handleSearch = (e: React.FormEvent) => {
       e.preventDefault();
@@ -98,9 +89,8 @@ export default function BookingWidget() {
       }
     };
 
-  const handleBook = (vehicle: any) => {
-    setSelectedVehicle(vehicle);
-    setIsCheckoutOpen(true);
+  const calculateOriginalPrice = (basePrice: number) => {
+    return isRoundTrip ? basePrice * 2 : basePrice;
   };
 
   const getPaxText = (n: number) => {
@@ -109,7 +99,7 @@ export default function BookingWidget() {
     }
     // Russian pluralization
     if (n === 1 || n === 21) return t('booking.passenger1');
-    if ([2, 3, 4, 22, 23, 24].includes(n)) return t('booking.passenger2');
+    if ([2, 3, 4, 12, 13, 14, 22, 23, 24].includes(n)) return t('booking.passenger2');
     return t('booking.passenger5');
   };
 
@@ -117,18 +107,9 @@ export default function BookingWidget() {
     return isRoundTrip ? Math.round(basePrice * 2 * 0.9) : basePrice;
   };
 
-  const calculateOriginalPrice = (basePrice: number) => {
-    return isRoundTrip ? basePrice * 2 : basePrice;
-  };
-
-  const handleInvalid = (e: React.FormEvent<HTMLFormElement>) => {
-    const firstInvalidElement = e.currentTarget.querySelector(':invalid') as HTMLElement;
-    if (firstInvalidElement) {
-      setTimeout(() => {
-        firstInvalidElement.focus();
-        firstInvalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 50);
-    }
+  const handleBook = (vehicle: any) => {
+    setSelectedVehicle(vehicle);
+    setIsCheckoutOpen(true);
   };
 
   return (
@@ -166,46 +147,7 @@ export default function BookingWidget() {
           <p>{t('booking.notice24h')}</p>
         </div>
         
-        {errorDetails && (
-          <div className="mb-6 p-6 bg-red-100 border-4 border-black text-black font-bold text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <p className="font-black mb-1 uppercase text-lg text-red-700">Google Sheets Connection Error:</p>
-            <p className="text-gray-800 mb-4">{errorDetails}</p>
-            
-            <div className="bg-white p-4 border-2 border-black rounded-xl mb-4 text-xs font-normal">
-              <label className="block text-[11px] font-black text-black uppercase tracking-wider mb-2">
-                {language === 'ru' ? 'Укажите ваш URL Google Web App' : 'Set your Google Web App URL'}
-              </label>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <input
-                  type="text"
-                  placeholder="https://script.google.com/macros/s/.../exec"
-                  value={customUrlInput}
-                  onChange={(e) => setCustomUrlInput(e.target.value)}
-                  className="brutal-input flex-1 px-3 py-2 text-xs font-mono bg-white text-black border-2 border-black rounded"
-                />
-                <button
-                  type="button"
-                  onClick={handleSaveUrl}
-                  className="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 border-2 border-black font-black uppercase text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-px active:translate-x-px"
-                >
-                  {language === 'ru' ? 'Сохранить' : 'Save'}
-                </button>
-              </div>
-              {saveStatus && (
-                <p className="text-green-600 font-bold mt-2 font-sans">{saveStatus}</p>
-              )}
-              <p className="text-[10px] text-gray-500 mt-2 font-mono">
-                {language === 'ru' 
-                  ? 'Сохраняется локально в текущем браузере (localStorage). Настройки вступят в силу немедленно.' 
-                  : 'Saved locally inside your browser (localStorage). Applied immediately.'}
-              </p>
-            </div>
 
-            <p className="mt-2 text-xs opacity-85 font-medium">
-              To fix this: Go to your Google Sheet &rarr; Extensions &rarr; Apps Script &rarr; Deploy &rarr; Manage deployments &rarr; Edit (pencil icon) &rarr; Ensure "Execute as" is "Me" and "Who has access" is "Anyone" &rarr; Deploy.
-            </p>
-          </div>
-        )}
 
         <form onSubmit={handleSearch} onInvalid={handleInvalid} className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="relative md:col-span-2">

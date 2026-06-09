@@ -181,7 +181,6 @@ function doPost(e) {
         'mode': 'payment',
         'success_url': originUrl + '/?session_id={CHECKOUT_SESSION_ID}',
         'cancel_url': originUrl + '/',
-        'customer_email': b.email || '',
         'line_items[0][price_data][currency]': 'eur',
         'line_items[0][price_data][unit_amount]': Math.round(chargeAmount * 100),
         'line_items[0][price_data][product_data][name]': 'Transfer: ' + b.fromName + ' ➡️ ' + b.toName + ' (' + payload.vehicleName + ')',
@@ -202,6 +201,11 @@ function doPost(e) {
         'metadata[type]': b.isRoundTrip ? 'Round Trip (В обе стороны)' : 'One Way (В одну сторону)',
         'metadata[comments]': 'Payment Mode: ' + (isDeposit ? 'Deposit Paid €20' : 'Full Amount Paid €' + amount) + ' | Flight: ' + (b.flightNumber || 'N/A') + ' | Address: ' + (b.address || 'N/A') + (b.comment ? ' | Comment: ' + b.comment : '') + (b.isRoundTrip ? ' | RETURN: ' + b.returnDate + ' at ' + b.returnTime : '')
       };
+
+      // Only add customer_email if a non-empty string is provided
+      if (b.email && typeof b.email === 'string' && b.email.trim() !== '') {
+        stripeParams['customer_email'] = b.email.trim();
+      }
 
       const formBody = buildFormParam(stripeParams).join('&');
 

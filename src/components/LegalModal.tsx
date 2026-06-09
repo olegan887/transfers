@@ -29,7 +29,7 @@ export default function LegalModal({ isOpen, onClose, type }: LegalModalProps) {
       en: {
         title: 'Terms of Service',
         body: `
-          Last updated: ${new Date().toLocaleDateString('en-US')}
+          Last updated: June 1, 2026
           
           1. Acceptance of Terms
           By accessing and using Cyprus Airport Transfer .co, you accept and agree to be bound by the terms and provision of this agreement.
@@ -50,7 +50,7 @@ export default function LegalModal({ isOpen, onClose, type }: LegalModalProps) {
       ru: {
         title: 'Договор оферты',
         body: `
-          Последнее обновление: ${new Date().toLocaleDateString('ru-RU')}
+          Последнее обновление: 1 июня 2026
           
           1. Принятие условий
           Используя сервис Cyprus Airport Transfer .co, вы соглашаетесь с настоящими условиями предоставления услуг.
@@ -73,7 +73,7 @@ export default function LegalModal({ isOpen, onClose, type }: LegalModalProps) {
       en: {
         title: 'Privacy Policy',
         body: `
-          Last updated: ${new Date().toLocaleDateString('en-US')}
+          Last updated: June 1, 2026
           
           1. Information We Collect
           We collect information you provide directly to us when booking a transfer, including your name, email address, phone number, and flight details. Payment information is processed securely by Stripe and is not stored on our servers.
@@ -94,7 +94,7 @@ export default function LegalModal({ isOpen, onClose, type }: LegalModalProps) {
       ru: {
         title: 'Политика конфиденциальности',
         body: `
-          Последнее обновление: ${new Date().toLocaleDateString('ru-RU')}
+          Последнее обновление: 1 июня 2026
           
           1. Какую информацию мы собираем
           Мы собираем информацию, которую вы предоставляете при бронировании трансфера: имя, email, номер телефона и данные рейса. Платежная информация безопасно обрабатывается сервисом Stripe и не хранится на наших серверах.
