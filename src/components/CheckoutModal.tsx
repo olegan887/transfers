@@ -4,7 +4,7 @@ import { X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { loadStripe } from '@stripe/stripe-js';
-import { getGoogleScriptUrl } from '../lib/utils';
+import { getGoogleScriptUrl, getApiUrl } from '../lib/utils';
 import Autocomplete from 'react-google-autocomplete';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
@@ -143,41 +143,47 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
     }).catch(err => console.error('Failed to log checkout lead directly', err));
 
     try {
-      // Build the standard completed order payload for google-apps-script.js
-      const payload = {
-        name: name,
-        phone: `${phone} (${messenger})`,
-        email: '', 
-        pickup: bookingData.fromName,
-        dropoff: bookingData.toName,
-        date: bookingData.date,
-        time: bookingData.time,
-        passengers: bookingData.pax,
-        vehicle: vehicleName,
-        price: finalPrice,
-        type: bookingData.isRoundTrip ? 'Round Trip (В обе стороны)' : 'One Way (В одну сторону)',
-        comments: `Payment: Cash to driver / Оплата наличными водителю (${paymentMode === 'deposit' ? 'with deposit agreement' : 'Full amount in cash'}) | Flight: ${flightNumber || 'N/A'} | Address: ${address}${comment ? ` / ${comment}` : ''}${bookingData.isRoundTrip ? ` | ROUND TRIP: Return on ${bookingData.returnDate} at ${bookingData.returnTime}` : ''}`
-      };
-
+      // Call Google Apps Script with action to create Stripe checkout session!
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'text/plain;charset=utf-8',
-        },
-        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'create_stripe_session',
+          bookingData: {
+            from: bookingData.from,
+            to: bookingData.to,
+            fromName: bookingData.fromName,
+            toName: bookingData.toName,
+            date: bookingData.date,
+            time: bookingData.time,
+            pax: bookingData.pax,
+            isRoundTrip: bookingData.isRoundTrip,
+            returnDate: bookingData.returnDate,
+            returnTime: bookingData.returnTime,
+            name: name,
+            phone: phone,
+            messenger: messenger,
+            flightNumber: flightNumber,
+            address: address,
+            comment: comment,
+            paymentMode: paymentMode,
+          },
+          price: finalPrice,
+          vehicleName: vehicleName,
+          originUrl: window.location.origin + window.location.pathname.replace(/\/$/, '')
+        })
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit order directly to Google Sheets');
+        throw new Error('Failed to reach booking server');
       }
 
       const data = await response.json();
-
-      if (data.result === 'success') {
-        const basePath = window.location.pathname.replace(/\/$/, '').replace(/\/success$/, '');
-        window.location.href = `${basePath}/success?direct_success=true&name=${encodeURIComponent(name)}&pickup=${encodeURIComponent(bookingData.fromName)}&dropoff=${encodeURIComponent(bookingData.toName)}`;
+      if (data.result === 'success' && data.url) {
+        // Redirect directly to Stripe Checkout url!
+        window.location.href = data.url;
       } else {
-        throw new Error(data.message || 'Failed to submit order directly');
+        throw new Error(data.message || 'Error occurred starting checkout. Please try again.');
       }
       
     } catch (err: any) {

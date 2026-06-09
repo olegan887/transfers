@@ -39,3 +39,11 @@ export function getGoogleScriptUrl() {
   const rawUrl = storedUrl || envUrl || DEFAULT_GOOGLE_SCRIPT_URL;
   return rawUrl.trim().replace(/^["']|["']$/g, '');
 }
+
+export function getApiUrl(path: string) {
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('run.app'))) {
+    return cleanPath;
+  }
+  return `https://ais-pre-eamemo4u5k7i6q4xkkj7a5-636191656390.europe-west2.run.app${cleanPath}`;
+}

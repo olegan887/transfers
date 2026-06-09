@@ -33,7 +33,10 @@ export default function App() {
       path = path.slice(0, -1);
     }
     
-    if (path.endsWith('/success')) {
+    const params = new URLSearchParams(window.location.search);
+    const hasSuccess = params.has('direct_success') || params.has('session_id') || path.endsWith('/success');
+    
+    if (hasSuccess) {
       setCurrentPath('/success');
     } else if (path.endsWith('/blog')) {
       setCurrentPath('/blog');

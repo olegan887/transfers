@@ -160,7 +160,7 @@ async function startServer() {
           console.error("Error sending TEST order to Google Sheets:", error);
         }
 
-        return res.json({ id: 'test_session', url: `${req.headers.origin}/success?session_id=test_session` });
+        return res.json({ id: 'test_session', url: `${req.headers.origin}/?session_id=test_session` });
       }
 
       const stripe = getStripe();
@@ -183,7 +183,7 @@ async function startServer() {
           },
         ],
         mode: 'payment',
-        success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${req.headers.origin}/?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/`,
         metadata: {
           from: bookingData.from || '',

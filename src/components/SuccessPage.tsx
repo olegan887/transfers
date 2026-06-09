@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { CheckCircle2, Home, Loader2, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { getGoogleScriptUrl } from '../lib/utils';
 
 export default function SuccessPage() {
   const { t } = useLanguage();
@@ -33,20 +34,26 @@ export default function SuccessPage() {
 
   const verifyAndProcessOrder = async (sid: string) => {
     try {
-      // 1. Verify session with our backend
-      const verifyRes = await fetch('/api/verify-session', {
+      const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
+      // 1. Verify session directly with Google Apps Script
+      const verifyRes = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId: sid })
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ 
+          action: 'verify_stripe_session',
+          sessionId: sid 
+        })
       });
       
-      const verifyData = await verifyRes.json();
-
-      if (!verifyRes.ok || !verifyData.success) {
-        throw new Error(verifyData.error || verifyData.status || 'Payment verification failed');
+      if (!verifyRes.ok) {
+        throw new Error('Failed to reach validation server');
       }
 
-      const metadata = verifyData.metadata;
+      const verifyData = await verifyRes.json();
+
+      if (verifyData.result !== 'success' || !verifyData.success) {
+        throw new Error(verifyData.message || 'Payment verification failed');
+      }
 
       // 2. Trigger Google Ads Conversion
       if (typeof (window as any).gtag_report_conversion === 'function') {
