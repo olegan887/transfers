@@ -9,7 +9,7 @@
  * 3. Полностью сотрите весь старый код в редакторе (Code.gs) и вставьте этот новый код.
  * 4. Убедитесь, что у вас есть следующие листы в таблице:
  *    - "Orders" (Столбцы: Timestamp, Name, Phone, Email, Pickup, Dropoff, Date, Time, Passengers, Vehicle, Price, Type, Comments)
- *    - "Leads" (Столбцы: Timestamp, Status, Name, Phone, Pickup, Dropoff, Date, Time, Passengers, Vehicle, Price, Comments)
+ *    - "Leads" (Столбцы: Timestamp, Status, Name, Phone, Email, Pickup, Dropoff, Date, Time, Passengers, Vehicle, Price, Comments)
  *    - "Routes" (Столбцы: From, To, Price, Available)
  *    - "BlockedTimes" (Столбцы: Date, Time)
  * 5. ⭐️ НАСТРОЙКА STRIPE:
@@ -24,7 +24,7 @@
  *    - Запуск от имени (Execute as): "Я" (Me).
  *    - Кто имеет доступ (Who has access): "Все" (Anyone).
  * 7. Нажмите "Развернуть" (Deploy), разрешите доступ (предоставьте гуглу права на работу со своими таблицами) и скопируйте полученный Web App URL!
- * 8. Настройте Telegram Bot: Пропишите ваши TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID ниже в коде (строки 42-43).
+ * 8. Настройте Telegram Bot: Пропишите ваши TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID ниже в коде (строки 46-47).
  * 
  * EN:
  * 1. Go to your Google Sheet -> Extensions -> Apps Script.
@@ -36,7 +36,7 @@
  *    - Name: STRIPE_SECRET_KEY
  *    - Value: Paste your Stripe Secret Key (starts with sk_live_... or sk_test_...).
  *    - Click "Save properties".
- * 4. Update TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID below in lines 42-43.
+ * 4. Update TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID below in lines 46-47.
  * 5. Click Deploy -> New Deployment -> Select "Web App".
  *    - Execute as: "Me"
  *    - Who has access: "Anyone"
@@ -46,8 +46,41 @@
 const TELEGRAM_BOT_TOKEN = '8715085806:AAGOT47PlW6y_t8MMnIQzJN84zXqZ8itwTY';
 const TELEGRAM_CHAT_ID = '8529666732';
 
+/**
+ * Функция первоначальной настройки таблиц.
+ * Рекомендуется выбрать "setup" в выпадающем списке сверху и нажать "Выполнить".
+ */
+function setup() {
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  
+  const ordersHeaders = ['Timestamp', 'Name', 'Phone', 'Email', 'Pickup', 'Dropoff', 'Date', 'Time', 'Passengers', 'Vehicle', 'Price', 'Type', 'Comments'];
+  getOrCreateSheet(spreadsheet, 'Orders', ordersHeaders);
+  
+  const leadsHeaders = ['Timestamp', 'Status', 'Name', 'Phone', 'Email', 'Pickup', 'Dropoff', 'Date', 'Time', 'Passengers', 'Vehicle', 'Price', 'Comments'];
+  getOrCreateSheet(spreadsheet, 'Leads', leadsHeaders);
+  
+  const routesHeaders = ['From', 'To', 'Price', 'Available'];
+  getOrCreateSheet(spreadsheet, 'Routes', routesHeaders);
+  
+  const blockedHeaders = ['Date', 'Time'];
+  getOrCreateSheet(spreadsheet, 'BlockedTimes', blockedHeaders);
+  
+  Logger.log("Все листы успешно созданы и готовы к работе!");
+}
+
 // Helper function to get or create a sheet with headers
 function getOrCreateSheet(spreadsheet, sheetName, headers) {
+  // Защита от запуска вручную без параметров из меню Apps Script
+  if (!spreadsheet) {
+    spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  }
+  if (!sheetName) {
+    sheetName = 'Orders';
+  }
+  if (!headers) {
+    headers = ['Timestamp', 'Name', 'Phone', 'Email', 'Pickup', 'Dropoff', 'Date', 'Time', 'Passengers', 'Vehicle', 'Price', 'Type', 'Comments'];
+  }
+
   let sheet = spreadsheet.getSheetByName(sheetName);
   if (!sheet) {
     sheet = spreadsheet.insertSheet(sheetName);
@@ -159,6 +192,16 @@ function doPost(e) {
       }
       return ContentService.createTextOutput(JSON.stringify({ result: 'success' }))
         .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // ⭐️ ACTION: Record Stripe Order (Explicitly matched with deduplication)
+    if (payload.action === 'record_stripe_order') {
+      const session = payload.session;
+      if (session) {
+        const recorded = recordStripeOrder(spreadsheet, session);
+        return ContentService.createTextOutput(JSON.stringify({ result: 'success', recorded: recorded }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
     }
 
     // ⭐️ ACTION: Create Stripe Checkout Session
@@ -284,7 +327,7 @@ function doPost(e) {
 
     // ⭐️ ACTION: Log Lead (Abandoned user interaction / Search)
     if (payload.action === 'log_lead') {
-      const leadsHeaders = ['Timestamp', 'Status', 'Name', 'Phone', 'Pickup', 'Dropoff', 'Date', 'Time', 'Passengers', 'Vehicle', 'Price', 'Comments'];
+      const leadsHeaders = ['Timestamp', 'Status', 'Name', 'Phone', 'Email', 'Pickup', 'Dropoff', 'Date', 'Time', 'Passengers', 'Vehicle', 'Price', 'Comments'];
       const leadsSheet = getOrCreateSheet(spreadsheet, 'Leads', leadsHeaders);
       
       leadsSheet.appendRow([
@@ -292,6 +335,7 @@ function doPost(e) {
         payload.status || 'Unknown',
         payload.name || '',
         payload.phone || '',
+        payload.email || '',
         payload.pickup || '',
         payload.dropoff || '',
         payload.date || '',
@@ -327,6 +371,7 @@ function doPost(e) {
     ]);
 
     sendTelegramNotification(payload);
+    sendConfirmationEmail(payload);
 
     return ContentService.createTextOutput(JSON.stringify({ result: 'success' }))
       .setMimeType(ContentService.MimeType.JSON);
@@ -357,10 +402,13 @@ function recordStripeOrder(spreadsheet, session) {
   // Combine comments and append the stripe payment signature
   const completeComments = (m.comments || '') + ' | Unique Payment Ref: ' + sessionId;
   
+  // Format phone with messenger (способ связи) so it records correctly!
+  const displayPhone = m.messenger ? m.phone + ' (' + m.messenger + ')' : (m.phone || '');
+  
   ordersSheet.appendRow([
     new Date(),
     m.name || '',
-    m.phone || '',
+    displayPhone,
     m.email || '',
     m.pickup || '',
     m.dropoff || '',
@@ -376,7 +424,7 @@ function recordStripeOrder(spreadsheet, session) {
   // Telegram payload
   const telegramPayload = {
     name: m.name,
-    phone: m.phone,
+    phone: displayPhone,
     pickup: m.pickup,
     dropoff: m.dropoff,
     date: m.date,
@@ -389,6 +437,22 @@ function recordStripeOrder(spreadsheet, session) {
   };
   
   sendTelegramNotification(telegramPayload);
+
+  // Send email confirmation
+  sendConfirmationEmail({
+    name: m.name,
+    email: m.email,
+    pickup: m.pickup,
+    dropoff: m.dropoff,
+    date: m.date,
+    time: m.time,
+    vehicle: m.vehicle,
+    passengers: m.passengers,
+    type: m.type,
+    price: m.price,
+    comments: completeComments
+  });
+
   return true;
 }
 
@@ -424,5 +488,109 @@ ${payload.comments}
     UrlFetchApp.fetch(url, options);
   } catch (e) {
     console.error("Telegram Error: " + e.toString());
+  }
+}
+
+/**
+ * Sends a highly professional English confirmation email to the client with WhatsApp contact link
+ */
+function sendConfirmationEmail(payload) {
+  const email = payload.email || '';
+  if (!email || email.indexOf('@') === -1) {
+    console.log("Skipping email sending: empty or invalid email address.");
+    return; // No valid email address provided
+  }
+
+  const subject = "Transfer Booking Confirmed - Cyprus Airport Transfers";
+  const whatsappUrl = "https://wa.me/35796867289";
+  
+  const textBody = "Dear " + (payload.name || 'Customer') + ",\n\n" +
+    "Thank you for booking your transfer with us! We are pleased to confirm your booking.\n\n" +
+    "--- BOOKING DETAILS ---\n" +
+    "Route: " + payload.pickup + " ➡️ " + payload.dropoff + "\n" +
+    "Date & Time: " + payload.date + " at " + payload.time + "\n" +
+    "Vehicle: " + payload.vehicle + " (" + payload.passengers + " pax)\n" +
+    "Price: €" + payload.price + "\n" +
+    "Type: " + (payload.type || 'One Way') + "\n" +
+    "Details/Comments: " + (payload.comments || 'None') + "\n\n" +
+    "--- WHAT HAPPENS NEXT ---\n" +
+    "1. Our driver will meet you at the arrival hall/exit area holding a sign with your name.\n" +
+    "2. If your flight is delayed, don't worry! We track your flight status and the driver will wait for you free of charge.\n\n" +
+    "If you have any questions, need to make changes, or wish to contact us instantly, please click the link below to chat with us on WhatsApp:\n" +
+    whatsappUrl + "\n\n" +
+    "Safe travels,\n" +
+    "Cyprus Airport Transfers Team\n" +
+    "WhatsApp Support: " + whatsappUrl;
+
+  const htmlBody = 
+    '<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">' +
+      '<div style="background-color: #facc15; padding: 24px; text-align: center; border-bottom: 4px solid #000000;">' +
+        '<h1 style="margin: 0; font-size: 24px; font-weight: 900; color: #000000; text-transform: uppercase; letter-spacing: -0.5px;">Booking Confirmed</h1>' +
+      '</div>' +
+      '<div style="padding: 24px; background-color: #ffffff; color: #333333; line-height: 1.6;">' +
+        '<p style="margin-top: 0; font-size: 16px;">Dear <strong>' + (payload.name || 'Customer') + '</strong>,</p>' +
+        '<p style="font-size: 15px;">Thank you for booking your transfer with us! We are pleased to confirm your transfer request.</p>' +
+        
+        '<div style="background-color: #f9fafb; border: 2px solid #000000; padding: 16px; margin: 20px 0; border-radius: 4px; box-shadow: 4px 4px 0px 0px #000000;">' +
+          '<h3 style="margin-top: 0; color: #000000; text-transform: uppercase; border-bottom: 2px solid #000000; padding-bottom: 8px; font-size: 14px; font-weight: 800;">Transfer Details</h3>' +
+          '<table style="width: 100%; border-collapse: collapse; font-size: 14px;">' +
+            '<tr>' +
+              '<td style="padding: 6px 0; font-weight: bold; width: 120px;">Route:</td>' +
+              '<td style="padding: 6px 0;">' + payload.pickup + ' &rarr; ' + payload.dropoff + '</td>' +
+            '</tr>' +
+            '<tr>' +
+              '<td style="padding: 6px 0; font-weight: bold;">Date &amp; Time:</td>' +
+              '<td style="padding: 6px 0;">' + payload.date + ' at ' + payload.time + '</td>' +
+            '</tr>' +
+            '<tr>' +
+              '<td style="padding: 6px 0; font-weight: bold;">Vehicle:</td>' +
+              '<td style="padding: 6px 0;">' + payload.vehicle + ' (' + payload.passengers + ' pax)</td>' +
+            '</tr>' +
+            '<tr>' +
+              '<td style="padding: 6px 0; font-weight: bold;">Type:</td>' +
+              '<td style="padding: 6px 0;">' + (payload.type || 'One Way') + '</td>' +
+            '</tr>' +
+            '<tr>' +
+              '<td style="padding: 6px 0; font-weight: bold;">Price:</td>' +
+              '<td style="padding: 6px 0; font-weight: 900; font-size: 16px; color: #000000;">&euro;' + payload.price + '</td>' +
+            '</tr>' +
+            (payload.comments ? 
+            '<tr>' +
+              '<td style="padding: 6px 0; font-weight: bold; vertical-align: top;">Notes:</td>' +
+              '<td style="padding: 6px 0; color: #555555; font-style: italic;">' + payload.comments + '</td>' +
+            '</tr>' : '') +
+          '</table>' +
+        '</div>' +
+        
+        '<h3 style="color: #000000; text-transform: uppercase; font-size: 14px; font-weight: 800; margin-top: 24px;">What Happens Next?</h3>' +
+        '<ol style="padding-left: 20px; margin-bottom: 24px; font-size: 14px;">' +
+          '<li style="margin-bottom: 8px;"><strong>Airport Meeting:</strong> Our professional driver will meet you directly in the arrival hall/exit area holding a prominent sign with your name.</li>' +
+          '<li style="margin-bottom: 8px;"><strong>Flight Status Tracking:</strong> We track flight arrivals in real-time. If your flight is delayed, don\'t worry — we will adjust the pickup time and wait for you free of charge.</li>' +
+        '</ol>' +
+        
+        '<div style="text-align: center; margin: 32px 0 16px 0;">' +
+          '<a href="' + whatsappUrl + '" target="_blank" style="background-color: #25D366; color: #ffffff; text-decoration: none; padding: 14px 28px; font-weight: bold; font-size: 16px; border-radius: 4px; display: inline-block; border: 2px solid #000000; box-shadow: 4px 4px 0px 0px #000000; text-transform: uppercase;">' +
+            '💬 Chat with us on WhatsApp' +
+          '</a>' +
+        '</div>' +
+        '<p style="text-align: center; margin: 0; font-size: 12px; color: #666666;">' +
+          'Quick help: <a href="' + whatsappUrl + '" style="color: #25D366; font-weight: bold; text-decoration: underline;">' + whatsappUrl + '</a>' +
+        '</p>' +
+      '</div>' +
+      '<div style="background-color: #f3f4f6; padding: 16px; text-align: center; border-top: 1px solid #e0e0e0; font-size: 12px; color: #666666;">' +
+        '&copy; ' + new Date().getFullYear() + ' Cyprus Airport Transfers. All rights reserved.' +
+      '</div>' +
+    '</div>';
+
+  try {
+    MailApp.sendEmail({
+      to: email,
+      subject: subject,
+      body: textBody,
+      htmlBody: htmlBody
+    });
+    console.log("Confirmation email successfully sent to: " + email);
+  } catch (e) {
+    console.error("Error sending confirmation email: " + e.toString());
   }
 }

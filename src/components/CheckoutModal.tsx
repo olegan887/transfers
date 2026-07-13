@@ -31,6 +31,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
   const { t, language } = useLanguage();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [messenger, setMessenger] = useState('whatsapp');
   const [flightNumber, setFlightNumber] = useState('');
   const [address, setAddress] = useState('');
@@ -53,6 +54,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
           status: 'Abandoned Modal',
           name: name,
           phone: `${phone} (${messenger})`,
+          email: email,
           pickup: bookingData.fromName,
           dropoff: bookingData.toName,
           date: bookingData.date,
@@ -126,6 +128,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
         status: 'Initiated checkout',
         name: name,
         phone: `${phone} (${messenger})`,
+        email: email,
         pickup: bookingData.fromName,
         dropoff: bookingData.toName,
         date: bookingData.date,
@@ -157,6 +160,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
             name: name,
             phone: phone,
             messenger: messenger,
+            email: email,
             flightNumber: flightNumber,
             address: address,
             comment: comment,
@@ -270,33 +274,47 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
 
                   <div>
                     <label className="block text-[10px] font-black text-black uppercase tracking-wider mb-1">
-                      {t('booking.phone')}
+                      {t('contact.email') || 'Email'}
                     </label>
-                    <div className="flex flex-col gap-2">
-                      <input
-                        type="tel"
-                        required
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+357 99 123456"
-                        className="brutal-input w-full px-3 h-12 text-base md:text-sm"
-                      />
-                      <div className="flex gap-1">
-                        {['whatsapp', 'telegram', 'sms'].map((m) => (
-                          <button
-                            key={m}
-                            type="button"
-                            onClick={() => setMessenger(m)}
-                            className={`flex-1 h-10 text-[10px] font-black uppercase border-2 border-black transition-all ${
-                              messenger === m 
-                                ? 'bg-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transform translate-x-[1px] translate-y-[1px]' 
-                                : 'bg-white text-black hover:bg-gray-100 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'
-                            }`}
-                          >
-                            {m === 'whatsapp' ? 'WhatsApp' : m === 'telegram' ? 'Telegram' : 'SMS'}
-                          </button>
-                        ))}
-                      </div>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="your@email.com"
+                      className="brutal-input w-full px-3 h-12 text-base md:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black text-black uppercase tracking-wider mb-1">
+                    {t('booking.phone')}
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <input
+                      type="tel"
+                      required
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+357 99 123456"
+                      className="brutal-input w-full px-3 h-12 text-base md:text-sm sm:col-span-2"
+                    />
+                    <div className="flex gap-1 sm:col-span-1">
+                      {['whatsapp', 'telegram', 'sms'].map((m) => (
+                        <button
+                          key={m}
+                          type="button"
+                          onClick={() => setMessenger(m)}
+                          className={`flex-1 h-12 text-[10px] font-black uppercase border-2 border-black transition-all ${
+                            messenger === m 
+                              ? 'bg-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transform translate-x-[1px] translate-y-[1px]' 
+                              : 'bg-white text-black hover:bg-gray-100 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'
+                          }`}
+                        >
+                          {m === 'whatsapp' ? 'WhatsApp' : m === 'telegram' ? 'Telegram' : 'SMS'}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>

@@ -103,7 +103,7 @@ async function startServer() {
       callback(null, true);
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Google-Script-Url"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Google-Script-Url", "X-Script-Url"],
     credentials: true
   }));
 
@@ -204,24 +204,35 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
-  app.all("/api/google-proxy", async (req, res) => {
+  const handleProxy = async (req: express.Request, res: express.Response) => {
     try {
       if (req.method === "OPTIONS") {
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Google-Script-Url");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Google-Script-Url, X-Script-Url");
         return res.status(204).end();
       }
 
-      const targetHeader = req.headers["x-google-script-url"] as string;
-      const GOOGLE_SCRIPT_URL = getGoogleScriptUrl(targetHeader);
+      let targetHeader = req.headers["x-script-url"] || req.headers["x-google-script-url"] || req.query.script_url;
+      const sParam = req.query.s;
+      if (sParam && typeof sParam === "string") {
+        try {
+          targetHeader = Buffer.from(sParam, "base64").toString("utf8");
+        } catch (e) {
+          // ignore
+        }
+      }
+
+      const GOOGLE_SCRIPT_URL = getGoogleScriptUrl(targetHeader as string);
 
       let urlObject = new URL(GOOGLE_SCRIPT_URL);
 
       if (req.method === "GET") {
         urlObject.searchParams.set("t", Date.now().toString());
         for (const [key, val] of Object.entries(req.query)) {
-          urlObject.searchParams.set(key, val as string);
+          if (key !== "script_url" && key !== "s") {
+            urlObject.searchParams.set(key, val as string);
+          }
         }
 
         const response = await fetch(urlObject.toString(), {
@@ -270,7 +281,10 @@ async function startServer() {
       console.error("Google proxy error:", error);
       return res.status(500).json({ result: "error", message: error.message });
     }
-  });
+  };
+
+  app.all("/api/google-proxy", handleProxy);
+  app.all("/api/sync-data", handleProxy);
 
   app.post("/api/log-lead", async (req, res) => {
     try {
@@ -356,6 +370,7 @@ async function startServer() {
         mode: 'payment',
         success_url: `${req.headers.origin}/?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/`,
+        customer_email: bookingData.email || undefined,
         metadata: {
           from: bookingData.from || '',
           to: bookingData.to || '',
@@ -371,6 +386,7 @@ async function startServer() {
           name: bookingData.name || '',
           phone: bookingData.phone || '',
           messenger: bookingData.messenger || '',
+          email: bookingData.email || '',
           flightNumber: bookingData.flightNumber || '',
           address: bookingData.address || '',
           comment: bookingData.comment || '',

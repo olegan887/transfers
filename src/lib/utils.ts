@@ -64,7 +64,9 @@ export function getApiUrl(path: string) {
   }
   const base = getBasePath();
   const formattedPath = path.startsWith('/') ? path : `/${path}`;
-  return `${window.location.protocol}//${window.location.host}${base}${formattedPath}`;
+  
+  // Return relative path to let the browser resolve it against the current origin/base URL
+  return `${base}${formattedPath}`;
 }
 
 export async function safeFetchGoogleScript(
@@ -80,11 +82,27 @@ export async function safeFetchGoogleScript(
 
   // 1. Try to fetch via Express backend proxy (which bypasses ad-blockers and CORS)
   try {
-    const proxyUrl = getApiUrl('/api/google-proxy');
+    const baseApiUrl = getApiUrl('/api/sync-data');
+    
+    // Obfuscate Google Apps Script URL using base64 and parameter 's' to bypass aggressive ad-blockers
+    let proxyUrl = baseApiUrl;
+    let obfuscatedUrl = '';
+    try {
+      obfuscatedUrl = btoa(googleScriptUrl);
+    } catch (e) {
+      obfuscatedUrl = '';
+    }
+
+    if (obfuscatedUrl) {
+      proxyUrl += `${proxyUrl.includes('?') ? '&' : '?'}s=${encodeURIComponent(obfuscatedUrl)}`;
+    } else {
+      proxyUrl += `${proxyUrl.includes('?') ? '&' : '?'}script_url=${encodeURIComponent(googleScriptUrl)}`;
+    }
+    
     const headers: Record<string, string> = {
-      'X-Google-Script-Url': googleScriptUrl,
       ...(options?.headers || {}),
     };
+    
     if (method === 'POST') {
       headers['Content-Type'] = 'application/json';
     }
