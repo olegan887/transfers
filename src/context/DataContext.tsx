@@ -1,10 +1,27 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { basePrices } from '../data/pricing';
+import { basePrices, DEFAULT_FEATURED_ROUTES, RouteItem } from '../data/pricing';
 import { getGoogleScriptUrl, safeFetchGoogleScript, getBidirectional, cleanUrl } from '../lib/utils';
 import { isTimeBlocked as externalIsTimeBlocked } from '../lib/dateUtils';
 
-type RouteData = { from: string; to: string; price: number; available: boolean };
+type RouteData = RouteItem;
 type BlockedTime = { date: string; time: string };
+
+const getInitialRoutes = (): RouteData[] => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem('cached_transfer_routes');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+  return DEFAULT_FEATURED_ROUTES;
+};
 
 interface DataContextType {
   routes: RouteData[];
@@ -20,9 +37,9 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [routes, setRoutes] = useState<RouteData[]>([]);
+  const [routes, setRoutes] = useState<RouteData[]>(getInitialRoutes);
   const [blockedTimes, setBlockedTimes] = useState<BlockedTime[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [errorDetails, setErrorDetails] = useState<string | null>(null);
   const [googleScriptUrl, setGoogleScriptUrl] = useState(getGoogleScriptUrl());
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -31,14 +48,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const controller = new AbortController();
     
     const fetchData = async () => {
-      setLoading(true);
-      setErrorDetails(null);
       let GOOGLE_SCRIPT_URL = googleScriptUrl;
       try {
         GOOGLE_SCRIPT_URL = cleanUrl(GOOGLE_SCRIPT_URL);
 
         if (!GOOGLE_SCRIPT_URL) {
-          throw new Error('Google Apps Script URL is empty');
+          return;
         }
 
         const response = await safeFetchGoogleScript(GOOGLE_SCRIPT_URL);
@@ -46,7 +61,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (controller.signal.aborted) return;
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          return;
         }
         
         const data = await response.json();
@@ -54,22 +69,22 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (controller.signal.aborted) return;
 
         if (data && data.result === 'success') {
-          setRoutes(data.routes || []);
-          setBlockedTimes(data.blocked || []);
+          if (Array.isArray(data.routes) && data.routes.length > 0) {
+            setRoutes(data.routes);
+            try {
+              localStorage.setItem('cached_transfer_routes', JSON.stringify(data.routes));
+            } catch (e) {
+              // ignore
+            }
+          }
+          if (Array.isArray(data.blocked)) {
+            setBlockedTimes(data.blocked);
+          }
           setErrorDetails(null);
-        } else {
-          setRoutes(data?.routes || []);
-          setBlockedTimes(data?.blocked || []);
         }
       } catch (error: any) {
         if (controller.signal.aborted) return;
-        console.warn('Dynamic pricing sync unavailable, using default rates:', error?.message || error);
-        setRoutes([]);
-        setBlockedTimes([]);
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
+        console.warn('Silent pricing background sync:', error?.message || error);
       }
     };
 

@@ -44,13 +44,43 @@ export const basePrices: Record<string, Record<string, number>> = {
     'protaras': 170,
     'limassol': 70,
     'larnaca-city': 130,
-    'paphos-city': 35,
+    'paphos-city': 40,
     'nicosia': 140,
     'coral-bay': 45,
     'peyia': 50,
     'polis': 65,
+  },
+  'limassol': {
+    'paphos-city': 70,
+    'larnaca-city': 50,
+    'ayia-napa': 75,
+    'protaras': 80,
+    'nicosia': 60,
+    'coral-bay': 60,
+    'peyia': 65,
+    'polis': 75,
   }
 };
+
+export interface RouteItem {
+  from: string;
+  to: string;
+  price: number;
+  available: boolean;
+}
+
+// Default 9 popular cards rendered instantly without waiting for network
+export const DEFAULT_FEATURED_ROUTES: RouteItem[] = [
+  { from: 'lca', to: 'paphos-city', price: 130, available: true },
+  { from: 'pfo', to: 'limassol', price: 70, available: true },
+  { from: 'pfo', to: 'larnaca-city', price: 130, available: true },
+  { from: 'limassol', to: 'paphos-city', price: 70, available: true },
+  { from: 'pfo', to: 'nicosia', price: 140, available: true },
+  { from: 'pfo', to: 'ayia-napa', price: 160, available: true },
+  { from: 'pfo', to: 'paphos-city', price: 40, available: true },
+  { from: 'lca', to: 'coral-bay', price: 145, available: true },
+  { from: 'lca', to: 'peyia', price: 150, available: true },
+];
 
 export function getPrice(from: string, to: string, vehicleId: string): number | null {
   const basePrice = getBidirectional(basePrices, from, to);
