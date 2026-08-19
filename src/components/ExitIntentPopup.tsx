@@ -3,9 +3,13 @@ import { createPortal } from 'react-dom';
 import { X, Tag, Copy, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { DEFAULT_PROMO_CODE } from '../config';
+import { DEFAULT_PROMO_CODE, ENABLE_EXIT_INTENT_POPUP } from '../config';
 
 export default function ExitIntentPopup() {
+  if (!ENABLE_EXIT_INTENT_POPUP) {
+    return null;
+  }
+
   const [isVisible, setIsVisible] = useState(false);
   const [copied, setCopied] = useState(false);
   const { language } = useLanguage();

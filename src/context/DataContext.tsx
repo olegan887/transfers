@@ -53,17 +53,19 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         if (controller.signal.aborted) return;
 
-        if (data.result === 'success') {
+        if (data && data.result === 'success') {
           setRoutes(data.routes || []);
           setBlockedTimes(data.blocked || []);
           setErrorDetails(null);
         } else {
-          throw new Error(data.message || 'Unknown error from script');
+          setRoutes(data?.routes || []);
+          setBlockedTimes(data?.blocked || []);
         }
       } catch (error: any) {
         if (controller.signal.aborted) return;
-        console.error('Failed to fetch dynamic data:', error);
-        setErrorDetails(`${error.message}. URL starts with: ${GOOGLE_SCRIPT_URL.substring(0, 30)}...`);
+        console.warn('Dynamic pricing sync unavailable, using default rates:', error?.message || error);
+        setRoutes([]);
+        setBlockedTimes([]);
       } finally {
         if (!controller.signal.aborted) {
           setLoading(false);

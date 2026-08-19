@@ -7,3 +7,7 @@ export const WHATSAPP_NUMBER = '35796867289';
 export const DEPOSIT_AMOUNT = 20;
 export const DEFAULT_PROMO_CODE = 'DONTGO5';
 
+// Feature flags
+// Set to true to re-enable the exit discount popup modal
+export const ENABLE_EXIT_INTENT_POPUP = false;
+

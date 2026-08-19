@@ -14,7 +14,7 @@ import BlogPost from './components/BlogPost';
 import ExitIntentPopup from './components/ExitIntentPopup';
 import { LanguageProvider, useLanguage } from './i18n/LanguageContext';
 import { DataProvider } from './context/DataContext';
-import { WHATSAPP_NUMBER } from './config';
+import { WHATSAPP_NUMBER, ENABLE_EXIT_INTENT_POPUP } from './config';
 import { reportConversion } from './lib/analytics';
 
 function AppContent() {
@@ -109,7 +109,7 @@ function AppContent() {
       </a>
       
       <CookieConsent />
-      <ExitIntentPopup />
+      {ENABLE_EXIT_INTENT_POPUP && <ExitIntentPopup />}
     </div>
   );
 }

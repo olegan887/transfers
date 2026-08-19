@@ -1,5 +1,6 @@
 {
   "name": "Cyprus Transfers",
   "description": "Premium airport transfers in Cyprus. Book your ride from Larnaca or Paphos airport to any destination on the island.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
