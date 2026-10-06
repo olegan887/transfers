@@ -57,10 +57,10 @@ function AppContent() {
 
   useEffect(() => {
     if (currentPath === '/' || currentPath === '/#destinations' || currentPath === '/#features') {
-      document.title = 'Cyprus Airport Transfers | Taxi Paphos & Larnaca';
+      document.title = 'Limassol & Cyprus Airport Transfers | Taxi Limassol, Larnaca & Paphos';
       const metaDescription = document.querySelector('meta[name="description"]');
       if (metaDescription) {
-        metaDescription.setAttribute('content', 'Reliable airport transfers in Cyprus. Book a taxi from Paphos (PFO) or Larnaca (LCA) to Limassol, Paphos City, Ayia Napa. Fixed prices, comfortable cars.');
+        metaDescription.setAttribute('content', 'Reliable airport transfers in Limassol and Cyprus. Book fixed-price taxi from Limassol to Larnaca Airport (LCA), Larnaca City, Paphos Airport (PFO), and from airports to Limassol. 24/7 online booking.');
       }
     }
   }, [currentPath]);

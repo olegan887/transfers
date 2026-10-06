@@ -22,12 +22,28 @@ interface CheckoutModalProps {
     isRoundTrip: boolean;
     returnDate: string;
     returnTime: string;
+    nightFee?: number;
+    nightLegsCount?: number;
   };
   price: number;
+  baseFare?: number;
+  nightFee?: number;
+  nightLegsCount?: number;
   vehicleName: string;
 }
 
-export default function CheckoutModal({ isOpen, onClose, bookingData, price, vehicleName }: CheckoutModalProps) {
+export default function CheckoutModal({
+  isOpen,
+  onClose,
+  bookingData,
+  price,
+  baseFare,
+  nightFee = 0,
+  nightLegsCount = 0,
+  vehicleName
+}: CheckoutModalProps) {
+  const effectiveNightFee = nightFee || bookingData.nightFee || 0;
+  const effectiveNightLegs = nightLegsCount || bookingData.nightLegsCount || (effectiveNightFee > 10 ? 2 : effectiveNightFee > 0 ? 1 : 0);
   const { t, language } = useLanguage();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -62,7 +78,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
           passengers: bookingData.pax,
           vehicle: vehicleName,
           price: price,
-          comments: `Flight: ${flightNumber} | Address: ${address} | Comment: ${comment} | RoundTrip: ${bookingData.isRoundTrip}`
+          comments: `Flight: ${flightNumber} | Address: ${address} | Comment: ${comment} | RoundTrip: ${bookingData.isRoundTrip}${effectiveNightFee > 0 ? ` | NightTariff: +€${effectiveNightFee} (${effectiveNightLegs === 2 ? 'both legs' : '1 leg'})` : ''}`
         }
       }).catch(err => console.error('Failed to log abandoned lead directly', err));
     }
@@ -136,7 +152,7 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
         passengers: bookingData.pax,
         vehicle: vehicleName,
         price: finalPrice,
-        comments: `Flight: ${flightNumber} | Address: ${address} | Comment: ${comment} | RoundTrip: ${bookingData.isRoundTrip}`
+        comments: `Flight: ${flightNumber} | Address: ${address} | Comment: ${comment} | RoundTrip: ${bookingData.isRoundTrip}${effectiveNightFee > 0 ? ` | NightTariff: +€${effectiveNightFee} (${effectiveNightLegs === 2 ? 'both legs' : '1 leg'})` : ''}`
       }
     }).catch(err => console.error('Failed to log checkout lead directly', err));
 
@@ -165,6 +181,8 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
             address: address,
             comment: comment,
             paymentMode: paymentMode,
+            nightFee: effectiveNightFee,
+            nightLegsCount: effectiveNightLegs,
           },
           price: finalPrice,
           vehicleName: vehicleName,
@@ -249,6 +267,25 @@ export default function CheckoutModal({ isOpen, onClose, bookingData, price, veh
                   <span>•</span>
                   <span>{vehicleName}</span>
                 </div>
+                {effectiveNightFee > 0 && (
+                  <div className="mt-2.5 pt-2 border-t-2 border-dashed border-gray-300 flex flex-col gap-1 text-xs">
+                    <div className="flex justify-between font-bold text-gray-600">
+                      <span>{t('booking.baseFareLabel')}:</span>
+                      <span>€{baseFare ?? Math.max(0, price - effectiveNightFee)}</span>
+                    </div>
+                    <div className="flex justify-between font-black text-amber-900 bg-amber-50 px-2 py-1 border border-amber-300">
+                      <span className="flex items-center gap-1.5">
+                        <span>🌙</span>
+                        <span>
+                          {effectiveNightLegs === 2
+                            ? t('booking.nightTariffBothBadge')
+                            : t('booking.nightTariffBadge')}
+                        </span>
+                      </span>
+                      <span>+€{effectiveNightFee}</span>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {error && (

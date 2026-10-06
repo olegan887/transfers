@@ -94,3 +94,46 @@ export function isTimeBlocked(
     return false;
   });
 }
+
+/**
+ * Checks if the given time string (HH:MM or HH:MM:SS) falls into nighttime:
+ * From 11:00 PM (23:00) to 7:00 AM (07:00).
+ * That is: hour >= 23 or hour < 7.
+ */
+export function isNightTime(timeStr: string): boolean {
+  if (!timeStr) return false;
+  const parts = timeStr.trim().split(':');
+  if (parts.length < 2) return false;
+  const hours = parseInt(parts[0], 10);
+  if (isNaN(hours)) return false;
+  return hours >= 23 || hours < 7;
+}
+
+export interface NightSurchargeResult {
+  totalNightFee: number;
+  outboundIsNight: boolean;
+  returnIsNight: boolean;
+  legsCount: number;
+}
+
+export function calculateNightSurcharge(
+  time: string,
+  isRoundTrip: boolean,
+  returnTime?: string
+): NightSurchargeResult {
+  const outboundIsNight = isNightTime(time);
+  const returnIsNight = isRoundTrip && returnTime ? isNightTime(returnTime) : false;
+  
+  let totalNightFee = 0;
+  let legsCount = 0;
+  if (outboundIsNight) {
+    totalNightFee += 10;
+    legsCount++;
+  }
+  if (returnIsNight) {
+    totalNightFee += 10;
+    legsCount++;
+  }
+
+  return { totalNightFee, outboundIsNight, returnIsNight, legsCount };
+}

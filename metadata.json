@@ -1,6 +1,6 @@
 {
   "name": "Cyprus Transfers",
-  "description": "Premium airport transfers in Cyprus. Book your ride from Larnaca or Paphos airport to any destination on the island.",
+  "description": "Reliable airport transfers in Limassol and Cyprus. Book taxi from Limassol to Larnaca Airport, Larnaca City, Paphos, and all routes to Limassol.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

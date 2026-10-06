@@ -13,10 +13,10 @@ export default function Destinations() {
     return loc ? loc.name[language] : id;
   };
 
-  // Determine routes to show: use dynamic list if it has custom routes, or default 9 popular combinations
+  // Determine routes to show: directly use the order set in the Google Sheets table
   const displayRoutes = (routes && routes.length > 0) ? routes : DEFAULT_FEATURED_ROUTES;
   const routesToShow = displayRoutes
-    .filter(route => route.available !== false)
+    .filter(route => route.available !== false && Boolean(route.from) && Boolean(route.to))
     .slice(0, 9);
 
   return (

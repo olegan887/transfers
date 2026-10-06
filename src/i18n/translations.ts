@@ -56,6 +56,12 @@ export const translations = {
       successDesc: 'Спасибо за заказ. Мы получили вашу заявку и свяжемся с вами в ближайшее время для подтверждения деталей.',
       backHome: 'На главную',
       notice24h: 'Бронируйте не менее чем за 24 часа. Если нужен трансфер ранее - свяжитесь с нами.',
+      nightTariffBadge: 'Ночной тариф (23:00 – 07:00): +€10',
+      nightTariffBothBadge: 'Ночной тариф (обе поездки): +€20',
+      nightTariffNotice: 'В ночное время (23:00 – 07:00) действует доплата +€10 за поездку.',
+      nightFeeLabel: 'Ночной тариф',
+      baseFareLabel: 'Базовый тариф',
+      roundTripDiscountLabel: 'Скидка на обратный рейс (-10%)',
     },
     features: {
       title: 'Почему выбирают нас',
@@ -102,7 +108,7 @@ export const translations = {
       error: 'Произошла ошибка. Пожалуйста, попробуйте позже.',
     },
     seo: {
-      article: 'Трансфер из аэропортов Кипра: надежное такси из Пафоса (PFO) и Ларнаки (LCA). Ищете дешевое такси на Кипре или комфортный трансфер из аэропорта? Мы предлагаем безопасные пассажирские перевозки по всему острову. Наши приоритетные и самые популярные маршруты: трансфер из аэропорта Ларнаки в Лимассол, такси Ларнака - Айя-Напа, Ларнака - Протарас и Ларнака - Никосия. Также мы специализируемся на маршрутах из Пафоса: трансфер аэропорт Пафос - Лимассол, такси из Пафоса в Корал Бэй и Пафос Сити (Paphos City). Нужен ли вам трансфер из Ларнаки или такси из аэропорта Пафоса, мы гарантируем фиксированные цены, отсутствие скрытых платежей и бесплатную встречу с табличкой по прилету. Закажите такси на Кипре дешево и онлайн 24/7. Комфортные поездки в Пейю, Полис, Айя-Напу, Протарас, Никосию и Лимассол с профессиональными русскоговорящими водителями. Надежный трансфер на Кипре по лучшей цене.'
+      article: 'Трансферы и такси в Лимасоле и по всему Кипру: официальный сервис с офисом в The Oval (Лимасол). Мы предлагаем надежные междугородние поездки и трансферы из аэропортов с фиксированными тарифами. Все ключевые маршруты из Лимасола: трансфер из Лимасола в аэропорт Ларнака (LCA), такси Лимасол – Ларнака город, трансфер из Лимасола в аэропорт Пафос (PFO), поездки из Лимасола в Пафос (город), Айя-Напу, Протарас, Никосию, Корал Бэй, Пейю и Полис. Также осуществляем все обратные маршруты в Лимасол: трансфер из аэропорта Ларнаки в Лимасол с бесплатной встречей с табличкой и отслеживанием рейса, такси из города Ларнака в Лимасол, трансфер из аэропорта Пафоса в Лимасол. Работаем круглосуточно 24/7 (включая ночные рейсы с 23:00 до 07:00). Профессиональные вежливые водители, чистые комфортабельные автомобили, детские автокресла и фиксированная цена без скрытых платежей.'
     },
     blog: {
       title: 'Наш блог',
@@ -168,6 +174,12 @@ export const translations = {
       successDesc: 'Thank you for your booking. We have received your request and will contact you shortly to confirm the details.',
       backHome: 'Back to Home',
       notice24h: 'Please book at least 24 hours in advance. If you need a transfer sooner, contact us.',
+      nightTariffBadge: 'Night tariff (23:00 – 07:00): +€10',
+      nightTariffBothBadge: 'Night tariff (both trips): +€20',
+      nightTariffNotice: 'Late-night rides (23:00 – 07:00) include a +€10 night tariff per trip.',
+      nightFeeLabel: 'Night tariff',
+      baseFareLabel: 'Base fare',
+      roundTripDiscountLabel: 'Round-trip discount (-10%)',
     },
     features: {
       title: 'Why choose us',
@@ -214,7 +226,7 @@ export const translations = {
       error: 'An error occurred. Please try again later.',
     },
     seo: {
-      article: 'Cyprus Airport Transfers: Reliable Taxi from Paphos (PFO) and Larnaca (LCA). Are you looking for a cheap taxi in Cyprus or a premium airport transfer? We offer comfortable, safe, and reliable passenger transportation across the entire island. Our priority routes include: Larnaca Airport to Limassol, Larnaca Airport to Ayia Napa, Larnaca Airport to Protaras, and Larnaca Airport to Nicosia. We also specialize in transfers from Paphos Airport to Limassol, Paphos Airport to Coral Bay, and taxi from Paphos Airport to Paphos City. Whether you need a Larnaca airport transfer or a Paphos airport taxi, we guarantee fixed prices, no hidden fees, and a free meet and greet service at the arrivals hall. Book your Cyprus airport taxi online 24/7. Enjoy a stress-free ride to popular destinations like Peyia, Polis, Ayia Napa, Protaras, and Nicosia with our professional drivers. Cheap taxi Cyprus, reliable transfer, and premium service – all in one place.'
+      article: 'Airport transfers and private taxi services in Limassol and across Cyprus. Headquartered at The Oval business landmark in Limassol, we provide dependable airport and intercity transfers at guaranteed fixed prices. All primary routes from Limassol: private transfer from Limassol to Larnaca Airport (LCA), taxi from Limassol to Larnaca City, transfer from Limassol to Paphos Airport (PFO), as well as direct rides from Limassol to Paphos City, Ayia Napa, Protaras, and Nicosia. We also specialize in all transfers to Limassol: meet & greet taxi from Larnaca Airport (LCA) to Limassol with free flight monitoring, rides from Larnaca City to Limassol, and Paphos Airport (PFO) to Limassol. Available 24/7 online booking, including late-night flights (23:00 to 07:00). Enjoy premium service with clean vehicles, child seats, and professional multilingual drivers with zero hidden fees.'
     },
     blog: {
       title: 'Our Blog',

@@ -419,6 +419,8 @@ async function startServer() {
           address: bookingData.address || '',
           comment: bookingData.comment || '',
           paymentMode: bookingData.paymentMode || '',
+          nightFee: bookingData.nightFee?.toString() || '0',
+          nightLegsCount: bookingData.nightLegsCount?.toString() || '0',
           totalPrice: price?.toString() || '',
         }
       });

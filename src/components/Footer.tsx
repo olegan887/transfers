@@ -59,7 +59,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <MapPin className="w-5 h-5 text-black shrink-0" />
-                26 Neofytou Nikolaidi, Paphos 8011, Cyprus
+                The Oval, Krinou 3, Agios Athanasios, 4103 Limassol, Cyprus
               </li>
             </ul>
           </div>

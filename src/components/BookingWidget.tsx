@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { MapPin, Calendar, Clock, Users, Search, CarFront } from 'lucide-react';
+import { MapPin, Calendar, Clock, Users, Search, CarFront, Moon } from 'lucide-react';
 import { locations, vehicles } from '../data/pricing';
 import { motion } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useData } from '../context/DataContext';
 import { getGoogleScriptUrl, safeFetchGoogleScript } from '../lib/utils';
 import { handleInvalid } from '../lib/formUtils';
+import { isNightTime, calculateNightSurcharge } from '../lib/dateUtils';
 import CheckoutModal from './CheckoutModal';
 
 export default function BookingWidget() {
@@ -26,6 +27,9 @@ export default function BookingWidget() {
   const [timeError, setTimeError] = useState('');
   const { language, t } = useLanguage();
   const { getBasePrice, isTimeBlocked } = useData();
+
+  const nightSurcharge = calculateNightSurcharge(time, isRoundTrip, returnTime);
+  const nightFee = nightSurcharge.totalNightFee;
 
     const handleSearch = (e: React.FormEvent) => {
       e.preventDefault();
@@ -81,7 +85,7 @@ export default function BookingWidget() {
             date: date,
             time: time,
             passengers: pax,
-            comments: `RoundTrip: ${isRoundTrip}`
+            comments: `RoundTrip: ${isRoundTrip} | NightFee: €${nightFee}`
           }
         }).catch(err => console.error('Failed to log search lead directly', err));
 
@@ -89,8 +93,16 @@ export default function BookingWidget() {
       }
     };
 
+  const calculateDiscountedBasePrice = (basePrice: number) => {
+    return isRoundTrip ? Math.round(basePrice * 2 * 0.9) : basePrice;
+  };
+
   const calculateOriginalPrice = (basePrice: number) => {
-    return isRoundTrip ? basePrice * 2 : basePrice;
+    return (isRoundTrip ? basePrice * 2 : basePrice) + nightFee;
+  };
+
+  const calculateTotalPrice = (basePrice: number) => {
+    return calculateDiscountedBasePrice(basePrice) + nightFee;
   };
 
   const getPaxText = (n: number) => {
@@ -101,10 +113,6 @@ export default function BookingWidget() {
     if (n === 1 || n === 21) return t('booking.passenger1');
     if ([2, 3, 4, 12, 13, 14, 22, 23, 24].includes(n)) return t('booking.passenger2');
     return t('booking.passenger5');
-  };
-
-  const calculateTotalPrice = (basePrice: number) => {
-    return isRoundTrip ? Math.round(basePrice * 2 * 0.9) : basePrice;
   };
 
   const handleBook = (vehicle: any) => {
@@ -246,6 +254,12 @@ export default function BookingWidget() {
                 lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
               />
             </div>
+            {isNightTime(time) && (
+              <div className="text-[11px] font-bold text-amber-900 bg-amber-50 border-2 border-black p-1.5 mt-1.5 flex items-center gap-1.5 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">
+                <Moon className="w-3.5 h-3.5 shrink-0 text-black" />
+                <span>{t('booking.nightTariffNotice')}</span>
+              </div>
+            )}
           </div>
 
           {isRoundTrip && (
@@ -280,6 +294,12 @@ export default function BookingWidget() {
                     lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
                   />
                 </div>
+                {isNightTime(returnTime) && (
+                  <div className="text-[11px] font-bold text-amber-900 bg-amber-50 border-2 border-black p-1.5 mt-1.5 flex items-center gap-1.5 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">
+                    <Moon className="w-3.5 h-3.5 shrink-0 text-black" />
+                    <span>{t('booking.nightTariffNotice')}</span>
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -325,12 +345,22 @@ export default function BookingWidget() {
                 return (
                   <div key={vehicle.id} className="brutal-card bg-white p-4 md:p-6 flex flex-col md:flex-row items-center gap-6">
                     <div className="w-full md:w-48 h-32 border-4 border-black overflow-hidden shrink-0 bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                      <img src={vehicle.image} alt={vehicle.name[language]} className="w-full h-full object-cover" />
+                      <img src={vehicle.image} alt={vehicle.name[language]} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                     </div>
                     
                     <div className="flex-1 w-full">
                       <div className="flex justify-between items-start mb-2">
                         <div>
+                          {nightFee > 0 && (
+                            <div className="inline-flex items-center gap-1.5 bg-black text-yellow-400 px-2.5 py-1 text-xs font-black border-2 border-black mb-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                              <Moon className="w-3.5 h-3.5 text-yellow-400" />
+                              <span>
+                                {nightSurcharge.legsCount === 2
+                                  ? t('booking.nightTariffBothBadge')
+                                  : t('booking.nightTariffBadge')}
+                              </span>
+                            </div>
+                          )}
                           <h4 className="text-xl font-black text-black uppercase">{vehicle.name[language]}</h4>
                           <p className="text-gray-600 font-bold text-sm">{vehicle.description[language]}</p>
                         </div>
@@ -391,9 +421,14 @@ export default function BookingWidget() {
             pax,
             isRoundTrip,
             returnDate,
-            returnTime
+            returnTime,
+            nightFee,
+            nightLegsCount: nightSurcharge.legsCount
           }}
           price={calculateTotalPrice(Math.round((getBasePrice(from, to) || 0) * selectedVehicle.multiplier))}
+          baseFare={calculateDiscountedBasePrice(Math.round((getBasePrice(from, to) || 0) * selectedVehicle.multiplier))}
+          nightFee={nightFee}
+          nightLegsCount={nightSurcharge.legsCount}
           vehicleName={selectedVehicle.name[language]}
         />
       )}

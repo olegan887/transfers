@@ -18,10 +18,13 @@ export const vehicles = [
   {
     id: 'sedan',
     name: { ru: 'Комфортабельный седан', en: 'Comfortable Sedan' },
-    description: { ru: 'Mercedes E-Class, Toyota Camry или аналогичный', en: 'Mercedes E-Class, Toyota Camry or similar' },
+    description: { 
+      ru: 'Mercedes E-Class, Opel Insignia, Toyota Camry или аналогичный', 
+      en: 'Mercedes E-Class, Opel Insignia, Toyota Camry or similar' 
+    },
     pax: 4,
     bags: 3,
-    image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=600&h=400',
+    image: '/src/assets/images/opel_insignia_grey_1791299648321.jpg',
     multiplier: 1,
   },
 ];
@@ -69,17 +72,17 @@ export interface RouteItem {
   available: boolean;
 }
 
-// Default 9 popular cards rendered instantly without waiting for network
+// Default 9 popular cards rendered instantly without waiting for network (matches order from table)
 export const DEFAULT_FEATURED_ROUTES: RouteItem[] = [
-  { from: 'lca', to: 'paphos-city', price: 130, available: true },
-  { from: 'pfo', to: 'limassol', price: 70, available: true },
-  { from: 'pfo', to: 'larnaca-city', price: 130, available: true },
-  { from: 'limassol', to: 'paphos-city', price: 70, available: true },
-  { from: 'pfo', to: 'nicosia', price: 140, available: true },
-  { from: 'pfo', to: 'ayia-napa', price: 160, available: true },
-  { from: 'pfo', to: 'paphos-city', price: 40, available: true },
-  { from: 'lca', to: 'coral-bay', price: 145, available: true },
-  { from: 'lca', to: 'peyia', price: 150, available: true },
+  { from: 'lca', to: 'paphos-city', price: 135, available: true },
+  { from: 'pfo', to: 'limassol', price: 75, available: true },
+  { from: 'pfo', to: 'larnaca-city', price: 135, available: true },
+  { from: 'limassol', to: 'paphos-city', price: 75, available: true },
+  { from: 'limassol', to: 'lca', price: 75, available: true },
+  { from: 'pfo', to: 'nicosia', price: 150, available: true },
+  { from: 'pfo', to: 'ayia-napa', price: 180, available: true },
+  { from: 'limassol', to: 'ayia-napa', price: 115, available: true },
+  { from: 'lca', to: 'coral-bay', price: 150, available: true },
 ];
 
 export function getPrice(from: string, to: string, vehicleId: string): number | null {

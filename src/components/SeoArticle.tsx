@@ -9,7 +9,7 @@ export default function SeoArticle() {
       <div className="container mx-auto px-4">
         {/* Visually hidden but accessible to screen readers and search engines */}
         <div className="sr-only">
-          <h2>Cyprus Airport Transfers: Paphos (PFO) and Larnaca (LCA)</h2>
+          <h2>Limassol & Cyprus Airport Transfers: Larnaca (LCA) & Paphos (PFO)</h2>
           <p>{t('seo.article')}</p>
         </div>
         
