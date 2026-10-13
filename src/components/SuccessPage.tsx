@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { CheckCircle2, Home, Loader2, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { getGoogleScriptUrl, safeFetchGoogleScript } from '../lib/utils';
+import { reportConversion } from '../lib/analytics';
 
 export default function SuccessPage() {
   const { t } = useLanguage();
@@ -17,10 +18,8 @@ export default function SuccessPage() {
 
     if (isDirectSuccess) {
       setSessionId(`LIMO-${new Date().getTime().toString().slice(-6)}`);
-      // Trigger Google Ads Conversion if applicable
-      if (typeof (window as any).gtag_report_conversion === 'function') {
-        (window as any).gtag_report_conversion();
-      }
+      // Trigger conversions (Google Ads + Meta Pixel)
+      reportConversion();
       setStatus('success');
     } else if (sid && !processedRef.current) {
       setSessionId(sid);
@@ -54,10 +53,8 @@ export default function SuccessPage() {
         throw new Error(verifyData.message || 'Payment verification failed');
       }
 
-      // 2. Trigger Google Ads Conversion
-      if (typeof (window as any).gtag_report_conversion === 'function') {
-        (window as any).gtag_report_conversion();
-      }
+      // 2. Trigger Conversions (Google Ads + Meta Pixel)
+      reportConversion();
 
       setStatus('success');
     } catch (err: any) {

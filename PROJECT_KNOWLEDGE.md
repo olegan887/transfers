@@ -27,9 +27,10 @@
   - **POST Requests (`server.ts`):** When a Stripe payment succeeds (or a test order is placed), the server sends the order payload to the Apps Script.
   - **Telegram Bot:** The Google Apps Script is responsible for instantly forwarding new orders to a Telegram chat via the Telegram Bot API (`UrlFetchApp.fetch`).
 - **Analytics & Tracking:**
-  - Google Analytics (gtag) - ID: `AW-17973746217`
+  - Google Analytics / Ads (gtag) - ID: `AW-17973746217`
   - Microsoft Clarity - ID: `vzu4kcc9x2`
-  - Google Ads Conversion tracking on successful purchases.
+  - Meta (Facebook) Pixel - ID: `2782001655390125` (tracks `PageView`, `Purchase`, and custom events)
+  - Google Ads & Meta Pixel conversion tracking on successful purchases.
 
 ## 4. Environment Variables (`.env`)
 Required keys for local development and production:
