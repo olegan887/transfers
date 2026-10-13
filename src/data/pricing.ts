@@ -1,4 +1,5 @@
 import { getBidirectional } from '../lib/utils';
+import sedanImage from '../assets/images/opel_insignia_grey_1791299648321.jpg';
 
 export const locations = [
   { id: 'lca', name: { ru: 'Аэропорт Ларнака (LCA)', en: 'Larnaca Airport (LCA)' }, type: 'airport' },
@@ -24,7 +25,7 @@ export const vehicles = [
     },
     pax: 4,
     bags: 3,
-    image: '/src/assets/images/opel_insignia_grey_1791299648321.jpg',
+    image: sedanImage,
     multiplier: 1,
   },
 ];

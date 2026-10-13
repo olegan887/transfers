@@ -345,7 +345,18 @@ export default function BookingWidget() {
                 return (
                   <div key={vehicle.id} className="brutal-card bg-white p-4 md:p-6 flex flex-col md:flex-row items-center gap-6">
                     <div className="w-full md:w-48 h-32 border-4 border-black overflow-hidden shrink-0 bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                      <img src={vehicle.image} alt={vehicle.name[language]} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                      <img 
+                        src={vehicle.image} 
+                        alt={vehicle.name[language]} 
+                        className="w-full h-full object-cover" 
+                        referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (!target.src.includes('/cars/sedan.jpg')) {
+                            target.src = '/cars/sedan.jpg';
+                          }
+                        }}
+                      />
                     </div>
                     
                     <div className="flex-1 w-full">

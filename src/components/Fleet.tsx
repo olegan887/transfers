@@ -31,6 +31,12 @@ export default function Fleet() {
                   alt={vehicle.name[language]} 
                   className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.src.includes('/cars/sedan.jpg')) {
+                      target.src = '/cars/sedan.jpg';
+                    }
+                  }}
                 />
               </div>
               <div className="p-6 relative z-20 -mt-8">
