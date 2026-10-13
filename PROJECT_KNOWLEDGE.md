@@ -23,8 +23,7 @@
   - *Note:* Currently uses the legacy Places API (throws a console warning about `google.maps.places.Autocomplete` deprecation in 2025, but remains functional).
 - **Google Sheets & Apps Script (Backend Database & Logic):**
   - The project uses a Google Apps Script deployed as a Web App (`VITE_GOOGLE_SCRIPT_URL`) to act as a lightweight database and CRM.
-  - **GET Requests (`DataContext.tsx`):** Fetches dynamic pricing, available routes, and blocked dates/times from the Google Sheet.
-  - **POST Requests (`server.ts`):** When a Stripe payment succeeds (or a test order is placed), the server sends the order payload to the Apps Script.
+  - **Direct Client Fetch (`utils.ts` & `DataContext.tsx`):** Because the production domain is deployed statically via GitHub Pages, client calls directly query Google Apps Script (which natively supports CORS for Web Apps). This prevents 404 proxy errors and ensures instant loading.
   - **Telegram Bot:** The Google Apps Script is responsible for instantly forwarding new orders to a Telegram chat via the Telegram Bot API (`UrlFetchApp.fetch`).
 - **Analytics & Tracking:**
   - Google Analytics / Ads (gtag) - ID: `AW-17973746217`

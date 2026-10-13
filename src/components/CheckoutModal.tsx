@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { getGoogleScriptUrl, getApiUrl, safeFetchGoogleScript } from '../lib/utils';
+import { getGoogleScriptUrl, safeFetchGoogleScript } from '../lib/utils';
 import { DEFAULT_PROMO_CODE, DEPOSIT_AMOUNT } from '../config';
 import { handleInvalid } from '../lib/formUtils';
 import Autocomplete from 'react-google-autocomplete';

@@ -80,68 +80,31 @@ export async function safeFetchGoogleScript(
   const method = options?.method || 'GET';
   const googleScriptUrl = cleanUrl(url);
 
-  // 1. Try to fetch via Express backend proxy (which bypasses ad-blockers and CORS)
-  try {
-    const baseApiUrl = getApiUrl('/api/sync-data');
-    
-    // Obfuscate Google Apps Script URL using base64 and parameter 's' to bypass aggressive ad-blockers
-    let proxyUrl = baseApiUrl;
-    let obfuscatedUrl = '';
-    try {
-      obfuscatedUrl = btoa(googleScriptUrl);
-    } catch (e) {
-      obfuscatedUrl = '';
-    }
-
-    if (obfuscatedUrl) {
-      proxyUrl += `${proxyUrl.includes('?') ? '&' : '?'}s=${encodeURIComponent(obfuscatedUrl)}`;
-    } else {
-      proxyUrl += `${proxyUrl.includes('?') ? '&' : '?'}script_url=${encodeURIComponent(googleScriptUrl)}`;
-    }
-    
-    const headers: Record<string, string> = {
-      ...(options?.headers || {}),
-    };
-    
-    if (method === 'POST') {
-      headers['Content-Type'] = 'application/json';
-    }
-
-    const response = await fetch(proxyUrl, {
-      method,
-      headers,
-      body: options?.body ? JSON.stringify(options.body) : undefined,
-    });
-
-    const contentType = response.headers.get('content-type') || '';
-    if (response.ok && !contentType.includes('text/html')) {
-      return response;
-    }
-    
-    console.warn(`Proxy request returned non-JSON response (status: ${response.status}, content-type: ${contentType})`);
-  } catch (proxyError) {
-    console.warn('Proxy request unreachable:', proxyError);
-  }
-
-  // 2. Fallback: Direct Fetch to Google Apps Script (if possible) or return fallback JSON Response
   try {
     const fetchUrl = method === 'GET' 
       ? `${googleScriptUrl}${googleScriptUrl.includes('?') ? '&' : '?'}t=${Date.now()}`
       : googleScriptUrl;
 
-    const directHeaders: Record<string, string> = {};
+    const directHeaders: Record<string, string> = {
+      ...(options?.headers || {})
+    };
+    
+    // For POST requests to Google Apps Script Web App, text/plain avoids unnecessary preflight CORS errors while delivering valid JSON string payload
     if (method === 'POST') {
-      directHeaders['Content-Type'] = 'text/plain;charset=utf-8';
+      directHeaders['Content-Type'] = directHeaders['Content-Type'] || 'text/plain;charset=utf-8';
     }
 
-    const directResponse = await fetch(fetchUrl, {
+    const response = await fetch(fetchUrl, {
       method,
       headers: directHeaders,
       body: options?.body ? JSON.stringify(options.body) : undefined,
     });
-    return directResponse;
-  } catch (directError) {
-    console.warn('Direct fetch to script unreachable, using built-in fallback data.');
+
+    return response;
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.warn('Google Apps Script request notice, utilizing offline fallback data:', error);
+    }
     // Return a synthetic successful JSON response so caller doesn't break
     return new Response(JSON.stringify({
       result: 'success',

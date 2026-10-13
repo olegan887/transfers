@@ -84,7 +84,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       } catch (error: any) {
         if (controller.signal.aborted) return;
-        console.warn('Silent pricing background sync:', error?.message || error);
+        if (import.meta.env.DEV) {
+          console.warn('Silent pricing background sync:', error?.message || error);
+        }
       }
     };
 
