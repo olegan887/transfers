@@ -340,8 +340,13 @@ async function startServer() {
     try {
       const { bookingData, price, vehicleName } = req.body;
 
-      // TEST MODE BYPASS (Only allowed in non-production environments)
-      if (process.env.NODE_ENV !== 'production' && bookingData.name === 'TEST 0709') {
+      // TEST MODE BYPASS (Bypass Stripe for test orders)
+      const isTestOrder = bookingData && (
+        bookingData.name === 'TEST 0709' || 
+        bookingData.name === 'TEST' || 
+        (typeof bookingData.name === 'string' && (bookingData.name.toUpperCase().startsWith('TEST') || bookingData.name.toUpperCase().startsWith('ТЕСТ')))
+      );
+      if (isTestOrder) {
         console.log("Test mode activated. Bypassing Stripe.");
         const GOOGLE_SCRIPT_URL = getGoogleScriptUrl();
 

@@ -92,6 +92,12 @@ export default function CheckoutModal({
   const finalPrice = Math.round(price * (1 - discount));
   const canPayDeposit = finalPrice >= DEPOSIT_AMOUNT;
 
+  const isTestName = (val?: string): boolean => {
+    if (!val) return false;
+    const s = val.trim().toUpperCase().replace(/[\s\u00A0]+/g, ' ');
+    return s === 'TEST 0709' || s === 'ТЕСТ 0709' || s === 'TEST' || s === 'ТЕСТ' || s.startsWith('TEST 0709') || s.startsWith('ТЕСТ 0709');
+  };
+
   useEffect(() => {
     if (!canPayDeposit && paymentMode === 'deposit') {
       setPaymentMode('full');
@@ -157,6 +163,37 @@ export default function CheckoutModal({
     }).catch(err => console.error('Failed to log checkout lead directly', err));
 
     try {
+      // ⚡ TEST MODE BYPASS: If Name is "TEST 0709", bypass Stripe directly!
+      if (isTestName(name)) {
+        const testSessionId = `TEST-${Date.now().toString().slice(-6)}`;
+        const testPayload = {
+          name: name.trim(),
+          phone: `${phone} (${messenger})`,
+          email: email || 'test@example.com',
+          pickup: bookingData.fromName,
+          dropoff: bookingData.toName,
+          date: bookingData.date,
+          time: bookingData.time,
+          passengers: bookingData.pax,
+          vehicle: vehicleName,
+          price: finalPrice,
+          type: bookingData.isRoundTrip ? 'Round Trip (В обе стороны)' : 'One Way (В одну сторону)',
+          comments: `[ТЕСТОВЫЙ ЗАКАЗ TEST 0709 - БЕЗ ОПЛАТЫ STRIPE] Оплата: ${paymentMode === 'deposit' ? `Депозит €${DEPOSIT_AMOUNT}, остаток €${Math.max(0, finalPrice - DEPOSIT_AMOUNT)} наличными` : 'Полная оплата'} | Рейс: ${flightNumber || 'N/A'} | Адрес: ${address || 'N/A'}${comment ? ` | ${comment}` : ''}${bookingData.isRoundTrip ? ` | Обратно: ${bookingData.returnDate} в ${bookingData.returnTime}` : ''} | Ref: ${testSessionId}`
+        };
+
+        try {
+          await safeFetchGoogleScript(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            body: testPayload
+          });
+        } catch (scriptErr) {
+          console.warn('Test order background sync notice:', scriptErr);
+        }
+
+        window.location.href = `${window.location.origin}/?direct_success=true&session_id=${testSessionId}`;
+        return;
+      }
+
       // Call Google Apps Script via safeFetchGoogleScript (proxies but has direct fallback)
       const response = await safeFetchGoogleScript(GOOGLE_SCRIPT_URL, {
         method: 'POST',
