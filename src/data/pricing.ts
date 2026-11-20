@@ -1,26 +1,186 @@
 import { getBidirectional } from '../lib/utils';
+import { Language } from '../lib/routing';
 
-export const locations = [
-  { id: 'lca', name: { ru: 'Аэропорт Ларнака (LCA)', en: 'Larnaca Airport (LCA)' }, type: 'airport' },
-  { id: 'pfo', name: { ru: 'Аэропорт Пафос (PFO)', en: 'Paphos Airport (PFO)' }, type: 'airport' },
-  { id: 'ayia-napa', name: { ru: 'Айя-Напа', en: 'Ayia Napa' }, type: 'city' },
-  { id: 'protaras', name: { ru: 'Протарас', en: 'Protaras' }, type: 'city' },
-  { id: 'limassol', name: { ru: 'Лимассол', en: 'Limassol' }, type: 'city' },
-  { id: 'larnaca-city', name: { ru: 'Ларнака (Город)', en: 'Larnaca (City)' }, type: 'city' },
-  { id: 'paphos-city', name: { ru: 'Пафос (Город)', en: 'Paphos (City)' }, type: 'city' },
-  { id: 'nicosia', name: { ru: 'Никосия', en: 'Nicosia' }, type: 'city' },
-  { id: 'coral-bay', name: { ru: 'Корал Бэй', en: 'Coral Bay' }, type: 'city' },
-  { id: 'peyia', name: { ru: 'Пейя', en: 'Peyia' }, type: 'city' },
-  { id: 'polis', name: { ru: 'Полис', en: 'Polis' }, type: 'city' },
+export interface LocalizedLocation {
+  id: string;
+  name: Record<Language, string>;
+  type: 'airport' | 'city';
+}
+
+export const locations: LocalizedLocation[] = [
+  {
+    id: 'lca',
+    type: 'airport',
+    name: {
+      en: 'Larnaca Airport (LCA)',
+      ru: 'Аэропорт Ларнака (LCA)',
+      de: 'Flughafen Larnaka (LCA)',
+      pl: 'Lotnisko Larnaka (LCA)',
+      fr: 'Aéroport de Larnaca (LCA)',
+      el: 'Αεροδρόμιο Λάρνακας (LCA)',
+      it: 'Aeroporto di Larnaca (LCA)',
+    },
+  },
+  {
+    id: 'pfo',
+    type: 'airport',
+    name: {
+      en: 'Paphos Airport (PFO)',
+      ru: 'Аэропорт Пафос (PFO)',
+      de: 'Flughafen Paphos (PFO)',
+      pl: 'Lotnisko Pafos (PFO)',
+      fr: 'Aéroport de Paphos (PFO)',
+      el: 'Αεροδρόμιο Πάφου (PFO)',
+      it: 'Aeroporto di Pafos (PFO)',
+    },
+  },
+  {
+    id: 'ayia-napa',
+    type: 'city',
+    name: {
+      en: 'Ayia Napa',
+      ru: 'Айя-Напа',
+      de: 'Ayia Napa',
+      pl: 'Ayia Napa',
+      fr: 'Ayia Napa',
+      el: 'Αγία Νάπα',
+      it: 'Ayia Napa',
+    },
+  },
+  {
+    id: 'protaras',
+    type: 'city',
+    name: {
+      en: 'Protaras',
+      ru: 'Протарас',
+      de: 'Protaras',
+      pl: 'Protaras',
+      fr: 'Protaras',
+      el: 'Πρωταράς',
+      it: 'Protaras',
+    },
+  },
+  {
+    id: 'limassol',
+    type: 'city',
+    name: {
+      en: 'Limassol',
+      ru: 'Лимассол',
+      de: 'Limassol',
+      pl: 'Limassol',
+      fr: 'Limassol',
+      el: 'Λεμεσός',
+      it: 'Limassol',
+    },
+  },
+  {
+    id: 'larnaca-city',
+    type: 'city',
+    name: {
+      en: 'Larnaca (City)',
+      ru: 'Ларнака (Город)',
+      de: 'Larnaka (Stadt)',
+      pl: 'Larnaka (Miasto)',
+      fr: 'Larnaca (Ville)',
+      el: 'Λάρνακα (Πόλη)',
+      it: 'Larnaca (Città)',
+    },
+  },
+  {
+    id: 'paphos-city',
+    type: 'city',
+    name: {
+      en: 'Paphos (City)',
+      ru: 'Пафос (Город)',
+      de: 'Paphos (Stadt)',
+      pl: 'Pafos (Miasto)',
+      fr: 'Paphos (Ville)',
+      el: 'Πάφος (Πόλη)',
+      it: 'Pafos (Città)',
+    },
+  },
+  {
+    id: 'nicosia',
+    type: 'city',
+    name: {
+      en: 'Nicosia',
+      ru: 'Никосия',
+      de: 'Nikosia',
+      pl: 'Nikozja',
+      fr: 'Nicosie',
+      el: 'Λευκωσία',
+      it: 'Nicosia',
+    },
+  },
+  {
+    id: 'coral-bay',
+    type: 'city',
+    name: {
+      en: 'Coral Bay',
+      ru: 'Корал Бэй',
+      de: 'Coral Bay',
+      pl: 'Coral Bay',
+      fr: 'Coral Bay',
+      el: 'Coral Bay',
+      it: 'Coral Bay',
+    },
+  },
+  {
+    id: 'peyia',
+    type: 'city',
+    name: {
+      en: 'Peyia',
+      ru: 'Пейя',
+      de: 'Peyia',
+      pl: 'Peyia',
+      fr: 'Peyia',
+      el: 'Πέγεια',
+      it: 'Peyia',
+    },
+  },
+  {
+    id: 'polis',
+    type: 'city',
+    name: {
+      en: 'Polis',
+      ru: 'Полис',
+      de: 'Polis',
+      pl: 'Polis',
+      fr: 'Polis',
+      el: 'Πόλις Χρυσοχούς',
+      it: 'Polis',
+    },
+  },
 ];
 
-export const vehicles = [
+export const vehicles: Array<{
+  id: string;
+  name: Record<Language, string>;
+  description: Record<Language, string>;
+  pax: number;
+  bags: number;
+  image: string;
+  multiplier: number;
+}> = [
   {
     id: 'sedan',
-    name: { ru: 'Комфортабельный седан', en: 'Comfortable Sedan' },
+    name: {
+      en: 'Comfortable Sedan',
+      ru: 'Комфортабельный седан',
+      de: 'Komfort-Limousine',
+      pl: 'Komfortowy sedan',
+      fr: 'Berline confortable',
+      el: 'Άνετο Sedan',
+      it: 'Berlina confortevole',
+    },
     description: {
-      ru: 'Mercedes E-Class, Opel Insignia, Toyota Camry или аналогичный',
       en: 'Mercedes E-Class, Opel Insignia, Toyota Camry or similar',
+      ru: 'Mercedes E-Class, Opel Insignia, Toyota Camry или аналогичный',
+      de: 'Mercedes E-Klasse, Opel Insignia, Toyota Camry oder ähnlich',
+      pl: 'Mercedes Klasy E, Opel Insignia, Toyota Camry lub podobny',
+      fr: 'Mercedes Classe E, Opel Insignia, Toyota Camry ou similaire',
+      el: 'Mercedes E-Class, Opel Insignia, Toyota Camry ή παρόμοιο',
+      it: 'Mercedes Classe E, Opel Insignia, Toyota Camry o simile',
     },
     pax: 4,
     bags: 3,

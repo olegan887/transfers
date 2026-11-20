@@ -12,6 +12,8 @@ import BlogList from './components/BlogList';
 import BlogPost from './components/BlogPost';
 import RouteLandingPage from './components/RouteLandingPage';
 import RoutesIndexPage from './components/RoutesIndexPage';
+import WidgetBuilderPage from './components/WidgetBuilderPage';
+import EmbedCalculator from './components/EmbedCalculator';
 import CookieConsent from './components/CookieConsent';
 import ExitIntentPopup from './components/ExitIntentPopup';
 import { LanguageProvider } from './i18n/LanguageContext';
@@ -94,13 +96,31 @@ function AppContent({ initialPath, initialSearch }: AppProps) {
 
   useDocumentMeta(locationState.pathname, locationState.search);
 
+  const [prefillRoute, setPrefillRoute] = useState({ from: '', to: '' });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(locationState.search || window.location.search);
+    setPrefillRoute({
+      from: params.get('from') || '',
+      to: params.get('to') || '',
+    });
+  }, [locationState.search]);
+
   const parsed = parseRoute(locationState.pathname, locationState.search);
 
   if (parsed.view === 'success') {
     return <SuccessPage />;
   }
 
+  if (parsed.view === 'embed') {
+    return <EmbedCalculator />;
+  }
+
   const renderContent = () => {
+    if (parsed.view === 'widget') {
+      return <WidgetBuilderPage />;
+    }
     if (parsed.view === 'routes-index') {
       return <RoutesIndexPage />;
     }
@@ -115,7 +135,7 @@ function AppContent({ initialPath, initialSearch }: AppProps) {
     }
     return (
       <main>
-        <Hero />
+        <Hero defaultFrom={prefillRoute.from} defaultTo={prefillRoute.to} />
         <Destinations />
         <Features />
         <ContactForm />

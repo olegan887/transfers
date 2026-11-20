@@ -11,9 +11,10 @@ interface BlogPostProps {
 
 export default function BlogPost({ slug }: BlogPostProps) {
   const { language, t } = useLanguage();
+  const blogLang: 'en' | 'ru' = language === 'ru' ? 'ru' : 'en';
   const post = blogPosts.find((p) => p.slug === slug);
-  const homeHref = buildLocalizedPath('home', language);
-  const blogHref = buildLocalizedPath('blog-list', language);
+  const homeHref = buildLocalizedPath('home', blogLang);
+  const blogHref = buildLocalizedPath('blog-list', blogLang);
 
   if (!post) {
     return (
@@ -23,7 +24,7 @@ export default function BlogPost({ slug }: BlogPostProps) {
             404
           </h1>
           <p className="text-xl font-bold mb-6">
-            {language === 'ru' ? 'Статья не найдена' : 'Article not found'}
+            {blogLang === 'ru' ? 'Статья не найдена' : 'Article not found'}
           </p>
           <a href={blogHref} className="brutal-btn inline-block px-8 py-3 text-base uppercase">
             {t('blog.backToBlog')}
@@ -38,14 +39,14 @@ export default function BlogPost({ slug }: BlogPostProps) {
       <article className="container mx-auto px-4 max-w-3xl">
         <nav aria-label="Breadcrumb" className="mb-6 text-xs sm:text-sm font-bold text-gray-700 flex flex-wrap items-center gap-2">
           <a href={homeHref} className="hover:text-black underline">
-            {language === 'ru' ? 'Главная' : 'Home'}
+            {t('common.home')}
           </a>
           <span aria-hidden="true">/</span>
           <a href={blogHref} className="hover:text-black underline">
             {t('nav.blog')}
           </a>
           <span aria-hidden="true">/</span>
-          <span className="text-black line-clamp-1">{post.title[language]}</span>
+          <span className="text-black line-clamp-1">{post.title[blogLang]}</span>
         </nav>
 
         <a
@@ -62,12 +63,12 @@ export default function BlogPost({ slug }: BlogPostProps) {
             <time dateTime={post.date}>{post.date}</time>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-black mb-6 leading-tight tracking-tight uppercase">
-            {post.title[language]}
+            {post.title[blogLang]}
           </h1>
           <div className="border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] overflow-hidden aspect-[4/3] bg-gray-100">
             <img
               src={post.image}
-              alt={post.title[language]}
+              alt={post.title[blogLang]}
               width={800}
               height={600}
               className="w-full h-full object-cover"
@@ -76,18 +77,18 @@ export default function BlogPost({ slug }: BlogPostProps) {
         </header>
 
         <div className="prose prose-lg max-w-none text-black font-medium prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight prose-a:text-black prose-a:font-bold prose-a:underline prose-p:leading-relaxed bg-white border-4 border-black p-6 sm:p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          {post.content[language]}
+          {post.content[blogLang]}
         </div>
 
         {/* Internal Link Block to Active Routes */}
         <section className="mt-12 bg-yellow-400 border-4 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
           <h2 className="text-xl font-black text-black uppercase mb-3">
-            {language === 'ru'
+            {blogLang === 'ru'
               ? 'Забронировать трансфер на Кипре (LCA, PFO и Лимассол)'
               : 'Book a Fixed-Price Cyprus Transfer (LCA, PFO & Limassol)'}
           </h2>
           <p className="text-sm font-bold text-black mb-4">
-            {language === 'ru'
+            {blogLang === 'ru'
               ? 'Выберите популярный маршрут и зафиксируйте стоимость поездки онлайн:'
               : 'Choose a direct route below to view fixed prices and book online:'}
           </p>
@@ -102,18 +103,18 @@ export default function BlogPost({ slug }: BlogPostProps) {
                 ].includes(r.slug)
               )
               .map((r) => (
-              <a
-                key={r.slug}
-                href={buildLocalizedPath('route', language, r.slug)}
-                className="bg-white border-2 border-black px-3.5 py-2.5 flex items-center justify-between text-xs sm:text-sm font-black hover:bg-black hover:text-white transition-colors"
-              >
-                <span>{r[language].h1}</span>
-                <span className="inline-flex items-center gap-1 ml-2 shrink-0 tabular-nums">
-                  €{r.basePrice}
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </span>
-              </a>
-            ))}
+                <a
+                  key={r.slug}
+                  href={buildLocalizedPath('route', blogLang, r.slug)}
+                  className="bg-white border-2 border-black px-3.5 py-2.5 flex items-center justify-between text-xs sm:text-sm font-black hover:bg-black hover:text-white transition-colors"
+                >
+                  <span>{r[blogLang].h1}</span>
+                  <span className="inline-flex items-center gap-1 ml-2 shrink-0 tabular-nums">
+                    €{r.basePrice}
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </a>
+              ))}
           </div>
         </section>
       </article>

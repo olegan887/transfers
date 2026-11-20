@@ -3,8 +3,13 @@ import BookingWidget from './BookingWidget';
 import { useLanguage } from '../i18n/LanguageContext';
 import { Star, ShieldCheck, Clock } from 'lucide-react';
 
-export default function Hero() {
-  const { t, language } = useLanguage();
+interface HeroProps {
+  defaultFrom?: string;
+  defaultTo?: string;
+}
+
+export default function Hero({ defaultFrom = '', defaultTo = '' }: HeroProps) {
+  const { t } = useLanguage();
 
   return (
     <section className="relative pt-10 pb-16 md:pt-14 md:pb-24 overflow-hidden bg-white">
@@ -13,11 +18,11 @@ export default function Hero() {
           <div className="inline-flex flex-wrap items-center justify-center gap-3 mb-6 text-xs sm:text-sm font-bold text-black">
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
               <Clock className="w-4 h-4 text-black" />
-              {language === 'ru' ? 'Подача 24/7 по прилёту' : '24/7 Airport Pickup'}
+              {t('hero.badgePickup')}
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
               <ShieldCheck className="w-4 h-4 text-black" />
-              {language === 'ru' ? 'Фиксированный тариф EUR' : 'Fixed EUR Rates'}
+              {t('hero.badgeFixed')}
             </span>
           </div>
 
@@ -46,22 +51,18 @@ export default function Hero() {
                 ))}
               </div>
               <span className="text-sm text-black font-bold tabular-nums">
-                {language === 'ru'
-                  ? '4.9/5 · Более 10 000 поездок из LCA и PFO'
-                  : '4.9/5 · 10,000+ LCA & PFO airport transfers'}
+                {t('hero.ratingSummary')}
               </span>
             </a>
 
             <span className="bg-black text-white px-3.5 py-2 text-xs sm:text-sm font-bold border-2 border-black">
-              {language === 'ru'
-                ? 'Скидка 10% на обратный трансфер'
-                : '10% OFF round-trip bookings'}
+              {t('hero.returnBadge')}
             </span>
           </div>
         </div>
 
         <div className="w-full">
-          <BookingWidget />
+          <BookingWidget defaultFrom={defaultFrom} defaultTo={defaultTo} />
         </div>
       </div>
     </section>

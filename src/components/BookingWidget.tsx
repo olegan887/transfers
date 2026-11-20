@@ -6,6 +6,7 @@ import { useData } from '../context/DataContext';
 import { getGoogleScriptUrl, safeFetchGoogleScript } from '../lib/utils';
 import { handleInvalid } from '../lib/formUtils';
 import { isNightTime, calculateNightSurcharge } from '../lib/dateUtils';
+import { LANGUAGE_LABELS } from '../lib/routing';
 
 const CheckoutModal = lazy(() => import('./CheckoutModal'));
 
@@ -51,21 +52,13 @@ export default function BookingWidget({ defaultFrom = '', defaultTo = '' }: Book
       minAllowedTime.setHours(minAllowedTime.getHours() + 18);
 
       if (selectedDateTime < minAllowedTime) {
-        setTimeError(
-          language === 'ru'
-            ? 'Бронирование онлайн возможно минимум за 18 часов. Для срочного заказа свяжитесь с нами.'
-            : 'Online booking is possible at least 18 hours in advance. For urgent requests, please contact us.'
-        );
+        setTimeError(t('booking.min18hError'));
         return;
       }
     }
 
     if (isTimeBlocked(date, time)) {
-      setTimeError(
-        language === 'ru'
-          ? 'Это время недоступно для бронирования'
-          : 'This time is not available for booking'
-      );
+      setTimeError(t('booking.timeBlockedError'));
       return;
     }
 
@@ -75,20 +68,12 @@ export default function BookingWidget({ defaultFrom = '', defaultTo = '' }: Book
       minAllowedReturnTime.setHours(minAllowedReturnTime.getHours() + 18);
 
       if (selectedReturnDateTime < minAllowedReturnTime) {
-        setTimeError(
-          language === 'ru'
-            ? 'Бронирование обратного рейса возможно минимум за 18 часов.'
-            : 'Return booking is possible at least 18 hours in advance.'
-        );
+        setTimeError(t('booking.min18hReturnError'));
         return;
       }
 
       if (isTimeBlocked(returnDate, returnTime)) {
-        setTimeError(
-          language === 'ru'
-            ? 'Время обратного рейса недоступно'
-            : 'Return time is not available'
-        );
+        setTimeError(t('booking.returnTimeBlockedError'));
         return;
       }
     }
@@ -133,12 +118,12 @@ export default function BookingWidget({ defaultFrom = '', defaultTo = '' }: Book
   };
 
   const getPaxText = (n: number) => {
-    if (language === 'en') {
-      return n === 1 ? t('booking.passenger1') : t('booking.passenger2');
+    if (language === 'ru' || language === 'pl') {
+      if (n === 1 || n === 21) return t('booking.passenger1');
+      if ([2, 3, 4, 12, 13, 14, 22, 23, 24].includes(n)) return t('booking.passenger2');
+      return t('booking.passenger5');
     }
-    if (n === 1 || n === 21) return t('booking.passenger1');
-    if ([2, 3, 4, 12, 13, 14, 22, 23, 24].includes(n)) return t('booking.passenger2');
-    return t('booking.passenger5');
+    return n === 1 ? t('booking.passenger1') : t('booking.passenger2');
   };
 
   const handleBook = (vehicle: any) => {
@@ -155,7 +140,7 @@ export default function BookingWidget({ defaultFrom = '', defaultTo = '' }: Book
               {t('booking.title')}
             </h2>
             <span className="px-3 py-1 bg-black text-white text-xs font-black uppercase tracking-wider border-2 border-black">
-              {language === 'ru' ? '-10% на обратный путь' : '10% OFF Round Trip'}
+              {t('booking.roundTripTag')}
             </span>
           </div>
 
@@ -336,7 +321,7 @@ export default function BookingWidget({ defaultFrom = '', defaultTo = '' }: Book
                 onChange={(e) => setTime(e.target.value)}
                 className="brutal-input w-full pl-12 pr-4 h-14 text-base bg-white"
                 required
-                lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
+                lang={LANGUAGE_LABELS[language].bcp47}
               />
             </div>
             {isNightTime(time) && (
@@ -388,7 +373,7 @@ export default function BookingWidget({ defaultFrom = '', defaultTo = '' }: Book
                     onChange={(e) => setReturnTime(e.target.value)}
                     className="brutal-input w-full pl-12 pr-4 h-14 text-base bg-white"
                     required={isRoundTrip}
-                    lang={language === 'ru' ? 'ru-RU' : 'en-GB'}
+                    lang={LANGUAGE_LABELS[language].bcp47}
                   />
                 </div>
                 {isNightTime(returnTime) && (

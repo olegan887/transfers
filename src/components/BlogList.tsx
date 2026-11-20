@@ -6,14 +6,15 @@ import { ArrowRight } from 'lucide-react';
 
 export default function BlogList() {
   const { language, t } = useLanguage();
-  const homeHref = buildLocalizedPath('home', language);
+  const blogLang: 'en' | 'ru' = language === 'ru' ? 'ru' : 'en';
+  const homeHref = buildLocalizedPath('home', blogLang);
 
   return (
     <main className="py-14 md:py-20 relative min-h-screen bg-white">
       <div className="container mx-auto px-4 max-w-6xl">
         <nav aria-label="Breadcrumb" className="mb-8 text-xs sm:text-sm font-bold text-gray-700 flex items-center gap-2">
           <a href={homeHref} className="hover:text-black underline">
-            {language === 'ru' ? 'Главная' : 'Home'}
+            {t('common.home')}
           </a>
           <span aria-hidden="true">/</span>
           <span className="text-black">{t('nav.blog')}</span>
@@ -30,13 +31,13 @@ export default function BlogList() {
           {blogPosts.map((post) => (
             <a
               key={post.id}
-              href={buildLocalizedPath('blog-post', language, post.slug)}
+              href={buildLocalizedPath('blog-post', blogLang, post.slug)}
               className="group bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-200 flex flex-col"
             >
               <div className="h-48 overflow-hidden border-b-4 border-black relative bg-gray-100">
                 <img
                   src={post.image}
-                  alt={post.title[language]}
+                  alt={post.title[blogLang]}
                   width={800}
                   height={600}
                   loading="lazy"
@@ -49,10 +50,10 @@ export default function BlogList() {
                   {post.date}
                 </div>
                 <h2 className="text-xl font-black text-black mb-3 tracking-tight leading-snug group-hover:text-yellow-600 transition-colors">
-                  {post.title[language]}
+                  {post.title[blogLang]}
                 </h2>
                 <p className="text-gray-800 text-sm font-medium mb-6 flex-1">
-                  {post.excerpt[language]}
+                  {post.excerpt[blogLang]}
                 </p>
                 <div className="brutal-btn w-full py-2.5 text-sm flex items-center justify-center">
                   <span>{t('blog.readMore')}</span>

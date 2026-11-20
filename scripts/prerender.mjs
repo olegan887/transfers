@@ -8,6 +8,9 @@ const rootDir = path.resolve(__dirname, '..');
 const distDir = path.join(rootDir, 'dist');
 const ssrDir = path.join(rootDir, 'dist-ssr');
 
+const CORE_LANGS = ['en', 'ru', 'de', 'pl', 'fr', 'el', 'it'];
+const BLOG_LANGS = ['en', 'ru'];
+
 function escapeHtmlAttr(str) {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -45,10 +48,24 @@ function extractBlogSlugs() {
   return slugs;
 }
 
+function buildHreflangBlock(seo) {
+  const lines = [];
+  const entries = Object.entries(seo.alternates || {});
+  for (const [code, href] of entries) {
+    if (href) {
+      lines.push(`    <link rel="alternate" hreflang="${escapeHtmlAttr(code)}" href="${escapeHtmlAttr(href)}" />`);
+    }
+  }
+  if (seo.xDefaultUrl) {
+    lines.push(`    <link rel="alternate" hreflang="x-default" href="${escapeHtmlAttr(seo.xDefaultUrl)}" />`);
+  }
+  return lines.join('\n');
+}
+
 function injectHeadTags(template, seo) {
   let html = template;
 
-  html = html.replace(/<html lang="[^"]*">/, `<html lang="${seo.lang}">`);
+  html = html.replace(/<html lang="[^"]*">/, `<html lang="${escapeHtmlAttr(seo.lang)}">`);
   html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtmlText(seo.title)}</title>`);
   html = html.replace(
     /<meta name="description" content="[^"]*"\s*\/?>/,
@@ -62,17 +79,11 @@ function injectHeadTags(template, seo) {
     /<link rel="canonical" href="[^"]*"\s*\/?>/,
     `<link rel="canonical" href="${escapeHtmlAttr(seo.canonicalUrl)}" />`
   );
+
+  const hreflangHtml = buildHreflangBlock(seo);
   html = html.replace(
-    /<link rel="alternate" hreflang="en" href="[^"]*"\s*\/?>/,
-    `<link rel="alternate" hreflang="en" href="${escapeHtmlAttr(seo.enUrl)}" />`
-  );
-  html = html.replace(
-    /<link rel="alternate" hreflang="ru" href="[^"]*"\s*\/?>/,
-    `<link rel="alternate" hreflang="ru" href="${escapeHtmlAttr(seo.ruUrl)}" />`
-  );
-  html = html.replace(
-    /<link rel="alternate" hreflang="x-default" href="[^"]*"\s*\/?>/,
-    `<link rel="alternate" hreflang="x-default" href="${escapeHtmlAttr(seo.enUrl)}" />`
+    /<!--seo-hreflang-start-->[\s\S]*?<!--seo-hreflang-end-->/,
+    hreflangHtml
   );
 
   html = html.replace(
@@ -132,16 +143,20 @@ async function runPrerender() {
   const blogSlugs = extractBlogSlugs();
 
   const pathsToRender = [
-    '/',
-    '/ru/',
-    '/routes',
-    '/ru/routes',
-    '/blog',
-    '/ru/blog',
-    '/success',
-    '/ru/success',
-    ...routeSlugs.flatMap((slug) => [`/routes/${slug}`, `/ru/routes/${slug}`]),
-    ...blogSlugs.flatMap((slug) => [`/blog/${slug}`, `/ru/blog/${slug}`]),
+    // Core site in 7 languages: en, ru, de, pl, fr, el, it
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/' : `/${l}/`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/routes' : `/${l}/routes`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/widget' : `/${l}/widget`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/embed' : `/${l}/embed`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/success' : `/${l}/success`)),
+    ...routeSlugs.flatMap((slug) =>
+      CORE_LANGS.map((l) => (l === 'en' ? `/routes/${slug}` : `/${l}/routes/${slug}`))
+    ),
+    // Blog strictly EN & RU only
+    ...BLOG_LANGS.map((l) => (l === 'en' ? '/blog' : `/${l}/blog`)),
+    ...blogSlugs.flatMap((slug) =>
+      BLOG_LANGS.map((l) => (l === 'en' ? `/blog/${slug}` : `/${l}/blog/${slug}`))
+    ),
   ];
 
   for (const urlPath of pathsToRender) {

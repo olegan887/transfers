@@ -6,6 +6,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { getGoogleScriptUrl, safeFetchGoogleScript } from '../lib/utils';
 import { DEFAULT_PROMO_CODE, DEPOSIT_AMOUNT } from '../config';
 import { handleInvalid } from '../lib/formUtils';
+import { buildLocalizedPath } from '../lib/routing';
 import Autocomplete from 'react-google-autocomplete';
 
 interface CheckoutModalProps {
@@ -115,7 +116,7 @@ export default function CheckoutModal({
       setError('');
     } else if (promoCode) {
       setDiscount(0);
-      setError(language === 'ru' ? 'Неверный промокод' : 'Invalid promo code');
+      setError(t('booking.promoInvalid'));
     } else {
       setDiscount(0);
       setError('');
@@ -190,7 +191,7 @@ export default function CheckoutModal({
           console.warn('Test order background sync notice:', scriptErr);
         }
 
-        window.location.href = `${window.location.origin}/?direct_success=true&session_id=${testSessionId}`;
+        window.location.href = `${window.location.origin}${buildLocalizedPath('success', language)}?direct_success=true&session_id=${testSessionId}`;
         return;
       }
 
@@ -296,11 +297,11 @@ export default function CheckoutModal({
                   {bookingData.isRoundTrip && (
                     <>
                       <span className="text-black">|</span>
-                      <span className="text-black">Return: {bookingData.returnDate} {bookingData.returnTime}</span>
+                      <span className="text-black">{t('booking.returnDate')}: {bookingData.returnDate} {bookingData.returnTime}</span>
                     </>
                   )}
                   <span>•</span>
-                  <span>{bookingData.pax} pax</span>
+                  <span>{bookingData.pax} {bookingData.pax === '1' ? t('booking.passenger1') : t('booking.passenger2')}</span>
                   <span>•</span>
                   <span>{vehicleName}</span>
                 </div>
@@ -422,7 +423,7 @@ export default function CheckoutModal({
                         componentRestrictions: { country: "cy" },
                       }}
                       className="brutal-input w-full px-3 h-12 text-base md:text-sm"
-                      placeholder={language === 'ru' ? 'Введите отель или адрес...' : 'Enter hotel or address...'}
+                      placeholder={t('booking.addressPlaceholder')}
                     />
                   </div>
                 </div>
@@ -466,7 +467,7 @@ export default function CheckoutModal({
 
                   <div>
                     <label className="block text-[10px] font-black text-black uppercase tracking-wider mb-1">
-                      {language === 'ru' ? 'Промокод' : 'Promo Code'}
+                      {t('booking.promoLabel')}
                     </label>
                     <div className="flex gap-2 mb-1">
                       <input
@@ -480,12 +481,12 @@ export default function CheckoutModal({
                         onClick={handlePromoApply}
                         className="bg-black text-white px-4 h-12 text-xs font-black uppercase border-2 border-black hover:bg-gray-800 transition-colors whitespace-nowrap"
                       >
-                        {language === 'ru' ? 'Применить' : 'Apply'}
+                        {t('booking.promoApply')}
                       </button>
                     </div>
                     {discount > 0 && (
                       <div className="text-green-600 font-bold text-[10px] mb-2 uppercase tracking-wider">
-                        {language === 'ru' ? '✓ Скидка 5% применена!' : '✓ 5% discount applied!'}
+                        {t('booking.promoApplied')}
                       </div>
                     )}
                     <label className="block text-[10px] font-black text-black uppercase tracking-wider mb-1 mt-2">
@@ -520,7 +521,7 @@ export default function CheckoutModal({
                 {isLoading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    Processing...
+                    {t('booking.processing')}
                   </>
                 ) : (
                   t('booking.pay')

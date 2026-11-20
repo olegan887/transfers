@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowRight, CheckCircle2, Clock, MapPin, ChevronDown, Plane } from 'lucide-react';
-import { getAirportRouteBySlug, airportRoutes } from '../data/routes';
+import { getAirportRouteBySlug, airportRoutes, getRouteContentForLanguage } from '../data/routes';
 import { useLanguage } from '../i18n/LanguageContext';
 import { buildLocalizedPath } from '../lib/routing';
 import BookingWidget from './BookingWidget';
@@ -10,7 +10,7 @@ interface RouteLandingPageProps {
 }
 
 export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const route = getAirportRouteBySlug(slug);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -19,21 +19,19 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
       <main className="py-24 bg-white min-h-[70vh] flex items-center justify-center px-4">
         <div className="max-w-lg w-full bg-white border-4 border-black p-8 text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
           <h1 className="text-4xl font-black uppercase mb-4">404</h1>
-          <p className="text-lg font-bold mb-6">
-            {language === 'ru' ? 'Маршрут не найден' : 'Airport route not found'}
-          </p>
+          <p className="text-lg font-bold mb-6">{t('routeDetail.notFound')}</p>
           <a
             href={buildLocalizedPath('routes-index', language)}
             className="brutal-btn px-6 py-3 uppercase text-sm"
           >
-            {language === 'ru' ? 'Все маршруты из аэропортов' : 'All Airport Routes'}
+            {t('routeDetail.allAirportRoutes')}
           </a>
         </div>
       </main>
     );
   }
 
-  const content = route[language];
+  const content = getRouteContentForLanguage(route, language);
   const homeHref = buildLocalizedPath('home', language);
   const routesHref = buildLocalizedPath('routes-index', language);
   const returnPrice = Math.round(route.basePrice * 2 * 0.9);
@@ -48,11 +46,11 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
         <div className="container mx-auto px-4 max-w-6xl">
           <nav aria-label="Breadcrumb" className="mb-6 text-xs sm:text-sm font-bold text-gray-700 flex flex-wrap items-center gap-2">
             <a href={homeHref} className="hover:text-black underline">
-              {language === 'ru' ? 'Главная' : 'Home'}
+              {t('common.home')}
             </a>
             <span aria-hidden="true">/</span>
             <a href={routesHref} className="hover:text-black underline">
-              {language === 'ru' ? 'Все маршруты' : 'All Routes'}
+              {t('common.allRoutes')}
             </a>
             <span aria-hidden="true">/</span>
             <span className="text-black">{content.h1}</span>
@@ -62,12 +60,8 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-400 border-2 border-black text-xs font-black uppercase mb-4">
               {route.airportCode ? <Plane className="w-4 h-4" /> : <MapPin className="w-4 h-4" />}
               <span>
-                {route.airportCode
-                  ? route.airportCode
-                  : language === 'ru'
-                    ? 'Лимассол · Межгород'
-                    : 'Limassol · Intercity'}{' '}
-                · {language === 'ru' ? 'Фиксированный тариф' : 'Fixed Rate'} €{route.basePrice}
+                {route.airportCode || t('routeDetail.limassolIntercity')} · {t('routeDetail.fixedRate')} €
+                {route.basePrice}
               </span>
             </div>
 
@@ -83,27 +77,31 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="bg-white border-2 border-black p-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                 <div className="text-xs font-bold text-gray-600 uppercase">
-                  {language === 'ru' ? 'В одну сторону' : 'One Way'}
+                  {t('routeDetail.oneWay')}
                 </div>
                 <div className="text-2xl font-black text-black tabular-nums">€{route.basePrice}</div>
               </div>
               <div className="bg-yellow-400 border-2 border-black p-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                 <div className="text-xs font-bold text-black uppercase">
-                  {language === 'ru' ? 'Туда-обратно (−10%)' : 'Round Trip (−10%)'}
+                  {t('routeDetail.roundTrip')}
                 </div>
                 <div className="text-2xl font-black text-black tabular-nums">€{returnPrice}</div>
               </div>
               <div className="bg-white border-2 border-black p-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                 <div className="text-xs font-bold text-gray-600 uppercase">
-                  {language === 'ru' ? 'Время в пути' : 'Travel Time'}
+                  {t('routeDetail.travelTime')}
                 </div>
-                <div className="text-2xl font-black text-black tabular-nums">~{route.durationMin} min</div>
+                <div className="text-2xl font-black text-black tabular-nums">
+                  ~{route.durationMin} {t('common.min')}
+                </div>
               </div>
               <div className="bg-white border-2 border-black p-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                 <div className="text-xs font-bold text-gray-600 uppercase">
-                  {language === 'ru' ? 'Расстояние' : 'Distance'}
+                  {t('routeDetail.distance')}
                 </div>
-                <div className="text-2xl font-black text-black tabular-nums">{route.distanceKm} km</div>
+                <div className="text-2xl font-black text-black tabular-nums">
+                  {route.distanceKm} {t('common.km')}
+                </div>
               </div>
             </div>
           </div>
@@ -120,12 +118,8 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
               <div>
                 <h2 className="text-2xl md:text-3xl font-black text-black uppercase tracking-tight mb-5">
                   {route.fromId === 'lca' || route.fromId === 'pfo'
-                    ? language === 'ru'
-                      ? `Встреча в аэропорту ${route.airportCode} и детали поездки`
-                      : `${route.airportCode} Arrivals Pickup & Route Details`
-                    : language === 'ru'
-                      ? 'Подача авто и детали маршрута'
-                      : 'Door-to-Door Pickup & Route Details'}
+                    ? t('routeDetail.arrivalsPickupTitle', { code: route.airportCode || '' })
+                    : t('routeDetail.doorPickupTitle')}
                 </h2>
                 <p className="text-base text-gray-800 font-medium leading-relaxed mb-6">
                   {content.pickupGuide}
@@ -144,11 +138,11 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
               <div className="mt-8 pt-5 border-t-2 border-black flex flex-wrap gap-4 text-xs sm:text-sm font-bold text-gray-700">
                 <span className="inline-flex items-center gap-1.5">
                   <Clock className="w-4 h-4 text-black" />
-                  {language === 'ru' ? '24/7 (ночь 23:00–07:00: +€10)' : '24/7 Service (23:00–07:00: +€10)'}
+                  {t('routeDetail.nightHours')}
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <MapPin className="w-4 h-4 text-black" />
-                  {language === 'ru' ? 'Доставка от двери до двери' : 'Door-to-door private sedan'}
+                  {t('routeDetail.doorToDoor')}
                 </span>
               </div>
             </div>
@@ -172,9 +166,7 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
       <section className="py-14 bg-white border-b-4 border-black">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-2xl md:text-3xl font-black text-black uppercase tracking-tight mb-8 text-center">
-            {language === 'ru'
-              ? 'Вопросы и ответы по этому маршруту'
-              : 'Frequently Asked Questions About This Route'}
+            {t('routeDetail.faqTitle')}
           </h2>
 
           <div className="space-y-4">
@@ -215,42 +207,45 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <h2 className="text-2xl font-black text-black uppercase tracking-tight">
-              {language === 'ru'
-                ? 'Другие популярные маршруты по Кипру'
-                : 'Related Cyprus Transfer Routes'}
+              {t('routeDetail.relatedTitle')}
             </h2>
             <a href={routesHref} className="font-black text-sm underline hover:text-yellow-600">
-              {language === 'ru' ? 'Смотреть все маршруты →' : 'View all routes →'}
+              {t('routeDetail.viewAllRoutes')}
             </a>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {(relatedRoutes.length > 0 ? relatedRoutes : airportRoutes.slice(0, 3)).map((rel) => (
-              <a
-                key={rel.slug}
-                href={buildLocalizedPath('route', language, rel.slug)}
-                className="brutal-card bg-white p-5 flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex items-center justify-between text-xs font-bold text-gray-600 mb-3">
-                    <span>{rel.airportCode || (language === 'ru' ? 'Кипр' : 'Cyprus')}</span>
-                    <span className="bg-black text-white px-2.5 py-0.5 font-black tabular-nums">
-                      €{rel.basePrice}
+            {(relatedRoutes.length > 0 ? relatedRoutes : airportRoutes.slice(0, 3)).map((rel) => {
+              const relContent = getRouteContentForLanguage(rel, language);
+              return (
+                <a
+                  key={rel.slug}
+                  href={buildLocalizedPath('route', language, rel.slug)}
+                  className="brutal-card bg-white p-5 flex flex-col justify-between group"
+                >
+                  <div>
+                    <div className="flex items-center justify-between text-xs font-bold text-gray-600 mb-3">
+                      <span>{rel.airportCode || t('routeDetail.cyprus')}</span>
+                      <span className="bg-black text-white px-2.5 py-0.5 font-black tabular-nums">
+                        €{rel.basePrice}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-black text-black group-hover:text-yellow-600 transition-colors mb-2">
+                      {relContent.h1}
+                    </h3>
+                  </div>
+                  <div className="pt-3 border-t-2 border-black flex items-center justify-between text-xs font-black uppercase">
+                    <span className="tabular-nums">
+                      ~{rel.durationMin} {t('common.min')}
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      {t('routeDetail.book')}
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
-                  <h3 className="text-lg font-black text-black group-hover:text-yellow-600 transition-colors mb-2">
-                    {rel[language].h1}
-                  </h3>
-                </div>
-                <div className="pt-3 border-t-2 border-black flex items-center justify-between text-xs font-black uppercase">
-                  <span className="tabular-nums">~{rel.durationMin} min</span>
-                  <span className="inline-flex items-center gap-1">
-                    {language === 'ru' ? 'Выбрать' : 'Book'}
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </span>
-                </div>
-              </a>
-            ))}
+                </a>
+              );
+            })}
           </div>
         </div>
       </section>

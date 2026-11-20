@@ -83,7 +83,7 @@ export default function Destinations() {
 
                 <div className="mt-5 flex items-center justify-between pt-4 border-t-2 border-black gap-3">
                   <span className="text-black text-xs font-extrabold uppercase tracking-wide">
-                    {language === 'ru' ? '−10% туда-обратно' : '−10% Round Trip'}
+                    {t('destinations.roundTripShort')}
                   </span>
                   <a href={targetHref} className="brutal-btn px-4 py-2 text-xs sm:text-sm uppercase">
                     <span>{t('destinations.order')}</span>

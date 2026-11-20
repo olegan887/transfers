@@ -38,7 +38,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLang
     setLanguage(lang);
     if (typeof window !== 'undefined') {
       localStorage.setItem('app_language', lang);
-      document.documentElement.lang = lang === 'ru' ? 'ru' : 'en';
+      document.documentElement.lang = lang;
 
       const targetPath = switchLanguagePath(window.location.pathname, lang, window.location.search);
       const currentPathWithSearch = window.location.pathname + window.location.search;
@@ -51,25 +51,35 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLang
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      document.documentElement.lang = language === 'ru' ? 'ru' : 'en';
+      document.documentElement.lang = language;
     }
   }, [language]);
 
   const t = useCallback(
     (key: string, params?: Record<string, string | number>) => {
       const keys = key.split('.');
-      let value: any = translations[language];
+      let value: any = translations[language] || translations.en;
 
       for (const k of keys) {
         if (value === undefined || value === null) {
-          return key;
+          value = undefined;
+          break;
         }
         value = value[k];
       }
 
-      let result = value !== undefined && value !== null ? value : key;
+      if (value === undefined || value === null) {
+        let fallback: any = translations.en;
+        for (const k of keys) {
+          if (fallback === undefined || fallback === null) return key;
+          fallback = fallback[k];
+        }
+        value = fallback !== undefined && fallback !== null ? fallback : key;
+      }
 
-      if (params && typeof result === 'string') {
+      let result = String(value);
+
+      if (params) {
         Object.entries(params).forEach(([k, v]) => {
           result = result.replaceAll(`{${k}}`, String(v));
         });

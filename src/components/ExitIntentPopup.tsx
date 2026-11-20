@@ -6,15 +6,12 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { DEFAULT_PROMO_CODE, ENABLE_EXIT_INTENT_POPUP } from '../config';
 
 export default function ExitIntentPopup() {
-  if (!ENABLE_EXIT_INTENT_POPUP) {
-    return null;
-  }
-
   const [isVisible, setIsVisible] = useState(false);
   const [copied, setCopied] = useState(false);
   const { language } = useLanguage();
 
   useEffect(() => {
+    if (!ENABLE_EXIT_INTENT_POPUP) return;
     // Check if we already showed it in this session
     const hasShown = sessionStorage.getItem('exit_intent_shown');
     if (hasShown) return;
@@ -99,7 +96,11 @@ export default function ExitIntentPopup() {
   };
 
 
-  const currentContent = content[language];
+  if (!ENABLE_EXIT_INTENT_POPUP) {
+    return null;
+  }
+
+  const currentContent = content[language === 'ru' ? 'ru' : 'en'];
 
   const modalContent = (
     <AnimatePresence>

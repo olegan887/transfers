@@ -1,3 +1,5 @@
+import { Language } from '../lib/routing';
+
 export interface RouteFaqItem {
   q: string;
   a: string;
@@ -28,6 +30,11 @@ export interface AirportRoutePage {
   relatedSlugs: string[];
   en: AirportRouteLocalized;
   ru: AirportRouteLocalized;
+  de: AirportRouteLocalized;
+  pl: AirportRouteLocalized;
+  fr: AirportRouteLocalized;
+  el: AirportRouteLocalized;
+  it: AirportRouteLocalized;
 }
 
 interface RouteSeed {
@@ -47,6 +54,94 @@ interface RouteSeed {
   image: string;
   relatedSlugs: string[];
 }
+
+interface LocationGrammar {
+  de: { nom: string; inLoc: string };
+  pl: { nom: string; gen: string; acc: string; loc: string };
+  fr: { nom: string; deFrom: string; aTo: string };
+  el: { nom: string; fromGen: string; toAcc: string; inLoc: string };
+  it: { nom: string; daFrom: string; aTo: string };
+}
+
+const LOCATION_GRAMMAR: Record<string, LocationGrammar> = {
+  lca: {
+    de: { nom: 'Flughafen Larnaka (LCA)', inLoc: 'am Flughafen Larnaka (LCA)' },
+    pl: { nom: 'Lotnisko Larnaka (LCA)', gen: 'Lotniska Larnaka (LCA)', acc: 'Lotnisko Larnaka (LCA)', loc: 'Lotnisku Larnaka' },
+    fr: { nom: 'Aéroport de Larnaca (LCA)', deFrom: "de l'aéroport de Larnaca (LCA)", aTo: "à l'aéroport de Larnaca (LCA)" },
+    el: { nom: 'Αεροδρόμιο Λάρνακας (LCA)', fromGen: 'το Αεροδρόμιο Λάρνακας (LCA)', toAcc: 'το Αεροδρόμιο Λάρνακας (LCA)', inLoc: 'στο Αεροδρόμιο Λάρνακας' },
+    it: { nom: 'Aeroporto di Larnaca (LCA)', daFrom: "dall'Aeroporto di Larnaca (LCA)", aTo: "all'Aeroporto di Larnaca (LCA)" },
+  },
+  pfo: {
+    de: { nom: 'Flughafen Paphos (PFO)', inLoc: 'am Flughafen Paphos (PFO)' },
+    pl: { nom: 'Lotnisko Pafos (PFO)', gen: 'Lotniska Pafos (PFO)', acc: 'Lotnisko Pafos (PFO)', loc: 'Lotnisku Pafos' },
+    fr: { nom: 'Aéroport de Paphos (PFO)', deFrom: "de l'aéroport de Paphos (PFO)", aTo: "à l'aéroport de Paphos (PFO)" },
+    el: { nom: 'Αεροδρόμιο Πάφου (PFO)', fromGen: 'το Αεροδρόμιο Πάφου (PFO)', toAcc: 'το Αεροδρόμιο Πάφου (PFO)', inLoc: 'στο Αεροδρόμιο Πάφου' },
+    it: { nom: 'Aeroporto di Pafos (PFO)', daFrom: "dall'Aeroporto di Pafos (PFO)", aTo: "all'Aeroporto di Pafos (PFO)" },
+  },
+  limassol: {
+    de: { nom: 'Limassol', inLoc: 'in Limassol' },
+    pl: { nom: 'Limassol', gen: 'Limassol', acc: 'Limassol', loc: 'Limassol' },
+    fr: { nom: 'Limassol', deFrom: 'de Limassol', aTo: 'à Limassol' },
+    el: { nom: 'Λεμεσός', fromGen: 'τη Λεμεσό', toAcc: 'τη Λεμεσό', inLoc: 'στη Λεμεσό' },
+    it: { nom: 'Limassol', daFrom: 'da Limassol', aTo: 'a Limassol' },
+  },
+  'paphos-city': {
+    de: { nom: 'Paphos', inLoc: 'in Paphos' },
+    pl: { nom: 'Pafos', gen: 'Pafos', acc: 'Pafos', loc: 'Pafos' },
+    fr: { nom: 'Paphos', deFrom: 'de Paphos', aTo: 'à Paphos' },
+    el: { nom: 'Πάφος', fromGen: 'την Πάφο', toAcc: 'την Πάφο', inLoc: 'στην Πάφο' },
+    it: { nom: 'Pafos', daFrom: 'da Pafos', aTo: 'a Pafos' },
+  },
+  'larnaca-city': {
+    de: { nom: 'Larnaka Stadt', inLoc: 'in Larnaka' },
+    pl: { nom: 'Larnaka (Miasto)', gen: 'Larnaki', acc: 'Larnaki', loc: 'Larnace' },
+    fr: { nom: 'Larnaca Ville', deFrom: 'de Larnaca', aTo: 'à Larnaca' },
+    el: { nom: 'Λάρνακα (Πόλη)', fromGen: 'τη Λάρνακα', toAcc: 'τη Λάρνακα', inLoc: 'στη Λάρνακα' },
+    it: { nom: 'Larnaca Città', daFrom: 'da Larnaca', aTo: 'a Larnaca' },
+  },
+  nicosia: {
+    de: { nom: 'Nikosia', inLoc: 'in Nikosia' },
+    pl: { nom: 'Nikozja', gen: 'Nikozji', acc: 'Nikozji', loc: 'Nikozji' },
+    fr: { nom: 'Nicosie', deFrom: 'de Nicosie', aTo: 'à Nicosie' },
+    el: { nom: 'Λευκωσία', fromGen: 'τη Λευκωσία', toAcc: 'τη Λευκωσία', inLoc: 'στη Λευκωσία' },
+    it: { nom: 'Nicosia', daFrom: 'da Nicosia', aTo: 'a Nicosia' },
+  },
+  'ayia-napa': {
+    de: { nom: 'Ayia Napa', inLoc: 'in Ayia Napa' },
+    pl: { nom: 'Ayia Napa', gen: 'Ayia Napy', acc: 'Ayia Napy', loc: 'Ayia Napie' },
+    fr: { nom: 'Ayia Napa', deFrom: "d'Ayia Napa", aTo: 'à Ayia Napa' },
+    el: { nom: 'Αγία Νάπα', fromGen: 'την Αγία Νάπα', toAcc: 'την Αγία Νάπα', inLoc: 'στην Αγία Νάπα' },
+    it: { nom: 'Ayia Napa', daFrom: 'da Ayia Napa', aTo: 'a Ayia Napa' },
+  },
+  protaras: {
+    de: { nom: 'Protaras', inLoc: 'in Protaras' },
+    pl: { nom: 'Protaras', gen: 'Protaras', acc: 'Protaras', loc: 'Protaras' },
+    fr: { nom: 'Protaras', deFrom: 'de Protaras', aTo: 'à Protaras' },
+    el: { nom: 'Πρωταράς', fromGen: 'τον Πρωταρά', toAcc: 'τον Πρωταρά', inLoc: 'στον Πρωταρά' },
+    it: { nom: 'Protaras', daFrom: 'da Protaras', aTo: 'a Protaras' },
+  },
+  'coral-bay': {
+    de: { nom: 'Coral Bay', inLoc: 'in Coral Bay' },
+    pl: { nom: 'Coral Bay', gen: 'Coral Bay', acc: 'Coral Bay', loc: 'Coral Bay' },
+    fr: { nom: 'Coral Bay', deFrom: 'de Coral Bay', aTo: 'à Coral Bay' },
+    el: { nom: 'Coral Bay', fromGen: 'το Coral Bay', toAcc: 'το Coral Bay', inLoc: 'στο Coral Bay' },
+    it: { nom: 'Coral Bay', daFrom: 'da Coral Bay', aTo: 'a Coral Bay' },
+  },
+  peyia: {
+    de: { nom: 'Peyia', inLoc: 'in Peyia' },
+    pl: { nom: 'Peyia', gen: 'Peyi', acc: 'Peyi', loc: 'Peyi' },
+    fr: { nom: 'Peyia', deFrom: 'de Peyia', aTo: 'à Peyia' },
+    el: { nom: 'Πέγεια', fromGen: 'την Πέγεια', toAcc: 'την Πέγεια', inLoc: 'στην Πέγεια' },
+    it: { nom: 'Peyia', daFrom: 'da Peyia', aTo: 'a Peyia' },
+  },
+  polis: {
+    de: { nom: 'Polis Chrysochous', inLoc: 'in Polis' },
+    pl: { nom: 'Polis Chrysochous', gen: 'Polis', acc: 'Polis', loc: 'Polis' },
+    fr: { nom: 'Polis Chrysochous', deFrom: 'de Polis', aTo: 'à Polis' },
+    el: { nom: 'Πόλις Χρυσοχούς', fromGen: 'την Πόλη Χρυσοχούς', toAcc: 'την Πόλη Χρυσοχούς', inLoc: 'στην Πόλη Χρυσοχούς' },
+    it: { nom: 'Polis Chrysochous', daFrom: 'da Polis', aTo: 'a Polis' },
+  },
+};
 
 const ROUTE_SEEDS: RouteSeed[] = [
   // === 1. Larnaca Airport (LCA) Active Routes ===
@@ -604,6 +699,10 @@ function buildRoutePage(seed: RouteSeed): AirportRoutePage {
   const isAirportPickup = seed.fromId === 'lca' || seed.fromId === 'pfo';
   const ruToNom = toRussianNominative(seed.ruToAcc);
 
+  // Align slug display direction accurately for routes where fromId/toId are swapped vs slug
+  const fromLoc = LOCATION_GRAMMAR[seed.fromId] || LOCATION_GRAMMAR.limassol;
+  const toLoc = LOCATION_GRAMMAR[seed.toId] || LOCATION_GRAMMAR.limassol;
+
   const enPickup = isAirportPickup
     ? `After collecting your luggage at ${seed.enFrom}, exit into the main Arrivals Hall. Your Limassol-based licensed driver will wait with a name board, help with bags, and drive you straight along the ${seed.highway} directly to your address in ${seed.enTo}.`
     : `Your Limassol-based chauffeur arrives at your hotel, villa, or apartment in ${seed.enFrom} 10 minutes early, loads your luggage, and drives you directly along the ${seed.highway} to ${seed.enTo} with zero intermediate stops.`;
@@ -611,6 +710,36 @@ function buildRoutePage(seed: RouteSeed): AirportRoutePage {
   const ruPickup = isAirportPickup
     ? `После получения багажа в ${seed.ruFromGen} выйдите в центральный зал прилёта. Наш водитель из Лимассола встретит вас с табличкой с вашим именем, поможет с чемоданами и доставит по трассе ${seed.highway} прямо до адреса в ${seed.ruToLoc}.`
     : `Водитель нашей службы в Лимассоле приедет точно к вашему отелю, вилле или адресу в точке «${seed.ruFrom}», поможет с багажом и доставит по маршруту ${seed.highway} в ${seed.ruToAcc} без пересадок.`;
+
+  const deFrom = fromLoc.de.nom;
+  const deTo = toLoc.de.nom;
+  const dePickup = isAirportPickup
+    ? `Nach der Gepäckausgabe ${fromLoc.de.inLoc} gehen Sie in die Ankunftshalle. Ihr lizenzierter Fahrer aus Limassol wartet dort mit einem Namensschild auf Sie und bringt Sie direkt über die Autobahn ${seed.highway} zu Ihrer Adresse ${toLoc.de.inLoc}.`
+    : `Ihr Chauffeur aus Limassol trifft 10 Minuten vor Abfahrt an Ihrem Hotel oder Ihrer Adresse ${fromLoc.de.inLoc} ein, verstaut Ihr Gepäck und fährt Sie ohne Umwege über die ${seed.highway} nach ${deTo}.`;
+
+  const plFrom = fromLoc.pl.nom;
+  const plTo = toLoc.pl.nom;
+  const plPickup = isAirportPickup
+    ? `Po odebraniu bagażu na ${fromLoc.pl.loc} wyjdź do hali przylotów. Licencjonowany kierowca z Limassol czeka tam z tabliczką imienną, pomaga z walizkami i dowozi Cię bezpośrednio trasą ${seed.highway} do ${plTo}.`
+    : `Nasz kierowca z Limassol podjeżdża 10 minut wcześniej pod Twój hotel lub adres w ${fromLoc.pl.loc}, pomaga z bagażem i wiezie Cię bezpośrednio trasą ${seed.highway} do ${toLoc.pl.acc} bez przesiadek.`;
+
+  const frFrom = fromLoc.fr.nom;
+  const frTo = toLoc.fr.nom;
+  const frPickup = isAirportPickup
+    ? `Après avoir récupéré vos bagages, rejoignez le hall des arrivées ${fromLoc.fr.deFrom}. Votre chauffeur basé à Limassol vous attend avec une pancarte à votre nom et vous conduit directement via ${seed.highway} jusqu'à votre adresse ${toLoc.fr.aTo}.`
+    : `Votre chauffeur basé à Limassol arrive 10 minutes avant l'heure prévue à votre hôtel ou villa ${fromLoc.fr.aTo}, charge vos bagages et vous conduit directement par ${seed.highway} ${toLoc.fr.aTo} sans arrêt intermédiaire.`;
+
+  const elFrom = fromLoc.el.nom;
+  const elTo = toLoc.el.nom;
+  const elPickup = isAirportPickup
+    ? `Αφού παραλάβετε τις αποσκευές σας ${fromLoc.el.inLoc}, βγείτε στην αίθουσα αφίξεων. Ο αδειούχος οδηγός μας από τη Λεμεσό θα σας περιμένει με ταμπέλα και θα σας μεταφέρει απευθείας μέσω ${seed.highway} στη διεύθυνσή σας ${toLoc.el.inLoc}.`
+    : `Ο οδηγός μας από τη Λεμεσό φτάνει 10 λεπτά νωρίτερα στο ξενοδοχείο ή τη διεύθυνσή σας ${fromLoc.el.inLoc}, φορτώνει τις αποσκευές και σας μεταφέρει απευθείας μέσω ${seed.highway} προς ${toLoc.el.toAcc} χωρίς στάσεις.`;
+
+  const itFrom = fromLoc.it.nom;
+  const itTo = toLoc.it.nom;
+  const itPickup = isAirportPickup
+    ? `Dopo aver ritirato i bagagli, entra nella sala arrivi (${itFrom}). Il nostro autista con base a Limassol ti aspetterà con un cartello nominativo per accompagnarti direttamente lungo la ${seed.highway} fino al tuo indirizzo ${toLoc.it.aTo}.`
+    : `Il nostro autista di Limassol arriva con 10 minuti di anticipo presso il tuo hotel o indirizzo ${fromLoc.it.aTo}, carica i bagagli e ti accompagna direttamente lungo la ${seed.highway} ${toLoc.it.aTo} senza fermate intermedie.`;
 
   return {
     slug: seed.slug,
@@ -681,6 +810,151 @@ function buildRoutePage(seed: RouteSeed): AirportRoutePage {
         },
       ],
     },
+    de: {
+      title: `Transfer ${deFrom} nach ${deTo} | Festpreis €${seed.basePrice}`,
+      metaDescription: `Privater Transfer von ${deFrom} nach ${deTo} für fest €${seed.basePrice}. ~${seed.durationMin} Min. Direktfahrt über Limassol, 10 % Rabatt bei Hin- & Rückfahrt.`,
+      h1: `Transfer ${deFrom} nach ${deTo}`,
+      subtitle: `Direkte Privatfahrt (~${seed.durationMin} Min.) zwischen ${deFrom} und ${deTo} ab unserer Basis in Limassol — Festpreis €${seed.basePrice} pro Limousine.`,
+      highlights: [
+        `${seed.distanceKm} km Direktstrecke über ${seed.highway}`,
+        isAirportPickup
+          ? `Empfang mit Namensschild in der Ankunftshalle inkl. Flugverfolgung`
+          : `Tür-zu-Tür-Abholung direkt am Hotel, der Villa oder Ihrer Adresse`,
+        `Festpreis €${seed.basePrice} pro Limousine (bis 4 Passagiere & 3 Koffer)`,
+        `10 % Sofortrabatt bei Buchung von Hin- und Rückfahrt`,
+      ],
+      pickupGuide: dePickup,
+      faqs: [
+        {
+          q: `Was kostet ein privater Transfer von ${deFrom} nach ${deTo}?`,
+          a: `Unser Festpreis zwischen ${deFrom} und ${deTo} beträgt €${seed.basePrice} pro Limousine (bis zu 4 Personen und 3 Koffer). Nachtfahrten (23:00–07:00) kosten +€10 Aufschlag.`,
+        },
+        {
+          q: `Wie lange dauert die Fahrt?`,
+          a: `Die Fahrzeit über die ${seed.highway} beträgt etwa ${seed.durationMin} Minuten (${seed.distanceKm} km).`,
+        },
+        {
+          q: `Gilt der Tarif auch in die umgekehrte Richtung?`,
+          a: `Ja, alle Strecken sind in beide Richtungen buchbar. Wählen Sie oben „Hin & Zurück“, um sofort 10 % Rabatt auf die Rückfahrt zu erhalten.`,
+        },
+      ],
+    },
+    pl: {
+      title: `Transfer ${plFrom} – ${plTo} | Stała cena €${seed.basePrice}`,
+      metaDescription: `Prywatny transfer z ${fromLoc.pl.gen} do ${toLoc.pl.acc} za €${seed.basePrice}. ~${seed.durationMin} min jazdy przez Limassol, 10% zniżki na powrót.`,
+      h1: `Transfer ${plFrom} – ${plTo}`,
+      subtitle: `Bezpośredni przejazd (~${seed.durationMin} min) prywatnym sedanem między ${plFrom} a ${plTo} z bazy w Limassol — stała cena €${seed.basePrice} za auto.`,
+      highlights: [
+        `${seed.distanceKm} km bezpośrednio trasą ${seed.highway} bez przesiadek`,
+        isAirportPickup
+          ? `Powitanie z tabliczką w hali przylotów i monitorowanie lotu gratis`
+          : `Odbiór spod drzwi hotelu, willi lub dowolnego adresu`,
+        `Stała cena €${seed.basePrice} za cały sedan (do 4 pasażerów i 3 walizek)`,
+        `10% zniżki automatycznie przy rezerwacji w obie strony`,
+      ],
+      pickupGuide: plPickup,
+      faqs: [
+        {
+          q: `Ile kosztuje transfer z ${fromLoc.pl.gen} do ${toLoc.pl.acc}?`,
+          a: `Stała cena przejazdu między ${plFrom} a ${plTo} wynosi €${seed.basePrice} za cały samochód (do 4 osób i 3 walizek). W nocy (23:00–07:00) obowiązuje dopłata +€10.`,
+        },
+        {
+          q: `Ile trwa podróż?`,
+          a: `Przejazd trasą ${seed.highway} zajmuje około ${seed.durationMin} minut (${seed.distanceKm} km).`,
+        },
+        {
+          q: `Czy można zamówić przejazd w drugą stronę lub powrotny?`,
+          a: `Tak, trasa działa w obu kierunkach. Wybierz powyżej opcję „W obie strony”, aby uzyskać 10% zniżki na kurs powrotny.`,
+        },
+      ],
+    },
+    fr: {
+      title: `Transfert ${frFrom} vers ${frTo} | Tarif fixe ${seed.basePrice} €`,
+      metaDescription: `Réservez votre transfert privé ${fromLoc.fr.deFrom} ${toLoc.fr.aTo} pour ${seed.basePrice} € fixes. ~${seed.durationMin} min via Limassol, -10 % sur le retour.`,
+      h1: `Transfert ${frFrom} – ${frTo}`,
+      subtitle: `Trajet direct (~${seed.durationMin} min) en berline privée entre ${frFrom} et ${frTo} depuis notre base de Limassol — tarif fixe ${seed.basePrice} € par véhicule.`,
+      highlights: [
+        `${seed.distanceKm} km direct via ${seed.highway}`,
+        isAirportPickup
+          ? `Accueil avec pancarte en salle des arrivées et suivi de vol en direct`
+          : `Prise en charge porte-à-porte à votre hôtel, villa ou adresse`,
+        `Tarif fixe ${seed.basePrice} € par berline (jusqu’à 4 passagers & 3 valises)`,
+        `10 % de remise immédiate en réservant l’aller-retour`,
+      ],
+      pickupGuide: frPickup,
+      faqs: [
+        {
+          q: `Combien coûte un transfert privé ${fromLoc.fr.deFrom} ${toLoc.fr.aTo} ?`,
+          a: `Notre tarif fixe est de ${seed.basePrice} € par berline (jusqu’à 4 passagers et 3 bagages). Les trajets de nuit (23h00–07h00) incluent un supplément de +10 €.`,
+        },
+        {
+          q: `Quelle est la durée du trajet ?`,
+          a: `Le trajet dure environ ${seed.durationMin} minutes (${seed.distanceKm} km) par ${seed.highway}.`,
+        },
+        {
+          q: `Puis-je réserver dans l’autre sens ou en aller-retour ?`,
+          a: `Oui, tous nos itinéraires fonctionnent dans les deux sens. Sélectionnez « Aller-retour » ci-dessus pour obtenir 10 % de remise sur le retour.`,
+        },
+      ],
+    },
+    el: {
+      title: `Μεταφορά ${elFrom} – ${elTo} | Σταθερή τιμή €${seed.basePrice}`,
+      metaDescription: `Ιδιωτική μεταφορά από ${fromLoc.el.fromGen} προς ${toLoc.el.toAcc} με €${seed.basePrice}. ~${seed.durationMin} λεπτά μέσω Λεμεσού, έκπτωση 10% επιστροφής.`,
+      h1: `Μεταφορά ${elFrom} – ${elTo}`,
+      subtitle: `Απευθείας ιδιωτική διαδρομή (~${seed.durationMin} λεπτά) μεταξύ ${elFrom} και ${elTo} από τη βάση μας στη Λεμεσό — σταθερή τιμή €${seed.basePrice}.`,
+      highlights: [
+        `${seed.distanceKm} χλμ απευθείας μέσω ${seed.highway}`,
+        isAirportPickup
+          ? `Υποδοχή με ταμπέλα στις αφίξεις και ζωντανή παρακολούθηση πτήσης`
+          : `Παραλαβή από την πόρτα ξενοδοχείου, βίλας ή κατοικίας`,
+        `Σταθερή τιμή €${seed.basePrice} ανά sedan (έως 4 επιβάτες & 3 βαλίτσες)`,
+        `Άμεση έκπτωση 10% με κράτηση μετ’ επιστροφής`,
+      ],
+      pickupGuide: elPickup,
+      faqs: [
+        {
+          q: `Πόσο κοστίζει η μεταφορά από ${fromLoc.el.fromGen} προς ${toLoc.el.toAcc};`,
+          a: `Η σταθερή τιμή μας είναι €${seed.basePrice} ανά όχημα (έως 4 επιβάτες και 3 βαλίτσες). Για νυχτερινές διαδρομές (23:00–07:00) ισχύει τέλος +€10.`,
+        },
+        {
+          q: `Πόση ώρα διαρκεί η διαδρομή;`,
+          a: `Η διαδρομή μέσω ${seed.highway} διαρκεί περίπου ${seed.durationMin} λεπτά (${seed.distanceKm} χλμ).`,
+        },
+        {
+          q: `Ισχύει η τιμή και για την αντίστροφη διαδρομή;`,
+          a: `Ναι, όλες οι διαδρομές εκτελούνται και προς τις δύο κατευθύνσεις. Επιλέξτε «Μετ’ επιστροφής» στον υπολογιστή για έκπτωση 10% στην επιστροφή.`,
+        },
+      ],
+    },
+    it: {
+      title: `Transfer ${itFrom} – ${itTo} | Tariffa fissa €${seed.basePrice}`,
+      metaDescription: `Prenota un transfer privato ${fromLoc.it.daFrom} ${toLoc.it.aTo} a €${seed.basePrice}. ~${seed.durationMin} min via Limassol, sconto 10% sul ritorno.`,
+      h1: `Transfer ${itFrom} – ${itTo}`,
+      subtitle: `Corsa diretta (~${seed.durationMin} min) in berlina privata tra ${itFrom} e ${itTo} dalla nostra sede di Limassol — fisso €${seed.basePrice} a veicolo.`,
+      highlights: [
+        `${seed.distanceKm} km diretti lungo la ${seed.highway}`,
+        isAirportPickup
+          ? `Accoglienza con cartello agli arrivi e controllo volo in tempo reale`
+          : `Ritiro privato porta a porta da hotel, ville o indirizzi`,
+        `Prezzo fisso €${seed.basePrice} per berlina (fino a 4 passeggeri e 3 valigie)`,
+        `Sconto immediato del 10% prenotando andata e ritorno`,
+      ],
+      pickupGuide: itPickup,
+      faqs: [
+        {
+          q: `Quanto costa un transfer privato ${fromLoc.it.daFrom} ${toLoc.it.aTo}?`,
+          a: `La nostra tariffa fissa tra ${itFrom} e ${itTo} è di €${seed.basePrice} per berlina (fino a 4 passeggeri e 3 valigie). Le corse notturne (23:00–07:00) prevedono +€10.`,
+        },
+        {
+          q: `Quanto dura il viaggio?`,
+          a: `Il tragitto lungo la ${seed.highway} dura circa ${seed.durationMin} minuti (${seed.distanceKm} km).`,
+        },
+        {
+          q: `Posso prenotare nella direzione opposta o andata e ritorno?`,
+          a: `Sì, tutte le tratte sono attive in entrambe le direzioni. Seleziona «Andata e ritorno» qui sopra per avere il 10% di sconto sul rientro.`,
+        },
+      ],
+    },
   };
 }
 
@@ -688,4 +962,11 @@ export const airportRoutes: AirportRoutePage[] = ROUTE_SEEDS.map(buildRoutePage)
 
 export function getAirportRouteBySlug(slug: string): AirportRoutePage | undefined {
   return airportRoutes.find((r) => r.slug === slug);
+}
+
+export function getRouteContentForLanguage(
+  route: AirportRoutePage,
+  lang: Language
+): AirportRouteLocalized {
+  return route[lang] || route.en;
 }

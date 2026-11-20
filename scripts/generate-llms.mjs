@@ -47,24 +47,33 @@ const crossIslandRoutes = routes.filter(
 );
 
 const formatRouteLine = (r) =>
-  `- [${r.enFrom} <-> ${r.enTo} Transfer (€${r.basePrice})](${SITE_URL}/routes/${r.slug}): Fixed €${r.basePrice} per sedan (~${r.durationMin} min, ${r.distanceKm} km via ${r.highway}) | [Russian version](${SITE_URL}/ru/routes/${r.slug})`;
+  `- [${r.enFrom} <-> ${r.enTo} Transfer (€${r.basePrice})](${SITE_URL}/routes/${r.slug}): Fixed €${r.basePrice} per sedan (~${r.durationMin} min, ${r.distanceKm} km via ${r.highway}) | [RU](${SITE_URL}/ru/routes/${r.slug}) | [DE](${SITE_URL}/de/routes/${r.slug}) | [PL](${SITE_URL}/pl/routes/${r.slug}) | [FR](${SITE_URL}/fr/routes/${r.slug}) | [EL](${SITE_URL}/el/routes/${r.slug}) | [IT](${SITE_URL}/it/routes/${r.slug})`;
 
 const content = `# Cyprus Airport Transfers (Limassol Base)
 
-> Fixed-price private sedan transfers in Cyprus operated 24/7 from Limassol, serving Larnaca Airport (LCA), Paphos Airport (PFO), and direct intercity routes through Limassol.
+> Fixed-price private sedan transfers in Cyprus operated 24/7 from Limassol, serving Larnaca Airport (LCA), Paphos Airport (PFO), and direct intercity routes through Limassol. Core booking pages and all 30 routes are available in 7 languages: English, Russian, German, Polish, French, Greek, and Italian.
 
 - Fleet: Mercedes E-Class, Opel Insignia, Toyota Camry sedans (up to 4 passengers & 3 suitcases per car; groups of 5+ arranged via WhatsApp).
 - Pricing: Fixed €75–€200 per sedan, +€10 flat night tariff (23:00–07:00), 10% automatic discount on round-trip bookings, optional €20 Stripe deposit or 100% cash/card to driver.
 - Office Base: The Oval, Krinou 3, Agios Athanasios, 4103 Limassol, Cyprus (34.6899 N, 33.0682 E).
 - Contact: +357 96 867289 | info@cyprus-airport-transfer.co | 24/7 Arrivals Meet & Greet with live flight tracking.
 
-## Main Pages & Booking
+## Main Pages & Language Editions
 
 - [Cyprus Airport Transfers — Home (EN)](${SITE_URL}/): Online fare calculator, instant booking, and overview of Limassol, LCA & PFO transfers.
 - [Cyprus Airport Transfers — Главная (RU)](${SITE_URL}/ru/): Калькулятор стоимости трансфера, онлайн-бронирование и тарифы из Лимассола, Ларнаки (LCA) и Пафоса (PFO).
+- [Zypern Flughafentransfer — Startseite (DE)](${SITE_URL}/de/): Festpreise ab Limassol, Flughafen Larnaka (LCA) und Paphos (PFO).
+- [Transfery lotniskowe Cypr — Strona główna (PL)](${SITE_URL}/pl/): Prywatne transfery ze stałą ceną z Limassol, LCA i PFO.
+- [Transferts Aéroport Chypre — Accueil (FR)](${SITE_URL}/fr/): Tarifs fixes depuis Limassol, aéroport de Larnaca (LCA) et Paphos (PFO).
+- [Μεταφορές Αεροδρομίου Κύπρος — Αρχική (EL)](${SITE_URL}/el/): Ιδιωτικές μεταφορές σταθερής τιμής από Λεμεσό, LCA και PFO.
+- [Transfer Aeroporto Cipro — Home (IT)](${SITE_URL}/it/): Transfer privati a tariffa fissa da Limassol, Larnaca (LCA) e Paphos (PFO).
 - [All 30 Active Transfer Routes (EN)](${SITE_URL}/routes): Filterable directory of all serviced airport and intercity routes with fixed EUR rates.
-- [Все 30 маршрутов трансфера (RU)](${SITE_URL}/ru/routes): Полный каталог доступных направлений с фиксированными тарифами.
+- [All 30 Routes — DE / PL / FR / EL / IT / RU](${SITE_URL}/de/routes): Localized route directories available under [DE](${SITE_URL}/de/routes), [PL](${SITE_URL}/pl/routes), [FR](${SITE_URL}/fr/routes), [EL](${SITE_URL}/el/routes), [IT](${SITE_URL}/it/routes), and [RU](${SITE_URL}/ru/routes).
 - [WhatsApp Dispatch (+357 96 867289)](https://wa.me/35796867289): Direct 24/7 booking support, child seats, and 5+ passenger inquiries.
+- [Free Website Calculator Widget (EN)](${SITE_URL}/widget): Self-serve HTML iframe fare calculator in all 7 languages for Cyprus hotels, villas, and travel blogs.
+- [RSS 2.0 Feed (EN)](${SITE_URL}/rss.xml): Automated syndication feed for Cyprus travel guides and fixed transfer routes.
+- [RSS 2.0 Feed (RU)](${SITE_URL}/ru/rss.xml): Русскоязычная RSS-лента статей и тарифов.
+- [JSON Feed 1.1 (EN)](${SITE_URL}/feed.json): Machine-readable feed of routes and articles.
 - [Google Maps Office Location (Limassol)](https://www.google.com/maps/search/?api=1&query=The+Oval,+Krinou+3,+Agios+Athanasios,+4103+Limassol,+Cyprus): Dispatch office in Agios Athanasios, Limassol.
 
 ## Service Boundaries
@@ -89,7 +98,7 @@ ${limassolRoutes.map(formatRouteLine).join('\n')}
 
 ${crossIslandRoutes.map(formatRouteLine).join('\n')}
 
-## Travel Guides & Blog
+## Travel Guides & Blog (EN & RU)
 
 - [Cyprus Travel Guides & Blog (EN)](${SITE_URL}/blog): Airport arrival tips, resort guides, and fare breakdowns.
 - [Блог и гиды по Кипру (RU)](${SITE_URL}/ru/blog): Полезные статьи о трансферах, курортах и ценах на такси на Кипре.
@@ -100,4 +109,4 @@ ${crossIslandRoutes.map(formatRouteLine).join('\n')}
 `;
 
 fs.writeFileSync(outPath, content, 'utf-8');
-console.log(`Generated public/llms.txt with ${routes.length} active routes.`);
+console.log(`Generated public/llms.txt with ${routes.length} active routes across 7 core languages.`);

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "node generate-sitemap.js && node scripts/generate-llms.mjs && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
+    "build": "node generate-sitemap.js && node scripts/generate-llms.mjs && tsx scripts/generate-feeds.ts && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "start": "node server.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist",

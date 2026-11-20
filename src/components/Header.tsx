@@ -1,26 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, MessageCircle, Globe } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Menu, X, MessageCircle, Globe, ChevronDown, Check } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { WHATSAPP_NUMBER } from '../config';
 import { reportConversion } from '../lib/analytics';
-import { buildLocalizedPath } from '../lib/routing';
+import {
+  buildLocalizedPath,
+  CORE_LANGUAGES,
+  LANGUAGE_LABELS,
+  switchLanguagePath,
+  Language,
+} from '../lib/routing';
 import Logo from './Logo';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [currentPath, setCurrentPath] = useState('/');
+  const langDropdownRef = useRef<HTMLDivElement>(null);
   const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
+    const syncPath = () => {
+      setCurrentPath(window.location.pathname);
+    };
+    syncPath();
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        langDropdownRef.current &&
+        !langDropdownRef.current.contains(event.target as Node)
+      ) {
+        setLangMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setLangMenuOpen(false);
+        setMobileMenuOpen(false);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('popstate', syncPath);
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('popstate', syncPath);
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
-  const toggleLanguage = () => {
-    setLanguage(language === 'ru' ? 'en' : 'ru');
+  const handleSelectLanguage = (e: React.MouseEvent, targetLang: Language) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setLanguage(targetLang);
+    setLangMenuOpen(false);
+    setMobileMenuOpen(false);
   };
 
   const handleWhatsAppClick = () => {
@@ -36,9 +80,7 @@ export default function Header() {
   return (
     <>
       <div className="w-full bg-yellow-400 text-black border-b-2 border-black py-2 text-center text-xs sm:text-sm font-bold tracking-wide z-[60] relative px-4">
-        {language === 'ru'
-          ? 'Спецпредложение: скидка 10% при бронировании трансфера туда-обратно'
-          : 'Special Offer: 10% OFF when you book a round-trip airport transfer'}
+        {t('hero.promoBanner')}
       </div>
       <header
         className={`sticky top-3 mx-auto w-[95%] max-w-6xl z-50 transition-all duration-200 ${
@@ -57,7 +99,7 @@ export default function Header() {
           </a>
 
           {/* Desktop Nav */}
-          <nav aria-label="Main navigation" className="hidden md:flex items-center gap-6">
+          <nav aria-label="Main navigation" className="hidden md:flex items-center gap-5 lg:gap-6">
             <a
               href={destinationsHref}
               className="text-sm font-bold text-black hover:text-yellow-600 transition-colors whitespace-nowrap shrink-0"
@@ -83,16 +125,60 @@ export default function Header() {
               {t('nav.blog')}
             </a>
 
-            <div className="flex items-center gap-4 ml-2 pl-5 border-l-2 border-black shrink-0">
-              <button
-                type="button"
-                onClick={toggleLanguage}
-                aria-label={language === 'ru' ? 'Switch to English' : 'Переключить на русский'}
-                className="flex items-center gap-1.5 text-xs font-black tracking-wider text-black hover:text-yellow-600 transition-colors whitespace-nowrap py-1.5 px-2 border-2 border-black rounded-lg bg-white"
-              >
-                <Globe className="w-4 h-4" />
-                {language === 'ru' ? 'EN' : 'RU'}
-              </button>
+            <div className="flex items-center gap-3 ml-1 pl-4 border-l-2 border-black shrink-0">
+              {/* 7-Language Dropdown Switcher */}
+              <div className="relative" ref={langDropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setLangMenuOpen((prev) => !prev)}
+                  aria-expanded={langMenuOpen}
+                  aria-haspopup="menu"
+                  aria-label={`Select language (${LANGUAGE_LABELS[language].native})`}
+                  className="flex items-center gap-1.5 text-xs font-black tracking-wider text-black hover:bg-yellow-100 transition-colors whitespace-nowrap py-1.5 px-2.5 border-2 border-black rounded-lg bg-white"
+                >
+                  <Globe className="w-4 h-4 shrink-0" />
+                  <span>{LANGUAGE_LABELS[language].code}</span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-150 ${
+                      langMenuOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+
+                {langMenuOpen && (
+                  <div
+                    role="menu"
+                    className="absolute right-0 mt-2 w-48 bg-white border-2 border-black rounded-xl shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] py-1.5 z-50"
+                  >
+                    {CORE_LANGUAGES.map((langCode) => {
+                      const info = LANGUAGE_LABELS[langCode];
+                      const isActive = langCode === language;
+                      const href = switchLanguagePath(currentPath, langCode);
+                      return (
+                        <a
+                          key={langCode}
+                          href={href}
+                          role="menuitem"
+                          hrefLang={langCode}
+                          onClick={(e) => handleSelectLanguage(e, langCode)}
+                          className={`flex items-center justify-between px-3.5 py-2 text-xs font-bold transition-colors ${
+                            isActive
+                              ? 'bg-yellow-400 text-black font-black'
+                              : 'text-black hover:bg-yellow-100'
+                          }`}
+                        >
+                          <span className="flex items-center gap-2">
+                            <span className="font-black w-6">{info.code}</span>
+                            <span>{info.native}</span>
+                          </span>
+                          {isActive && <Check className="w-3.5 h-3.5 shrink-0" />}
+                        </a>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}`}
                 target="_blank"
@@ -120,12 +206,12 @@ export default function Header() {
             </a>
             <button
               type="button"
-              onClick={toggleLanguage}
-              aria-label={language === 'ru' ? 'Switch to English' : 'Переключить на русский'}
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label={`Select language (${LANGUAGE_LABELS[language].native})`}
               className="flex items-center gap-1 text-xs font-black tracking-wider text-black border-2 border-black rounded-lg px-2 py-1.5 bg-white"
             >
               <Globe className="w-4 h-4" />
-              <span>{language === 'ru' ? 'EN' : 'RU'}</span>
+              <span>{LANGUAGE_LABELS[language].code}</span>
             </button>
             <button
               type="button"
@@ -145,33 +231,61 @@ export default function Header() {
             <nav aria-label="Mobile navigation" className="flex flex-col p-2">
               <a
                 href={destinationsHref}
-                className="py-3.5 px-5 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold"
+                className="py-3 px-4 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t('nav.destinations')}
               </a>
               <a
                 href={routesHref}
-                className="py-3.5 px-5 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold"
+                className="py-3 px-4 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t('nav.routes')}
               </a>
               <a
                 href={featuresHref}
-                className="py-3.5 px-5 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold"
+                className="py-3 px-4 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t('nav.features')}
               </a>
               <a
                 href={blogHref}
-                className="py-3.5 px-5 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold"
+                className="py-3 px-4 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t('nav.blog')}
               </a>
-              <div className="p-3 mt-1">
+
+              {/* Mobile 7-Language Selector Grid */}
+              <div className="px-3 py-3 mt-1 border-t-2 border-black">
+                <div className="grid grid-cols-4 gap-1.5">
+                  {CORE_LANGUAGES.map((langCode) => {
+                    const info = LANGUAGE_LABELS[langCode];
+                    const isActive = langCode === language;
+                    const href = switchLanguagePath(currentPath, langCode);
+                    return (
+                      <a
+                        key={langCode}
+                        href={href}
+                        hrefLang={langCode}
+                        onClick={(e) => handleSelectLanguage(e, langCode)}
+                        className={`py-2 px-2 text-center rounded-lg border-2 border-black text-xs font-black transition-colors ${
+                          isActive
+                            ? 'bg-yellow-400 text-black'
+                            : 'bg-white text-black hover:bg-gray-100'
+                        }`}
+                        title={info.native}
+                      >
+                        {info.code}
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="p-3 pt-1">
                 <a
                   href={`https://wa.me/${WHATSAPP_NUMBER}`}
                   target="_blank"

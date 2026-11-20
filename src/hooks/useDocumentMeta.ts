@@ -21,13 +21,13 @@ function upsertLink(selector: string, attrs: Record<string, string>) {
 }
 
 /**
- * Dynamically synchronizes title, description, canonical, hreflang, OG/Twitter tags, and JSON-LD schema.
+ * Dynamically synchronizes title, description, canonical, hreflang alternates, OG/Twitter tags, and JSON-LD schema.
  */
 export function useDocumentMeta(pathname: string, search = '') {
   useEffect(() => {
     const seo = getPageSeo(pathname, search);
 
-    document.documentElement.lang = seo.lang === 'ru' ? 'ru' : 'en';
+    document.documentElement.lang = seo.lang;
     document.title = seo.title;
 
     upsertMeta('meta[name="description"]', 'name', 'description', seo.description);
@@ -42,9 +42,29 @@ export function useDocumentMeta(pathname: string, search = '') {
     upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', seo.ogImage);
 
     upsertLink('link[rel="canonical"]', { rel: 'canonical', href: seo.canonicalUrl });
-    upsertLink('link[rel="alternate"][hreflang="en"]', { rel: 'alternate', hreflang: 'en', href: seo.enUrl });
-    upsertLink('link[rel="alternate"][hreflang="ru"]', { rel: 'alternate', hreflang: 'ru', href: seo.ruUrl });
-    upsertLink('link[rel="alternate"][hreflang="x-default"]', { rel: 'alternate', hreflang: 'x-default', href: seo.enUrl });
+
+    // Remove existing hreflang links cleanly so blog routes don't keep unused DE/PL/FR/EL/IT alternates
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
+
+    const canonicalEl = document.querySelector('link[rel="canonical"]');
+    const insertHreflang = (hreflang: string, href: string) => {
+      const linkEl = document.createElement('link');
+      linkEl.rel = 'alternate';
+      linkEl.setAttribute('hreflang', hreflang);
+      linkEl.href = href;
+      if (canonicalEl && canonicalEl.parentNode) {
+        canonicalEl.parentNode.insertBefore(linkEl, canonicalEl.nextSibling);
+      } else {
+        document.head.appendChild(linkEl);
+      }
+    };
+
+    insertHreflang('x-default', seo.xDefaultUrl);
+    Object.entries(seo.alternates)
+      .reverse()
+      .forEach(([code, href]) => {
+        if (href) insertHreflang(code, href);
+      });
 
     let jsonLdEl = document.getElementById('seo-json-ld') as HTMLScriptElement | null;
     if (!jsonLdEl) {

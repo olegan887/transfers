@@ -29,7 +29,7 @@ export default function Footer() {
     'larnaca-airport-to-limassol',
     'paphos-airport-to-limassol',
     'larnaca-airport-to-paphos',
-    'paphos-airport-to-larnaca',
+    'paphos-airport-to-larnaca-city',
     'limassol-to-paphos',
     'limassol-to-nicosia',
   ];
@@ -47,7 +47,7 @@ export default function Footer() {
             </a>
             <p className="text-sm leading-relaxed font-bold text-gray-800">{t('footer.desc')}</p>
             <span className="bg-black text-white px-3 py-1.5 font-black text-xs inline-block">
-              {language === 'ru' ? 'Скидка 10% на обратный трансфер' : '10% off return transfers'}
+              {t('footer.returnOffer')}
             </span>
           </div>
 
@@ -98,6 +98,22 @@ export default function Footer() {
                   className="hover:text-yellow-600 transition-colors"
                 >
                   {t('nav.blog')}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={buildLocalizedPath('widget', language)}
+                  className="hover:text-yellow-600 transition-colors"
+                >
+                  {t('nav.widget')}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={language === 'ru' ? '/ru/rss.xml' : '/rss.xml'}
+                  className="hover:text-yellow-600 transition-colors"
+                >
+                  RSS / JSON Feed
                 </a>
               </li>
               <li>
