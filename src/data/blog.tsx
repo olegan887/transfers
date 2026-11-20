@@ -1,25 +1,22 @@
 import React from 'react';
+import { Language } from '../lib/routing';
+import { flagshipBlogPosts, FlagshipBlogMeta, BlogFaqItem } from './flagshipBlogPosts';
 
 export interface BlogPost {
   id: string;
   slug: string;
   date: string;
   image: string;
-  title: {
-    en: string;
-    ru: string;
-  };
-  excerpt: {
-    en: string;
-    ru: string;
-  };
-  content: {
-    en: React.ReactNode;
-    ru: React.ReactNode;
-  };
+  isMultilingual?: boolean;
+  supportedLanguages?: Language[];
+  title: Partial<Record<Language, string>> & { en: string; ru: string };
+  excerpt: Partial<Record<Language, string>> & { en: string; ru: string };
+  content: Partial<Record<Language, React.ReactNode>> & { en: React.ReactNode; ru: React.ReactNode };
+  seoMeta?: Partial<Record<Language, FlagshipBlogMeta>>;
+  faqs?: Partial<Record<Language, BlogFaqItem[]>>;
 }
 
-export const blogPosts: BlogPost[] = [
+const legacyBlogPosts: BlogPost[] = [
   {
     id: '1',
     slug: 'larnaca-airport-to-paphos-transfer',
@@ -1616,3 +1613,5 @@ export const blogPosts: BlogPost[] = [
     }
   }
 ];
+
+export const blogPosts: BlogPost[] = [...flagshipBlogPosts, ...legacyBlogPosts];

@@ -42,6 +42,10 @@ interface LocalizedSeoCopy {
   embedDesc: string;
   successTitle: string;
   successDesc: string;
+  blogListTitle: string;
+  blogListDesc: string;
+  blogName: string;
+  blogNotFoundTitle: string;
 }
 
 const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
@@ -66,6 +70,11 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
       'Instant fixed-price fare calculator for Larnaca (LCA), Paphos (PFO), and Limassol transfers.',
     successTitle: 'Booking Confirmed | Cyprus Airport Transfers',
     successDesc: 'Your Cyprus airport transfer booking confirmation details.',
+    blogListTitle: 'Cyprus Airport Transfer Blog & Travel Guides | LCA & PFO Tips',
+    blogListDesc:
+      'Helpful Cyprus travel guides: getting from Larnaca (LCA) and Paphos (PFO) airports, fixed transfer rates, night arrival rules, and resort comparisons.',
+    blogName: 'Cyprus Airport Transfers Blog',
+    blogNotFoundTitle: 'Article Not Found | Cyprus Airport Transfers',
   },
   ru: {
     orgName: 'Cyprus Airport Transfers — Лимассол, LCA и PFO',
@@ -87,6 +96,11 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     embedDesc: 'Мгновенный расчёт фиксированной стоимости трансфера из аэропортов LCA и PFO.',
     successTitle: 'Бронирование подтверждено | Cyprus Airport Transfers',
     successDesc: 'Статус и подтверждение вашего бронирования трансфера из аэропортов Кипра.',
+    blogListTitle: 'Блог о путешествиях и трансферах на Кипре | Cyprus Airport Transfers',
+    blogListDesc:
+      'Полезные гиды для туристов на Кипре: как добраться из аэропортов Ларнака и Пафос, ночной тариф, межгородские маршруты и сравнение с такси.',
+    blogName: 'Блог Cyprus Airport Transfers',
+    blogNotFoundTitle: 'Статья не найдена | Cyprus Airport Transfers',
   },
   de: {
     orgName: 'Cyprus Airport Transfers (Limassol, LCA & PFO)',
@@ -108,6 +122,11 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     embedDesc: 'Sofortiger Festpreisrechner für Flughafentransfers ab LCA, PFO & Limassol.',
     successTitle: 'Buchung bestätigt | Cyprus Airport Transfers',
     successDesc: 'Bestätigung und Details Ihres gebuchten Zypern-Flughafentransfers.',
+    blogListTitle: 'Zypern Transfer-Blog & Ratgeber für Larnaka (LCA) & Paphos (PFO)',
+    blogListDesc:
+      'Aktuelle Reiseführer für Zypern: Festpreise ab Flughafen Larnaka (LCA) und Paphos (PFO) nach Limassol, Ayia Napa, Protaras & Regeln für Nachtankünfte.',
+    blogName: 'Cyprus Airport Transfers Blog (DE)',
+    blogNotFoundTitle: 'Artikel nicht gefunden | Cyprus Airport Transfers',
   },
   pl: {
     orgName: 'Cyprus Airport Transfers (Limassol, LCA i PFO)',
@@ -129,6 +148,11 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     embedDesc: 'Natychmiastowy kalkulator cen z lotnisk LCA, PFO oraz Limassol.',
     successTitle: 'Rezerwacja potwierdzona | Cyprus Airport Transfers',
     successDesc: 'Potwierdzenie i szczegóły Twojego transferu lotniskowego na Cyprze.',
+    blogListTitle: 'Blog o transferach na Cyprze i poradniki z lotnisk LCA & PFO',
+    blogListDesc:
+      'Praktyczne przewodniki po Cyprze: dojazd z lotnisk Larnaka (LCA) i Pafos (PFO) do Limassol, Ayia Napa i Protaras, taryfa nocna oraz porównanie cen.',
+    blogName: 'Blog Cyprus Airport Transfers (PL)',
+    blogNotFoundTitle: 'Nie znaleziono artykułu | Cyprus Airport Transfers',
   },
   fr: {
     orgName: 'Cyprus Airport Transfers (Limassol, LCA & PFO)',
@@ -150,6 +174,11 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     embedDesc: 'Calculateur de tarif fixe immédiat depuis LCA, PFO et Limassol.',
     successTitle: 'Réservation confirmée | Cyprus Airport Transfers',
     successDesc: 'Détails et confirmation de votre transfert aéroport à Chypre.',
+    blogListTitle: 'Blog Transferts Chypre & Guides Aéroports Larnaca (LCA) / Paphos (PFO)',
+    blogListDesc:
+      'Guides pratiques pour vos arrivées à Chypre : tarifs fixes depuis Larnaca (LCA) et Paphos (PFO) vers Limassol, Ayia Napa, Protaras et transferts de nuit.',
+    blogName: 'Blog Cyprus Airport Transfers (FR)',
+    blogNotFoundTitle: 'Article introuvable | Cyprus Airport Transfers',
   },
   el: {
     orgName: 'Cyprus Airport Transfers (Λεμεσός, LCA & PFO)',
@@ -171,6 +200,11 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     embedDesc: 'Άμεσος υπολογισμός σταθερής τιμής από Λάρνακα (LCA), Πάφο (PFO) και Λεμεσό.',
     successTitle: 'Η κράτηση επιβεβαιώθηκε | Cyprus Airport Transfers',
     successDesc: 'Επιβεβαίωση και στοιχεία της κράτησής σας στην Κύπρο.',
+    blogListTitle: 'Οδηγοί Μεταφορών Κύπρου & Αεροδρομίων Λάρνακας (LCA) / Πάφου (PFO)',
+    blogListDesc:
+      'Χρήσιμοι οδηγοί για Κύπρο: σταθερές τιμές από LCA και PFO προς Λεμεσό, Αγία Νάπα, Πρωταρά, Λευκωσία και κανόνες νυχτερινών αφίξεων.',
+    blogName: 'Blog Cyprus Airport Transfers (EL)',
+    blogNotFoundTitle: 'Το άρθρο δεν βρέθηκε | Cyprus Airport Transfers',
   },
   it: {
     orgName: 'Cyprus Airport Transfers (Limassol, LCA & PFO)',
@@ -192,6 +226,11 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     embedDesc: 'Calcolo immediato della tariffa fissa da LCA, PFO e Limassol.',
     successTitle: 'Prenotazione confermata | Cyprus Airport Transfers',
     successDesc: 'Conferma e dettagli della tua prenotazione transfer a Cipro.',
+    blogListTitle: 'Blog Transfer Cipro & Guide Aeroporti Larnaca (LCA) e Paphos (PFO)',
+    blogListDesc:
+      'Guide pratiche per Cipro: tariffe fisse da Larnaca (LCA) e Paphos (PFO) a Limassol, Ayia Napa, Protaras, Nicosia e regole per arrivi notturni.',
+    blogName: 'Blog Cyprus Airport Transfers (IT)',
+    blogNotFoundTitle: 'Articolo non trovato | Cyprus Airport Transfers',
   },
 };
 
@@ -503,20 +542,13 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
     };
   }
 
-  // Blog remains strictly EN & RU only
+  // Blog index supports all 7 languages (showing 37 articles on EN/RU, 3 localized flagship guides on DE/PL/FR/EL/IT)
   if (view === 'blog-list') {
-    const blogLang: 'en' | 'ru' = lang === 'ru' ? 'ru' : 'en';
-    const homeUrl = `${SITE_URL}${buildLocalizedPath('home', blogLang)}`;
+    const homeUrl = `${SITE_URL}${buildLocalizedPath('home', lang)}`;
     return {
-      lang: blogLang,
-      title:
-        blogLang === 'ru'
-          ? 'Блог о путешествиях и трансферах на Кипре | Cyprus Airport Transfers'
-          : 'Cyprus Airport Transfer Blog & Travel Guides | LCA & PFO Tips',
-      description:
-        blogLang === 'ru'
-          ? 'Полезные гиды для туристов на Кипре: как добраться из аэропортов Ларнака и Пафос, сравнение такси и автобусов, советы по курортам.'
-          : 'Helpful Cyprus travel guides: getting from Larnaca (LCA) and Paphos (PFO) airports, taxi vs bus comparisons, and resort arrival tips.',
+      lang,
+      title: copy.blogListTitle,
+      description: copy.blogListDesc,
       canonicalUrl,
       alternates,
       xDefaultUrl,
@@ -528,7 +560,8 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
         '@graph': [
           {
             '@type': 'Blog',
-            name: blogLang === 'ru' ? 'Блог Cyprus Airport Transfers' : 'Cyprus Airport Transfers Blog',
+            name: copy.blogName,
+            inLanguage: lang,
             url: canonicalUrl,
           },
           {
@@ -537,13 +570,13 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
               {
                 '@type': 'ListItem',
                 position: 1,
-                name: blogLang === 'ru' ? 'Главная' : 'Home',
+                name: trans.common.home,
                 item: homeUrl,
               },
               {
                 '@type': 'ListItem',
                 position: 2,
-                name: blogLang === 'ru' ? 'Блог' : 'Blog',
+                name: trans.nav.blog,
                 item: canonicalUrl,
               },
             ],
@@ -554,16 +587,91 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
   }
 
   if (view === 'blog-post' && slug) {
-    const blogLang: 'en' | 'ru' = lang === 'ru' ? 'ru' : 'en';
     const post = blogPosts.find((p) => p.slug === slug);
-    const homeUrl = `${SITE_URL}${buildLocalizedPath('home', blogLang)}`;
-    const blogUrl = `${SITE_URL}${buildLocalizedPath('blog-list', blogLang)}`;
+    const activeLang: Language = post?.supportedLanguages?.includes(lang)
+      ? lang
+      : lang === 'ru'
+      ? 'ru'
+      : 'en';
+    const activeTrans = translations[activeLang] || translations.en;
+    const activeCopy = SEO_COPY[activeLang] || SEO_COPY.en;
+    const homeUrl = `${SITE_URL}${buildLocalizedPath('home', activeLang)}`;
+    const blogUrl = `${SITE_URL}${buildLocalizedPath('blog-list', activeLang)}`;
+
     if (post) {
+      const postTitle = post.title[activeLang] || post.title.en;
+      const postExcerpt = post.excerpt[activeLang] || post.excerpt.en;
+      const meta = post.seoMeta?.[activeLang];
+      const postFaqs = post.faqs?.[activeLang] || [];
       const postImage = post.image.startsWith('http') ? post.image : `${SITE_URL}${post.image}`;
+
+      const graph: Record<string, any>[] = [
+        {
+          '@type': 'BlogPosting',
+          headline: postTitle,
+          description: meta?.description || postExcerpt,
+          ...(meta?.keywords?.length ? { keywords: meta.keywords.join(', ') } : {}),
+          datePublished: post.date,
+          dateModified: post.date,
+          image: postImage,
+          inLanguage: activeLang,
+          mainEntityOfPage: canonicalUrl,
+          author: {
+            '@type': 'Organization',
+            name: 'Cyprus Airport Transfers',
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Cyprus Airport Transfers',
+            logo: {
+              '@type': 'ImageObject',
+              url: `${SITE_URL}/logo.svg`,
+            },
+          },
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            {
+              '@type': 'ListItem',
+              position: 1,
+              name: activeTrans.common.home,
+              item: homeUrl,
+            },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              name: activeTrans.nav.blog,
+              item: blogUrl,
+            },
+            {
+              '@type': 'ListItem',
+              position: 3,
+              name: postTitle,
+              item: canonicalUrl,
+            },
+          ],
+        },
+      ];
+
+      if (postFaqs.length > 0) {
+        graph.push({
+          '@type': 'FAQPage',
+          mainEntity: postFaqs.map((faq) => ({
+            '@type': 'Question',
+            name: faq.q,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: faq.a,
+            },
+          })),
+        });
+      }
+
       return {
-        lang: blogLang,
-        title: `${post.title[blogLang]} | Cyprus Airport Transfers`,
-        description: post.excerpt[blogLang],
+        lang: activeLang,
+        title: meta?.title || `${postTitle} | Cyprus Airport Transfers`,
+        description: meta?.description || postExcerpt,
         canonicalUrl,
         alternates,
         xDefaultUrl,
@@ -572,63 +680,14 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
         robots: 'index, follow',
         jsonLd: {
           '@context': 'https://schema.org',
-          '@graph': [
-            {
-              '@type': 'BlogPosting',
-              headline: post.title[blogLang],
-              description: post.excerpt[blogLang],
-              datePublished: post.date,
-              dateModified: post.date,
-              image: postImage,
-              inLanguage: blogLang,
-              mainEntityOfPage: canonicalUrl,
-              author: {
-                '@type': 'Organization',
-                name: 'Cyprus Airport Transfers',
-              },
-              publisher: {
-                '@type': 'Organization',
-                name: 'Cyprus Airport Transfers',
-                logo: {
-                  '@type': 'ImageObject',
-                  url: `${SITE_URL}/logo.svg`,
-                },
-              },
-            },
-            {
-              '@type': 'BreadcrumbList',
-              itemListElement: [
-                {
-                  '@type': 'ListItem',
-                  position: 1,
-                  name: blogLang === 'ru' ? 'Главная' : 'Home',
-                  item: homeUrl,
-                },
-                {
-                  '@type': 'ListItem',
-                  position: 2,
-                  name: blogLang === 'ru' ? 'Блог' : 'Blog',
-                  item: blogUrl,
-                },
-                {
-                  '@type': 'ListItem',
-                  position: 3,
-                  name: post.title[blogLang],
-                  item: canonicalUrl,
-                },
-              ],
-            },
-          ],
+          '@graph': graph,
         },
       };
     }
 
     return {
-      lang: blogLang,
-      title:
-        blogLang === 'ru'
-          ? 'Статья не найдена | Cyprus Airport Transfers'
-          : 'Article Not Found | Cyprus Airport Transfers',
+      lang: activeLang,
+      title: activeCopy.blogNotFoundTitle,
       description: '',
       canonicalUrl,
       alternates,
@@ -638,7 +697,7 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
       robots: 'noindex, follow',
       jsonLd: {
         '@context': 'https://schema.org',
-        '@graph': [getBaseTaxiServiceSchema(blogLang)],
+        '@graph': [getBaseTaxiServiceSchema(activeLang)],
       },
     };
   }

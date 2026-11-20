@@ -110,7 +110,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href={language === 'ru' ? '/ru/rss.xml' : '/rss.xml'}
+                  href={language === 'en' ? '/rss.xml' : `/${language}/rss.xml`}
                   className="hover:text-yellow-600 transition-colors"
                 >
                   RSS / JSON Feed

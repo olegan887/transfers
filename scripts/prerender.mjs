@@ -9,7 +9,7 @@ const distDir = path.join(rootDir, 'dist');
 const ssrDir = path.join(rootDir, 'dist-ssr');
 
 const CORE_LANGS = ['en', 'ru', 'de', 'pl', 'fr', 'el', 'it'];
-const BLOG_LANGS = ['en', 'ru'];
+const LEGACY_BLOG_LANGS = ['en', 'ru'];
 
 function escapeHtmlAttr(str) {
   return String(str)
@@ -37,7 +37,21 @@ function extractRouteSlugs() {
   return slugs;
 }
 
-function extractBlogSlugs() {
+function extractFlagshipBlogSlugs() {
+  const flagshipContent = fs.readFileSync(
+    path.join(rootDir, 'src', 'data', 'flagshipBlogPosts.tsx'),
+    'utf-8'
+  );
+  const slugs = [];
+  const regex = /^\s*slug:\s*['"]([^'"]+)['"]\s*,\s*\r?\n\s*date:/gm;
+  let m;
+  while ((m = regex.exec(flagshipContent)) !== null) {
+    slugs.push(m[1]);
+  }
+  return slugs;
+}
+
+function extractLegacyBlogSlugs() {
   const blogContent = fs.readFileSync(path.join(rootDir, 'src', 'data', 'blog.tsx'), 'utf-8');
   const slugs = [];
   const regex = /slug:\s*['"]([^'"]+)['"]/g;
@@ -140,7 +154,8 @@ async function runPrerender() {
   const { render } = await import(serverEntryPath);
 
   const routeSlugs = extractRouteSlugs();
-  const blogSlugs = extractBlogSlugs();
+  const flagshipBlogSlugs = extractFlagshipBlogSlugs();
+  const legacyBlogSlugs = extractLegacyBlogSlugs();
 
   const pathsToRender = [
     // Core site in 7 languages: en, ru, de, pl, fr, el, it
@@ -152,10 +167,14 @@ async function runPrerender() {
     ...routeSlugs.flatMap((slug) =>
       CORE_LANGS.map((l) => (l === 'en' ? `/routes/${slug}` : `/${l}/routes/${slug}`))
     ),
-    // Blog strictly EN & RU only
-    ...BLOG_LANGS.map((l) => (l === 'en' ? '/blog' : `/${l}/blog`)),
-    ...blogSlugs.flatMap((slug) =>
-      BLOG_LANGS.map((l) => (l === 'en' ? `/blog/${slug}` : `/${l}/blog/${slug}`))
+    // Blog index + 3 flagship articles in all 7 languages
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/blog' : `/${l}/blog`)),
+    ...flagshipBlogSlugs.flatMap((slug) =>
+      CORE_LANGS.map((l) => (l === 'en' ? `/blog/${slug}` : `/${l}/blog/${slug}`))
+    ),
+    // Legacy blog articles strictly EN & RU only
+    ...legacyBlogSlugs.flatMap((slug) =>
+      LEGACY_BLOG_LANGS.map((l) => (l === 'en' ? `/blog/${slug}` : `/${l}/blog/${slug}`))
     ),
   ];
 

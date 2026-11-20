@@ -71,8 +71,7 @@ const content = `# Cyprus Airport Transfers (Limassol Base)
 - [All 30 Routes — DE / PL / FR / EL / IT / RU](${SITE_URL}/de/routes): Localized route directories available under [DE](${SITE_URL}/de/routes), [PL](${SITE_URL}/pl/routes), [FR](${SITE_URL}/fr/routes), [EL](${SITE_URL}/el/routes), [IT](${SITE_URL}/it/routes), and [RU](${SITE_URL}/ru/routes).
 - [WhatsApp Dispatch (+357 96 867289)](https://wa.me/35796867289): Direct 24/7 booking support, child seats, and 5+ passenger inquiries.
 - [Free Website Calculator Widget (EN)](${SITE_URL}/widget): Self-serve HTML iframe fare calculator in all 7 languages for Cyprus hotels, villas, and travel blogs.
-- [RSS 2.0 Feed (EN)](${SITE_URL}/rss.xml): Automated syndication feed for Cyprus travel guides and fixed transfer routes.
-- [RSS 2.0 Feed (RU)](${SITE_URL}/ru/rss.xml): Русскоязычная RSS-лента статей и тарифов.
+- [RSS 2.0 Feeds (EN / RU / DE / PL / FR / EL / IT)](${SITE_URL}/rss.xml): Automated syndication feeds for Cyprus travel guides and fixed transfer routes ([RU](${SITE_URL}/ru/rss.xml), [DE](${SITE_URL}/de/rss.xml), [PL](${SITE_URL}/pl/rss.xml), [FR](${SITE_URL}/fr/rss.xml), [EL](${SITE_URL}/el/rss.xml), [IT](${SITE_URL}/it/rss.xml)).
 - [JSON Feed 1.1 (EN)](${SITE_URL}/feed.json): Machine-readable feed of routes and articles.
 - [Google Maps Office Location (Limassol)](https://www.google.com/maps/search/?api=1&query=The+Oval,+Krinou+3,+Agios+Athanasios,+4103+Limassol,+Cyprus): Dispatch office in Agios Athanasios, Limassol.
 
@@ -98,10 +97,15 @@ ${limassolRoutes.map(formatRouteLine).join('\n')}
 
 ${crossIslandRoutes.map(formatRouteLine).join('\n')}
 
-## Travel Guides & Blog (EN & RU)
+## Flagship Travel Guides (All 7 Languages: EN / RU / DE / PL / FR / EL / IT)
 
-- [Cyprus Travel Guides & Blog (EN)](${SITE_URL}/blog): Airport arrival tips, resort guides, and fare breakdowns.
-- [Блог и гиды по Кипру (RU)](${SITE_URL}/ru/blog): Полезные статьи о трансферах, курортах и ценах на такси на Кипре.
+- [Larnaca (LCA) & Paphos (PFO) Airport to Limassol Transfer Guide (€75)](${SITE_URL}/blog/larnaca-paphos-airport-to-limassol-transfer-guide): Fixed €75 sedan fares, −10% round-trip savings, vs metered taxi & shuttle bus | [RU](${SITE_URL}/ru/blog/larnaca-paphos-airport-to-limassol-transfer-guide) | [DE](${SITE_URL}/de/blog/larnaca-paphos-airport-to-limassol-transfer-guide) | [PL](${SITE_URL}/pl/blog/larnaca-paphos-airport-to-limassol-transfer-guide) | [FR](${SITE_URL}/fr/blog/larnaca-paphos-airport-to-limassol-transfer-guide) | [EL](${SITE_URL}/el/blog/larnaca-paphos-airport-to-limassol-transfer-guide) | [IT](${SITE_URL}/it/blog/larnaca-paphos-airport-to-limassol-transfer-guide)
+- [Paphos Airport (PFO) to Ayia Napa, Protaras, Nicosia & Larnaca Guide](${SITE_URL}/blog/paphos-airport-to-ayia-napa-protaras-nicosia-transfer): Direct cross-island transfers via Limassol (€135–€190 fixed) + reverse LCA → Paphos/Coral Bay | [RU](${SITE_URL}/ru/blog/paphos-airport-to-ayia-napa-protaras-nicosia-transfer) | [DE](${SITE_URL}/de/blog/paphos-airport-to-ayia-napa-protaras-nicosia-transfer) | [PL](${SITE_URL}/pl/blog/paphos-airport-to-ayia-napa-protaras-nicosia-transfer) | [FR](${SITE_URL}/fr/blog/paphos-airport-to-ayia-napa-protaras-nicosia-transfer) | [EL](${SITE_URL}/el/blog/paphos-airport-to-ayia-napa-protaras-nicosia-transfer) | [IT](${SITE_URL}/it/blog/paphos-airport-to-ayia-napa-protaras-nicosia-transfer)
+- [Late-Night Cyprus Airport Transfers & Flight Delays Guide (LCA & PFO)](${SITE_URL}/blog/cyprus-night-airport-transfer-flight-delays-guide): Flat +€10 night tariff (23:00–07:00), free flight delay waiting, night bus gaps & 24/7 dispatch | [RU](${SITE_URL}/ru/blog/cyprus-night-airport-transfer-flight-delays-guide) | [DE](${SITE_URL}/de/blog/cyprus-night-airport-transfer-flight-delays-guide) | [PL](${SITE_URL}/pl/blog/cyprus-night-airport-transfer-flight-delays-guide) | [FR](${SITE_URL}/fr/blog/cyprus-night-airport-transfer-flight-delays-guide) | [EL](${SITE_URL}/el/blog/cyprus-night-airport-transfer-flight-delays-guide) | [IT](${SITE_URL}/it/blog/cyprus-night-airport-transfer-flight-delays-guide)
+
+## Blog Indexes & Extended Guides
+
+- [Cyprus Travel Guides & Blog (EN)](${SITE_URL}/blog): Airport arrival tips, resort guides, and fare breakdowns | Localized indexes: [RU](${SITE_URL}/ru/blog) | [DE](${SITE_URL}/de/blog) | [PL](${SITE_URL}/pl/blog) | [FR](${SITE_URL}/fr/blog) | [EL](${SITE_URL}/el/blog) | [IT](${SITE_URL}/it/blog)
 - [Cyprus Taxi & Transfer Price Guide](${SITE_URL}/blog/taxi-costs-in-cyprus): Fixed EUR transfer rates, night tariff rules, and round-trip savings.
 - [Larnaca Airport (LCA) to Paphos Guide](${SITE_URL}/blog/larnaca-airport-to-paphos-transfer): Route overview via Limassol (€135 fixed sedan rate).
 - [Private Transfer vs Local Taxi in Cyprus](${SITE_URL}/blog/private-transfer-vs-taxi-cyprus): Why fixed pre-booked transfers beat airport rank meters.

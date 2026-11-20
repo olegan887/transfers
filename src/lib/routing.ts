@@ -3,6 +3,12 @@ export type Language = 'en' | 'ru' | 'de' | 'pl' | 'fr' | 'el' | 'it';
 export const CORE_LANGUAGES: Language[] = ['en', 'ru', 'de', 'pl', 'fr', 'el', 'it'];
 export const BLOG_LANGUAGES: ('en' | 'ru')[] = ['en', 'ru'];
 
+export const MULTILINGUAL_BLOG_SLUGS = [
+  'larnaca-paphos-airport-to-limassol-transfer-guide',
+  'paphos-airport-to-ayia-napa-protaras-nicosia-transfer',
+  'cyprus-night-airport-transfer-flight-delays-guide',
+] as const;
+
 export const LANGUAGE_LABELS: Record<Language, { code: string; native: string; bcp47: string }> = {
   en: { code: 'EN', native: 'English', bcp47: 'en-GB' },
   ru: { code: 'RU', native: 'Русский', bcp47: 'ru-RU' },
@@ -46,6 +52,11 @@ export function normalizePathname(pathname: string): string {
 
 export function isBlogView(view: RouteView): boolean {
   return view === 'blog-list' || view === 'blog-post';
+}
+
+export function isMultilingualBlogSlug(slug?: string): boolean {
+  if (!slug) return false;
+  return (MULTILINGUAL_BLOG_SLUGS as readonly string[]).includes(slug);
 }
 
 export function parseRoute(pathname: string, search = ''): ParsedRoute {
@@ -93,19 +104,27 @@ export function parseRoute(pathname: string, search = ''): ParsedRoute {
     }
   }
 
-  // Blog is strictly EN & RU only
+  // Blog index is localized across all 7 languages (DE/PL/FR/EL/IT display the 7-language guides)
   if (subPath === '/blog') {
-    const blogLang: 'en' | 'ru' = detectedLang === 'ru' ? 'ru' : 'en';
     return {
-      lang: blogLang,
+      lang: detectedLang,
       view: 'blog-list',
-      cleanPath: blogLang === 'ru' ? '/ru/blog' : '/blog',
+      cleanPath: `${prefix}/blog`,
     };
   }
 
   if (subPath.startsWith('/blog/')) {
     const slug = subPath.replace('/blog/', '').trim();
     if (slug) {
+      if (isMultilingualBlogSlug(slug)) {
+        return {
+          lang: detectedLang,
+          view: 'blog-post',
+          slug,
+          cleanPath: `${prefix}/blog/${slug}`,
+        };
+      }
+      // Legacy 34 articles stay EN & RU only
       const blogLang: 'en' | 'ru' = detectedLang === 'ru' ? 'ru' : 'en';
       return {
         lang: blogLang,
@@ -124,10 +143,10 @@ export function parseRoute(pathname: string, search = ''): ParsedRoute {
 }
 
 export function buildLocalizedPath(view: RouteView, lang: Language, slug?: string): string {
-  // Blog routes stay in EN or RU (fallback non-RU languages to EN /blog)
-  if (isBlogView(view)) {
+  // Legacy blog posts stay EN/RU; multilingual flagship posts & blog index support all 7 languages
+  if (view === 'blog-post' && !isMultilingualBlogSlug(slug)) {
     const blogPrefix = lang === 'ru' ? '/ru' : '';
-    return view === 'blog-list' ? `${blogPrefix}/blog` : `${blogPrefix}/blog/${slug || ''}`;
+    return `${blogPrefix}/blog/${slug || ''}`;
   }
 
   const prefix = lang === 'en' ? '' : `/${lang}`;
@@ -139,6 +158,10 @@ export function buildLocalizedPath(view: RouteView, lang: Language, slug?: strin
       return `${prefix}/routes`;
     case 'route':
       return `${prefix}/routes/${slug || ''}`;
+    case 'blog-list':
+      return `${prefix}/blog`;
+    case 'blog-post':
+      return `${prefix}/blog/${slug || ''}`;
     case 'widget':
       return `${prefix}/widget`;
     case 'embed':
@@ -154,7 +177,7 @@ export function getAlternatePaths(
 ): Partial<Record<Language, string>> & { en: string; ru: string } {
   const parsed = parseRoute(pathname, search);
 
-  if (isBlogView(parsed.view)) {
+  if (parsed.view === 'blog-post' && !isMultilingualBlogSlug(parsed.slug)) {
     return {
       en: buildLocalizedPath(parsed.view, 'en', parsed.slug),
       ru: buildLocalizedPath(parsed.view, 'ru', parsed.slug),
@@ -175,9 +198,14 @@ export function getAlternatePaths(
 
 export function switchLanguagePath(pathname: string, targetLang: Language, search = ''): string {
   const parsed = parseRoute(pathname, search);
-  if (isBlogView(parsed.view) && targetLang !== 'en' && targetLang !== 'ru') {
-    // When switching to DE/PL/FR/EL/IT while reading the blog, navigate to that language's core homepage
-    return buildLocalizedPath('home', targetLang);
+  if (
+    parsed.view === 'blog-post' &&
+    !isMultilingualBlogSlug(parsed.slug) &&
+    targetLang !== 'en' &&
+    targetLang !== 'ru'
+  ) {
+    // Redirect from a legacy EN/RU-only article to the target language's localized guides index
+    return buildLocalizedPath('blog-list', targetLang);
   }
   return buildLocalizedPath(parsed.view, targetLang, parsed.slug);
 }
