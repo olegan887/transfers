@@ -6,23 +6,6 @@ import { isTimeBlocked as externalIsTimeBlocked } from '../lib/dateUtils';
 type RouteData = RouteItem;
 type BlockedTime = { date: string; time: string };
 
-const getInitialRoutes = (): RouteData[] => {
-  if (typeof window !== 'undefined') {
-    try {
-      const cached = localStorage.getItem('cached_transfer_routes');
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
-        }
-      }
-    } catch (e) {
-      // ignore
-    }
-  }
-  return DEFAULT_FEATURED_ROUTES;
-};
-
 interface DataContextType {
   routes: RouteData[];
   blockedTimes: BlockedTime[];
@@ -37,16 +20,33 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [routes, setRoutes] = useState<RouteData[]>(getInitialRoutes);
+  const [routes, setRoutes] = useState<RouteData[]>(DEFAULT_FEATURED_ROUTES);
   const [blockedTimes, setBlockedTimes] = useState<BlockedTime[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [errorDetails, setErrorDetails] = useState<string | null>(null);
-  const [googleScriptUrl, setGoogleScriptUrl] = useState(getGoogleScriptUrl());
+  const [googleScriptUrl, setGoogleScriptUrl] = useState<string>('');
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+  // Hydrate cached routes & script URL after mount so first client render matches SSR HTML
   useEffect(() => {
+    try {
+      const cached = localStorage.getItem('cached_transfer_routes');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setRoutes(parsed);
+        }
+      }
+    } catch {
+      // ignore
+    }
+    setGoogleScriptUrl(getGoogleScriptUrl());
+  }, []);
+
+  useEffect(() => {
+    if (!googleScriptUrl) return;
     const controller = new AbortController();
-    
+
     const fetchData = async () => {
       let GOOGLE_SCRIPT_URL = googleScriptUrl;
       try {
@@ -57,15 +57,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         const response = await safeFetchGoogleScript(GOOGLE_SCRIPT_URL);
-        
-        if (controller.signal.aborted) return;
 
-        if (!response.ok) {
-          return;
-        }
-        
+        if (controller.signal.aborted) return;
+        if (!response.ok) return;
+
         const data = await response.json();
-        
         if (controller.signal.aborted) return;
 
         if (data && data.result === 'success') {
@@ -73,7 +69,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setRoutes(data.routes);
             try {
               localStorage.setItem('cached_transfer_routes', JSON.stringify(data.routes));
-            } catch (e) {
+            } catch {
               // ignore
             }
           }
@@ -99,23 +95,24 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateGoogleScriptUrl = async (url: string): Promise<boolean> => {
     const cleanedUrl = cleanUrl(url);
     localStorage.setItem('VITE_GOOGLE_SCRIPT_URL', cleanedUrl);
-    
+
     if (cleanedUrl !== googleScriptUrl) {
       setGoogleScriptUrl(cleanedUrl);
     } else {
-      setRefreshTrigger(prev => prev + 1);
+      setRefreshTrigger((prev) => prev + 1);
     }
     return true;
   };
 
   const getBasePrice = (from: string, to: string): number | null => {
-    const dynamicRoute = routes.find(r => 
-      (r.from === from && r.to === to) || (r.from === to && r.to === from)
-    );
-    
-    if (dynamicRoute) {
-      if (!dynamicRoute.available) return null;
-      return dynamicRoute.price;
+    const exactMatch = routes.find((r) => r.from === from && r.to === to);
+    if (exactMatch) {
+      return exactMatch.available ? exactMatch.price : null;
+    }
+
+    const reverseMatch = routes.find((r) => r.from === to && r.to === from);
+    if (reverseMatch) {
+      return reverseMatch.available ? reverseMatch.price : null;
     }
 
     return getBidirectional(basePrices, from, to);
@@ -126,7 +123,18 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <DataContext.Provider value={{ routes, blockedTimes, loading, errorDetails, getBasePrice, isTimeBlocked, googleScriptUrl, updateGoogleScriptUrl }}>
+    <DataContext.Provider
+      value={{
+        routes,
+        blockedTimes,
+        loading,
+        errorDetails,
+        getBasePrice,
+        isTimeBlocked,
+        googleScriptUrl,
+        updateGoogleScriptUrl,
+      }}
+    >
       {children}
     </DataContext.Provider>
   );

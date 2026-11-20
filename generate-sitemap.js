@@ -6,55 +6,80 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const blogFilePath = path.join(__dirname, 'src', 'data', 'blog.tsx');
+const routesFilePath = path.join(__dirname, 'src', 'data', 'routes.ts');
 const sitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
 
 const blogContent = fs.readFileSync(blogFilePath, 'utf-8');
+const routesContent = fs.readFileSync(routesFilePath, 'utf-8');
 
 const slugRegex = /slug:\s*['"]([^'"]+)['"]/g;
 const dateRegex = /date:\s*['"]([^'"]+)['"]/g;
 
-const slugs = [];
-const dates = [];
-
+const routeSlugs = [];
 let match;
-while ((match = slugRegex.exec(blogContent)) !== null) {
-  slugs.push(match[1]);
+while ((match = slugRegex.exec(routesContent)) !== null) {
+  routeSlugs.push(match[1]);
 }
 
+slugRegex.lastIndex = 0;
+const blogSlugs = [];
+const blogDates = [];
+while ((match = slugRegex.exec(blogContent)) !== null) {
+  blogSlugs.push(match[1]);
+}
 while ((match = dateRegex.exec(blogContent)) !== null) {
-  dates.push(match[1]);
+  blogDates.push(match[1]);
 }
 
 const baseUrl = 'https://cyprus-airport-transfer.co';
+const today = new Date().toISOString().split('T')[0];
 
-let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${baseUrl}/</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/blog</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-`;
+function buildUrlEntry(enPath, ruPath, lastmod, changefreq, priority) {
+  const enUrl = `${baseUrl}${enPath}`;
+  const ruUrl = `${baseUrl}${ruPath}`;
 
-for (let i = 0; i < slugs.length; i++) {
-  const slug = slugs[i];
-  const date = dates[i] || new Date().toISOString().split('T')[0];
-  sitemap += `  <url>
-    <loc>${baseUrl}/blog/${slug}</loc>
-    <lastmod>${date}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+  const makeBlock = (loc) => `  <url>
+    <loc>${loc}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="${enUrl}" />
+    <xhtml:link rel="alternate" hreflang="ru" href="${ruUrl}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}" />
   </url>\n`;
+
+  return makeBlock(enUrl) + makeBlock(ruUrl);
 }
 
-sitemap += `</urlset>`;
+let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+`;
+
+// Homepages
+sitemap += buildUrlEntry('/', '/ru/', today, 'weekly', '1.0');
+
+// Routes Directory Pages
+sitemap += buildUrlEntry('/routes', '/ru/routes', today, 'weekly', '0.9');
+
+// Dedicated LCA & PFO Airport Route Landing Pages
+for (const slug of routeSlugs) {
+  sitemap += buildUrlEntry(`/routes/${slug}`, `/ru/routes/${slug}`, today, 'weekly', '0.9');
+}
+
+// Blog Index Pages
+sitemap += buildUrlEntry('/blog', '/ru/blog', today, 'weekly', '0.8');
+
+// Blog Articles
+for (let i = 0; i < blogSlugs.length; i++) {
+  const slug = blogSlugs[i];
+  const date = blogDates[i] || today;
+  sitemap += buildUrlEntry(`/blog/${slug}`, `/ru/blog/${slug}`, date, 'monthly', '0.7');
+}
+
+sitemap += `</urlset>\n`;
 
 fs.writeFileSync(sitemapPath, sitemap);
-console.log('Sitemap generated successfully!');
+console.log(
+  `Sitemap generated successfully! (${routeSlugs.length} route pairs + ${blogSlugs.length} blog pairs)`
+);

@@ -17,27 +17,12 @@ export function getBidirectional<T>(map: Record<string, Record<string, T>>, from
 }
 
 export function getBasePath() {
-  if (typeof window === 'undefined') return '';
-  const path = window.location.pathname;
-  if (path.includes('/blog')) {
-    return path.substring(0, path.indexOf('/blog'));
-  }
-  if (path.includes('/success')) {
-    return path.substring(0, path.indexOf('/success'));
-  }
-  return path.replace(/\/$/, '');
+  return '';
 }
 
 export function getLinkPath(targetPath: string) {
-  const base = getBasePath();
   const formattedTarget = targetPath.startsWith('/') ? targetPath : `/${targetPath}`;
-  
-  // For the root link /, keep it as base path or / if base is empty
-  if (targetPath === '/' || targetPath === '') {
-    return base || '/';
-  }
-  
-  return `${base}${formattedTarget}`;
+  return formattedTarget || '/';
 }
 
 export function getGoogleScriptUrl() {
@@ -45,10 +30,9 @@ export function getGoogleScriptUrl() {
     return DEFAULT_GOOGLE_SCRIPT_URL;
   }
   let storedUrl = localStorage.getItem('VITE_GOOGLE_SCRIPT_URL');
-  
-  // If the user has the old script URL cached in localStorage, clear it so they use the new default
+
   const oldUrl = 'https://script.google.com/macros/s/AKfycbxwwfZI69flEry9JRACIu-M48fAA2C9A_oBDfumPaZTwp8NEd6yeSwOYcIHNv7yNEZI/exec';
-  if (storedUrl && (storedUrl.trim().replace(/^["']|["']$/g, '') === oldUrl)) {
+  if (storedUrl && storedUrl.trim().replace(/^["']|["']$/g, '') === oldUrl) {
     localStorage.removeItem('VITE_GOOGLE_SCRIPT_URL');
     storedUrl = null;
   }
@@ -59,14 +43,7 @@ export function getGoogleScriptUrl() {
 }
 
 export function getApiUrl(path: string) {
-  if (typeof window === 'undefined') {
-    return path.startsWith('/') ? path : `/${path}`;
-  }
-  const base = getBasePath();
-  const formattedPath = path.startsWith('/') ? path : `/${path}`;
-  
-  // Return relative path to let the browser resolve it against the current origin/base URL
-  return `${base}${formattedPath}`;
+  return path.startsWith('/') ? path : `/${path}`;
 }
 
 export async function safeFetchGoogleScript(
@@ -81,15 +58,15 @@ export async function safeFetchGoogleScript(
   const googleScriptUrl = cleanUrl(url);
 
   try {
-    const fetchUrl = method === 'GET' 
-      ? `${googleScriptUrl}${googleScriptUrl.includes('?') ? '&' : '?'}t=${Date.now()}`
-      : googleScriptUrl;
+    const fetchUrl =
+      method === 'GET'
+        ? `${googleScriptUrl}${googleScriptUrl.includes('?') ? '&' : '?'}t=${Date.now()}`
+        : googleScriptUrl;
 
     const directHeaders: Record<string, string> = {
-      ...(options?.headers || {})
+      ...(options?.headers || {}),
     };
-    
-    // For POST requests to Google Apps Script Web App, text/plain avoids unnecessary preflight CORS errors while delivering valid JSON string payload
+
     if (method === 'POST') {
       directHeaders['Content-Type'] = directHeaders['Content-Type'] || 'text/plain;charset=utf-8';
     }
@@ -105,15 +82,17 @@ export async function safeFetchGoogleScript(
     if (import.meta.env.DEV) {
       console.warn('Google Apps Script request notice, utilizing offline fallback data:', error);
     }
-    // Return a synthetic successful JSON response so caller doesn't break
-    return new Response(JSON.stringify({
-      result: 'success',
-      routes: [],
-      blocked: [],
-      fallback: true
-    }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return new Response(
+      JSON.stringify({
+        result: 'success',
+        routes: [],
+        blocked: [],
+        fallback: true,
+      }),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   }
 }

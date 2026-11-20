@@ -24,7 +24,7 @@ export const blogPosts: BlogPost[] = [
     id: '1',
     slug: 'larnaca-airport-to-paphos-transfer',
     date: '2026-03-15',
-    image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/larnaca-route.webp',
     title: {
       en: 'How to Get from Larnaca Airport to Paphos: Taxi, Bus, or Transfer?',
       ru: 'Как добраться из аэропорта Ларнаки в Пафос: такси, автобус или трансфер?'
@@ -104,7 +104,7 @@ export const blogPosts: BlogPost[] = [
     id: '2',
     slug: 'top-5-places-to-visit-in-paphos',
     date: '2026-03-10',
-    image: 'https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/paphos-route.webp',
     title: {
       en: 'Top 5 Places to Visit in Paphos in 2026',
       ru: 'Топ-5 мест для посещения в Пафосе в 2026 году'
@@ -164,7 +164,7 @@ export const blogPosts: BlogPost[] = [
     id: '3',
     slug: 'private-transfer-vs-taxi-cyprus',
     date: '2026-03-05',
-    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Why Book a Private Airport Transfer in Cyprus Instead of a Regular Taxi',
       ru: 'Почему стоит забронировать индивидуальный трансфер на Кипре вместо обычного такси'
@@ -226,7 +226,7 @@ export const blogPosts: BlogPost[] = [
     id: '4',
     slug: 'cyprus-travel-guide-best-time-to-visit',
     date: '2026-03-20',
-    image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Cyprus Travel Guide 2026: Best Time to Visit and What to Expect',
       ru: 'Путеводитель по Кипру 2026: Лучшее время для посещения и чего ожидать'
@@ -326,7 +326,7 @@ export const blogPosts: BlogPost[] = [
     id: '5',
     slug: 'how-to-choose-airport-transfer-cyprus',
     date: '2026-03-25',
-    image: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'How to Choose the Right Airport Transfer Service in Cyprus',
       ru: 'Как выбрать правильный сервис трансфера из аэропорта на Кипре'
@@ -436,7 +436,7 @@ export const blogPosts: BlogPost[] = [
     id: '6',
     slug: 'top-things-to-do-in-limassol',
     date: '2026-03-28',
-    image: 'https://images.unsplash.com/photo-1600018111166-412f8145214c?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/limassol-route.webp',
     title: {
       en: 'Top Things to Do in Limassol: A Complete Guide',
       ru: 'Чем заняться в Лимассоле: Полный путеводитель'
@@ -476,7 +476,7 @@ export const blogPosts: BlogPost[] = [
     id: '7',
     slug: 'best-beaches-in-ayia-napa',
     date: '2026-04-02',
-    image: 'https://images.unsplash.com/photo-1544085311-11a028465b03?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/larnaca-route.webp',
     title: {
       en: 'The Best Beaches in Ayia Napa and Protaras',
       ru: 'Лучшие пляжи Айя-Напы и Протараса'
@@ -516,7 +516,7 @@ export const blogPosts: BlogPost[] = [
     id: '8',
     slug: 'cyprus-traditional-food-guide',
     date: '2026-04-05',
-    image: 'https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/limassol-route.webp',
     title: {
       en: 'Cyprus Traditional Food: 5 Dishes You Must Try',
       ru: 'Традиционная кухня Кипра: 5 блюд, которые стоит попробовать'
@@ -562,7 +562,7 @@ export const blogPosts: BlogPost[] = [
     id: '9',
     slug: 'traveling-to-cyprus-with-kids',
     date: '2026-04-10',
-    image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Traveling to Cyprus with Kids: A Complete Family Guide',
       ru: 'Путешествие на Кипр с детьми: Полный семейный путеводитель'
@@ -610,7 +610,7 @@ export const blogPosts: BlogPost[] = [
     id: '10',
     slug: 'what-to-see-in-larnaca',
     date: '2026-04-15',
-    image: 'https://images.unsplash.com/photo-1589802829985-817e51171b92?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/larnaca-route.webp',
     title: {
       en: 'What to See in Larnaca: Beyond the Airport',
       ru: 'Что посмотреть в Ларнаке: За пределами аэропорта'
@@ -654,7 +654,7 @@ export const blogPosts: BlogPost[] = [
     id: '11',
     slug: 'troodos-mountains-guide',
     date: '2026-04-20',
-    image: 'https://images.unsplash.com/photo-1602002418082-a4443e081dd1?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Exploring the Troodos Mountains: Wine, Monasteries, and Nature',
       ru: 'Исследование гор Троодос: Вино, монастыри и природа'
@@ -694,7 +694,7 @@ export const blogPosts: BlogPost[] = [
     id: '12',
     slug: 'coral-bay-paphos-guide',
     date: '2026-04-25',
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/paphos-route.webp',
     title: {
       en: 'Coral Bay, Paphos: The Ultimate Beach Destination',
       ru: 'Корал Бэй, Пафос: Идеальное пляжное направление'
@@ -734,7 +734,7 @@ export const blogPosts: BlogPost[] = [
     id: '13',
     slug: 'cyprus-visa-entry-requirements',
     date: '2026-04-30',
-    image: 'https://images.unsplash.com/photo-1553901753-215db0446d9a?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Cyprus Entry Requirements and Visa Guide 2026',
       ru: 'Правила въезда на Кипр и визовый гид 2026'
@@ -774,7 +774,7 @@ export const blogPosts: BlogPost[] = [
     id: '14',
     slug: 'best-luxury-hotels-cyprus',
     date: '2026-05-05',
-    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/limassol-route.webp',
     title: {
       en: 'Top 5 Luxury Hotels and Resorts in Cyprus',
       ru: 'Топ-5 роскошных отелей и курортов на Кипре'
@@ -822,7 +822,7 @@ export const blogPosts: BlogPost[] = [
     id: '15',
     slug: 'taxi-costs-in-cyprus',
     date: '2026-05-10',
-    image: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'How Much Does a Taxi Cost in Cyprus? 2026 Price Guide',
       ru: 'Сколько стоит такси на Кипре? Гид по ценам 2026 года'
@@ -882,7 +882,7 @@ export const blogPosts: BlogPost[] = [
     id: '16',
     slug: 'paphos-to-limassol-transfer-options',
     date: '2026-05-15',
-    image: 'https://images.unsplash.com/photo-1516550893923-42d28e5677af?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/paphos-route.webp',
     title: {
       en: 'Paphos to Limassol Transfer: Best Travel Options',
       ru: 'Трансфер из Пафоса в Лимассол: Лучшие варианты поездки'
@@ -922,7 +922,7 @@ export const blogPosts: BlogPost[] = [
     id: '17',
     slug: 'larnaca-to-ayia-napa-taxi-vs-bus',
     date: '2026-05-20',
-    image: 'https://images.unsplash.com/photo-1506929199175-60903ee8b5a9?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/larnaca-route.webp',
     title: {
       en: 'Larnaca to Ayia Napa: Taxi vs Bus Guide',
       ru: 'Из Ларнаки в Айя-Напу: Такси или автобус?'
@@ -958,7 +958,7 @@ export const blogPosts: BlogPost[] = [
     id: '18',
     slug: 'driving-in-cyprus-tips',
     date: '2026-05-25',
-    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Driving in Cyprus: Essential Rules and Tips',
       ru: 'Вождение на Кипре: Основные правила и советы'
@@ -998,7 +998,7 @@ export const blogPosts: BlogPost[] = [
     id: '19',
     slug: 'cyprus-for-digital-nomads',
     date: '2026-06-01',
-    image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Cyprus for Digital Nomads: Why It Is the Perfect Hub',
       ru: 'Кипр для цифровых кочевников: Почему это идеальный хаб'
@@ -1038,7 +1038,7 @@ export const blogPosts: BlogPost[] = [
     id: '20',
     slug: 'best-seafood-restaurants-paphos',
     date: '2026-06-05',
-    image: 'https://images.unsplash.com/photo-1551731359-2b04f55793b7?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/paphos-route.webp',
     title: {
       en: 'Best Seafood Restaurants in Paphos: A Foodie Guide',
       ru: 'Лучшие рыбные рестораны Пафоса: Гид для гурманов'
@@ -1078,7 +1078,7 @@ export const blogPosts: BlogPost[] = [
     id: '21',
     slug: 'shopping-in-cyprus-guide',
     date: '2026-06-10',
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Shopping in Cyprus: Malls, Markets, and Souvenirs',
       ru: 'Шопинг на Кипре: ТЦ, рынки и сувениры'
@@ -1118,7 +1118,7 @@ export const blogPosts: BlogPost[] = [
     id: '22',
     slug: 'cyprus-nightlife-guide',
     date: '2026-06-15',
-    image: 'https://images.unsplash.com/photo-1514525253361-bee8718a7439?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Cyprus Nightlife: From Ayia Napa Clubs to Limassol Bars',
       ru: 'Ночная жизнь Кипра: От клубов Айя-Напы до баров Лимассола'
@@ -1158,7 +1158,7 @@ export const blogPosts: BlogPost[] = [
     id: '23',
     slug: 'akamas-peninsula-adventure-guide',
     date: '2026-06-20',
-    image: 'https://images.unsplash.com/photo-1544085311-11a028465b03?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/paphos-route.webp',
     title: {
       en: 'Akamas Peninsula: An Adventure Guide for Nature Lovers',
       ru: 'Полуостров Акамас: Гид по приключениям для любителей природы'
@@ -1198,7 +1198,7 @@ export const blogPosts: BlogPost[] = [
     id: '24',
     slug: 'lefkara-village-guide',
     date: '2026-06-25',
-    image: 'https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/larnaca-route.webp',
     title: {
       en: 'Lefkara Village: The Home of Lace and Silver',
       ru: 'Деревня Лефкара: Родина кружева и серебра'
@@ -1238,7 +1238,7 @@ export const blogPosts: BlogPost[] = [
     id: '25',
     slug: 'cyprus-for-couples-romantic-spots',
     date: '2026-07-01',
-    image: 'https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Cyprus for Couples: Most Romantic Spots on the Island',
       ru: 'Кипр для пар: Самые романтичные места на острове'
@@ -1278,7 +1278,7 @@ export const blogPosts: BlogPost[] = [
     id: '26',
     slug: 'golfing-in-cyprus-best-courses',
     date: '2026-07-05',
-    image: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/paphos-route.webp',
     title: {
       en: 'Golfing in Cyprus: A Guide to the Best Courses',
       ru: 'Гольф на Кипре: Гид по лучшим полям'
@@ -1318,7 +1318,7 @@ export const blogPosts: BlogPost[] = [
     id: '27',
     slug: 'cyprus-history-overview',
     date: '2026-07-10',
-    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Cyprus History: A Brief Journey Through Time',
       ru: 'История Кипра: Краткое путешествие во времени'
@@ -1358,7 +1358,7 @@ export const blogPosts: BlogPost[] = [
     id: '28',
     slug: 'traveling-to-cyprus-in-winter-guide',
     date: '2026-07-15',
-    image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Traveling to Cyprus in Winter: What to Expect',
       ru: 'Путешествие на Кипр зимой: Чего ожидать'
@@ -1398,7 +1398,7 @@ export const blogPosts: BlogPost[] = [
     id: '29',
     slug: 'cyprus-festivals-events-2026',
     date: '2026-07-20',
-    image: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Cyprus Festivals and Events 2026: A Cultural Calendar',
       ru: 'Фестивали и события Кипра 2026: Культурный календарь'
@@ -1438,7 +1438,7 @@ export const blogPosts: BlogPost[] = [
     id: '30',
     slug: 'best-spas-in-cyprus-guide',
     date: '2026-07-25',
-    image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/limassol-route.webp',
     title: {
       en: 'Best Spas in Cyprus: Where to Relax and Rejuvenate',
       ru: 'Лучшие спа-центры Кипра: Где расслабиться и восстановиться'
@@ -1478,7 +1478,7 @@ export const blogPosts: BlogPost[] = [
     id: '31',
     slug: 'cyprus-for-solo-travelers-guide',
     date: '2026-08-01',
-    image: 'https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Cyprus for Solo Travelers: Safety, Tips, and Best Spots',
       ru: 'Кипр для одиночных путешественников: Безопасность и советы'
@@ -1518,7 +1518,7 @@ export const blogPosts: BlogPost[] = [
     id: '32',
     slug: 'scuba-diving-cyprus-zenobia-wreck',
     date: '2026-08-05',
-    image: 'https://images.unsplash.com/photo-1544551763-47a184117db7?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/larnaca-route.webp',
     title: {
       en: 'Scuba Diving in Cyprus: Exploring the Zenobia Wreck',
       ru: 'Дайвинг на Кипре: Исследование затонувшего судна Зенобия'
@@ -1558,7 +1558,7 @@ export const blogPosts: BlogPost[] = [
     id: '33',
     slug: 'cyprus-real-estate-for-tourists-guide',
     date: '2026-08-10',
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Cyprus Real Estate: A Guide for Tourists and Investors',
       ru: 'Недвижимость на Кипре: Гид для туристов и инвесторов'
@@ -1598,7 +1598,7 @@ export const blogPosts: BlogPost[] = [
     id: '34',
     slug: 'public-transport-in-cyprus-guide',
     date: '2026-08-15',
-    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Public Transport in Cyprus: A Comprehensive Guide',
       ru: 'Общественный транспорт на Кипре: Полный гид'
@@ -1638,7 +1638,7 @@ export const blogPosts: BlogPost[] = [
     id: '35',
     slug: 'hidden-gems-of-cyprus-guide',
     date: '2026-08-20',
-    image: 'https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?auto=format&fit=crop&q=80&w=1000',
+    image: '/images/airport-transfer.webp',
     title: {
       en: 'Hidden Gems of Cyprus: Off the Beaten Path',
       ru: 'Скрытые жемчужины Кипра: Вдали от проторенных троп'

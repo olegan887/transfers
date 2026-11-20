@@ -1,81 +1,117 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Destinations from './components/Destinations';
 import Features from './components/Features';
 import ContactForm from './components/ContactForm';
+import AirportFaqAndReviews from './components/AirportFaqAndReviews';
 import Footer from './components/Footer';
 import SuccessPage from './components/SuccessPage';
-import SeoArticle from './components/SeoArticle';
-import CookieConsent from './components/CookieConsent';
 import BlogList from './components/BlogList';
 import BlogPost from './components/BlogPost';
+import RouteLandingPage from './components/RouteLandingPage';
+import RoutesIndexPage from './components/RoutesIndexPage';
+import CookieConsent from './components/CookieConsent';
 import ExitIntentPopup from './components/ExitIntentPopup';
-import { LanguageProvider, useLanguage } from './i18n/LanguageContext';
+import { LanguageProvider } from './i18n/LanguageContext';
 import { DataProvider } from './context/DataContext';
 import { WHATSAPP_NUMBER, ENABLE_EXIT_INTENT_POPUP } from './config';
-import { reportConversion } from './lib/analytics';
+import { initDeferredAnalytics, reportConversion } from './lib/analytics';
+import { parseRoute } from './lib/routing';
+import { useDocumentMeta } from './hooks/useDocumentMeta';
 
-function AppContent() {
-  const [currentPath, setCurrentPath] = useState('');
+interface AppProps {
+  initialPath?: string;
+  initialSearch?: string;
+}
 
-  const handleLocationChange = () => {
-    let path = window.location.pathname;
-    
-    // Strip trailing slashes for consistency
-    if (path.endsWith('/') && path.length > 1) {
-      path = path.slice(0, -1);
+function AppContent({ initialPath, initialSearch }: AppProps) {
+  const [locationState, setLocationState] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return {
+        pathname: window.location.pathname,
+        search: window.location.search,
+      };
     }
-    
-    const params = new URLSearchParams(window.location.search);
-    const hasSuccess = params.has('direct_success') || params.has('session_id') || path.endsWith('/success');
-    
-    if (hasSuccess) {
-      setCurrentPath('/success');
-    } else if (path.endsWith('/blog')) {
-      setCurrentPath('/blog');
-    } else if (path.includes('/blog/')) {
-      const match = path.match(/\/blog\/(.+)$/);
-      if (match) {
-        setCurrentPath(`/blog/${match[1]}`);
-      } else {
-        setCurrentPath('/');
-      }
-    } else {
-      setCurrentPath('/');
-    }
-  };
+    return {
+      pathname: initialPath || '/',
+      search: initialSearch || '',
+    };
+  });
 
   useEffect(() => {
-    handleLocationChange();
+    const handleLocationChange = () => {
+      setLocationState({
+        pathname: window.location.pathname,
+        search: window.location.search,
+      });
+    };
+
+    // Intercept same-origin internal anchor clicks for instant SPA transitions while keeping real <a href> URLs
+    const handleDocumentClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+        return;
+      }
+      const target = (e.target as HTMLElement | null)?.closest('a');
+      if (!target) return;
+      const href = target.getAttribute('href');
+      if (!href || target.target === '_blank' || target.hasAttribute('download')) return;
+      if (href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+
+      const url = new URL(href, window.location.origin);
+      if (url.origin !== window.location.origin) return;
+
+      // Pure hash on current page
+      if (url.pathname === window.location.pathname && url.hash) {
+        return;
+      }
+
+      e.preventDefault();
+      window.history.pushState({}, '', url.pathname + url.search + url.hash);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+
+      if (url.hash) {
+        window.setTimeout(() => {
+          const el = document.querySelector(url.hash);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 50);
+      } else {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      }
+    };
+
     window.addEventListener('popstate', handleLocationChange);
+    document.addEventListener('click', handleDocumentClick);
+    const cleanupAnalytics = initDeferredAnalytics();
+
     return () => {
       window.removeEventListener('popstate', handleLocationChange);
+      document.removeEventListener('click', handleDocumentClick);
+      cleanupAnalytics();
     };
   }, []);
 
-  useEffect(() => {
-    if (currentPath === '/' || currentPath === '/#destinations' || currentPath === '/#features') {
-      document.title = 'Limassol & Cyprus Airport Transfers | Taxi Limassol, Larnaca & Paphos';
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', 'Reliable airport transfers in Limassol and Cyprus. Book fixed-price taxi from Limassol to Larnaca Airport (LCA), Larnaca City, Paphos Airport (PFO), and from airports to Limassol. 24/7 online booking.');
-      }
-    }
-  }, [currentPath]);
+  useDocumentMeta(locationState.pathname, locationState.search);
 
-  if (currentPath === '/success') {
+  const parsed = parseRoute(locationState.pathname, locationState.search);
+
+  if (parsed.view === 'success') {
     return <SuccessPage />;
   }
 
   const renderContent = () => {
-    if (currentPath === '/blog') {
+    if (parsed.view === 'routes-index') {
+      return <RoutesIndexPage />;
+    }
+    if (parsed.view === 'route' && parsed.slug) {
+      return <RouteLandingPage slug={parsed.slug} />;
+    }
+    if (parsed.view === 'blog-list') {
       return <BlogList />;
     }
-    if (currentPath.startsWith('/blog/')) {
-      const slug = currentPath.replace('/blog/', '');
-      return <BlogPost slug={slug} />;
+    if (parsed.view === 'blog-post' && parsed.slug) {
+      return <BlogPost slug={parsed.slug} />;
     }
     return (
       <main>
@@ -83,7 +119,7 @@ function AppContent() {
         <Destinations />
         <Features />
         <ContactForm />
-        <SeoArticle />
+        <AirportFaqAndReviews />
       </main>
     );
   };
@@ -93,7 +129,7 @@ function AppContent() {
       <Header />
       {renderContent()}
       <Footer />
-      
+
       {/* Floating WhatsApp Button */}
       <a
         href={`https://wa.me/${WHATSAPP_NUMBER}`}
@@ -102,23 +138,28 @@ function AppContent() {
         onClick={() => {
           reportConversion();
         }}
-        className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+        className="fixed bottom-5 right-5 z-50 flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-150"
         aria-label="Chat on WhatsApp"
       >
         <MessageCircle className="w-7 h-7" />
       </a>
-      
+
       <CookieConsent />
       {ENABLE_EXIT_INTENT_POPUP && <ExitIntentPopup />}
     </div>
   );
 }
 
-export default function App() {
+export default function App({ initialPath, initialSearch }: AppProps = {}) {
+  const initialLang = parseRoute(
+    typeof window !== 'undefined' ? window.location.pathname : initialPath || '/',
+    typeof window !== 'undefined' ? window.location.search : initialSearch || ''
+  ).lang;
+
   return (
-    <LanguageProvider>
+    <LanguageProvider initialLanguage={initialLang}>
       <DataProvider>
-        <AppContent />
+        <AppContent initialPath={initialPath} initialSearch={initialSearch} />
       </DataProvider>
     </LanguageProvider>
   );

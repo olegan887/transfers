@@ -457,7 +457,14 @@ function recordStripeOrder(spreadsheet, session) {
 }
 
 function sendTelegramNotification(payload) {
-  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID || TELEGRAM_BOT_TOKEN === 'YOUR_TELEGRAM_BOT_TOKEN') return;
+  const props = PropertiesService.getScriptProperties();
+  const token = props.getProperty('TELEGRAM_BOT_TOKEN') || TELEGRAM_BOT_TOKEN;
+  const chatId = props.getProperty('TELEGRAM_CHAT_ID') || TELEGRAM_CHAT_ID;
+
+  if (!token || !chatId || token === 'YOUR_TELEGRAM_BOT_TOKEN' || token.trim() === '') {
+    Logger.log("Telegram notification skipped: Token or Chat ID not configured.");
+    return;
+  }
 
   const message = `
 🚖 *New Transfer Order!*
@@ -473,21 +480,23 @@ function sendTelegramNotification(payload) {
 ${payload.comments}
   `;
 
-  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+  const url = `https://api.telegram.org/bot${token}/sendMessage`;
   const options = {
     method: 'post',
     contentType: 'application/json',
     payload: JSON.stringify({
-      chat_id: TELEGRAM_CHAT_ID,
+      chat_id: chatId,
       text: message,
       parse_mode: 'Markdown'
-    })
+    }),
+    muteHttpExceptions: true
   };
 
   try {
-    UrlFetchApp.fetch(url, options);
+    const res = UrlFetchApp.fetch(url, options);
+    Logger.log("Telegram Response (" + res.getResponseCode() + "): " + res.getContentText());
   } catch (e) {
-    console.error("Telegram Error: " + e.toString());
+    Logger.log("Telegram Error: " + e.toString());
   }
 }
 

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { translations, Language } from './translations';
+import { parseRoute, switchLanguagePath } from '../lib/routing';
 
 interface LanguageContextType {
   language: Language;
@@ -9,48 +10,75 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('en');
+function getInitialLanguage(explicit?: Language): Language {
+  if (explicit) return explicit;
+  if (typeof window !== 'undefined') {
+    return parseRoute(window.location.pathname, window.location.search).lang;
+  }
+  return 'en';
+}
 
-  // Load language from localStorage if available
+export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLanguage?: Language }> = ({
+  children,
+  initialLanguage,
+}) => {
+  const [language, setLanguage] = useState<Language>(() => getInitialLanguage(initialLanguage));
+
+  // Keep language synchronized with browser history navigation (back/forward)
   useEffect(() => {
-    const savedLang = localStorage.getItem('app_language') as Language;
-    if (savedLang && (savedLang === 'ru' || savedLang === 'en')) {
-      setLanguage(savedLang);
+    const syncFromUrl = () => {
+      const urlLang = parseRoute(window.location.pathname, window.location.search).lang;
+      setLanguage(urlLang);
+    };
+    window.addEventListener('popstate', syncFromUrl);
+    return () => window.removeEventListener('popstate', syncFromUrl);
+  }, []);
+
+  const handleSetLanguage = useCallback((lang: Language) => {
+    setLanguage(lang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('app_language', lang);
+      document.documentElement.lang = lang === 'ru' ? 'ru' : 'en';
+
+      const targetPath = switchLanguagePath(window.location.pathname, lang, window.location.search);
+      const currentPathWithSearch = window.location.pathname + window.location.search;
+      if (targetPath !== currentPathWithSearch) {
+        window.history.pushState({}, '', targetPath);
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      }
     }
   }, []);
 
-  const handleSetLanguage = (lang: Language) => {
-    setLanguage(lang);
-    localStorage.setItem('app_language', lang);
-    document.documentElement.lang = lang === 'ru' ? 'ru-RU' : 'en-GB';
-  };
-
   useEffect(() => {
-    document.documentElement.lang = language === 'ru' ? 'ru-RU' : 'en-GB';
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = language === 'ru' ? 'ru' : 'en';
+    }
   }, [language]);
 
-  const t = useCallback((key: string, params?: Record<string, string | number>) => {
-    const keys = key.split('.');
-    let value: any = translations[language];
-    
-    for (const k of keys) {
-      if (value === undefined || value === null) {
-        return key;
+  const t = useCallback(
+    (key: string, params?: Record<string, string | number>) => {
+      const keys = key.split('.');
+      let value: any = translations[language];
+
+      for (const k of keys) {
+        if (value === undefined || value === null) {
+          return key;
+        }
+        value = value[k];
       }
-      value = value[k];
-    }
-    
-    let result = (value !== undefined && value !== null) ? value : key;
-    
-    if (params && typeof result === 'string') {
-      Object.entries(params).forEach(([k, v]) => {
-        result = result.replaceAll(`{${k}}`, String(v));
-      });
-    }
-    
-    return result;
-  }, [language]);
+
+      let result = value !== undefined && value !== null ? value : key;
+
+      if (params && typeof result === 'string') {
+        Object.entries(params).forEach(([k, v]) => {
+          result = result.replaceAll(`{${k}}`, String(v));
+        });
+      }
+
+      return result;
+    },
+    [language]
+  );
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t }}>
