@@ -35,10 +35,15 @@ export default function AirportFaqAndReviews() {
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
-                    <div className="flex items-center gap-0.5 text-yellow-400" aria-label={`${review.rating} out of 5 stars`}>
+                    <div
+                      role="img"
+                      className="flex items-center gap-0.5 text-yellow-400"
+                      aria-label={language === 'ru' ? `${review.rating} из 5 звёзд` : `${review.rating} out of 5 stars`}
+                    >
                       {[...Array(review.rating)].map((_, idx) => (
                         <Star
                           key={idx}
+                          aria-hidden="true"
                           className="w-4 h-4 fill-current stroke-black stroke-[1.5px]"
                         />
                       ))}
