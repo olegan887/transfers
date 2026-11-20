@@ -46,6 +46,30 @@ function getBaseTaxiServiceSchema(lang: Language) {
       postalCode: '4103',
       addressCountry: 'CY',
     },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 34.6899,
+      longitude: 33.0682,
+    },
+    hasMap: 'https://www.google.com/maps/search/?api=1&query=The+Oval,+Krinou+3,+Agios+Athanasios,+4103+Limassol,+Cyprus',
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday',
+      ],
+      opens: '00:00',
+      closes: '23:59',
+    },
+    sameAs: [
+      'https://wa.me/35796867289',
+      'https://www.google.com/maps/search/?api=1&query=The+Oval,+Krinou+3,+Agios+Athanasios,+4103+Limassol,+Cyprus',
+    ],
     areaServed: [
       { '@type': 'Airport', name: 'Larnaca International Airport (LCA)' },
       { '@type': 'Airport', name: 'Paphos International Airport (PFO)' },

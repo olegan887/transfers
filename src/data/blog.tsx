@@ -36,66 +36,66 @@ export const blogPosts: BlogPost[] = [
     content: {
       en: (
         <>
-          <p>Traveling from Larnaca Airport (LCA) to Paphos is a common route for many tourists visiting Cyprus. The distance is approximately 135 km, and the journey can take anywhere from 1.5 to 3 hours depending on your chosen method of transportation.</p>
+          <p>Traveling from Larnaca Airport (LCA) to Paphos is a common route for many tourists visiting Cyprus. The distance is approximately 135 km via Limassol, and the journey takes anywhere from 1.5 to 3.5 hours depending on your chosen method of transportation.</p>
           
-          <h2>1. Private Airport Transfer (Recommended)</h2>
-          <p>The most comfortable and stress-free way to reach Paphos is by booking a private airport transfer. A professional driver will wait for you at the main exit, help you with your luggage, and drive you directly to your hotel or villa.</p>
+          <h2>1. Private Airport Transfer (Recommended — Fixed €135)</h2>
+          <p>The most comfortable and stress-free way to reach Paphos is by booking our <a href="/routes/larnaca-airport-to-paphos">Larnaca Airport (LCA) to Paphos private transfer</a>. Our Limassol-based driver waits inside the Arrivals Hall with a name sign, helps with your luggage, and drives you directly along the highway for a fixed <strong>€135</strong> per sedan (up to 4 passengers &amp; 3 bags, −10% off round-trip bookings).</p>
           <ul>
-            <li><strong>Travel time:</strong> ~1 hour 30 minutes</li>
-            <li><strong>Pros:</strong> Fixed price, no waiting, door-to-door service, comfortable vehicles with AC.</li>
-            <li><strong>Cons:</strong> Slightly more expensive than the bus for solo travelers, but very cost-effective for groups or families.</li>
+            <li><strong>Travel time:</strong> ~1 hour 30 minutes (135 km)</li>
+            <li><strong>Pros:</strong> Fixed €135 rate, flight tracking included, door-to-door service, air-conditioned sedan.</li>
+            <li><strong>Cons:</strong> Priced per vehicle rather than per seat (great value for 2–4 passengers). Night rides (23:00–07:00) include a +€10 tariff.</li>
           </ul>
 
           <h2>2. Intercity Bus</h2>
-          <p>If you are traveling on a tight budget, the intercity bus is an option. However, there is no direct bus from Larnaca Airport to Paphos. You will first need to take a local bus to Larnaca city center or Limassol, and then transfer to an Intercity bus heading to Paphos.</p>
+          <p>If you are traveling on a tight budget, the intercity bus is an option. However, there is no direct bus from Larnaca Airport to Paphos. You will first need to take a local shuttle to Larnaca center or Limassol, and then transfer to an Intercity bus heading to Paphos.</p>
           <ul>
             <li><strong>Travel time:</strong> 2.5 to 3.5 hours (including waiting and transfer times)</li>
-            <li><strong>Pros:</strong> Very cheap.</li>
+            <li><strong>Pros:</strong> Very cheap per person.</li>
             <li><strong>Cons:</strong> Long travel time, inconvenient with heavy luggage, limited schedule (especially at night).</li>
           </ul>
 
           <h2>3. Regular Airport Taxi</h2>
-          <p>You can catch a regular taxi outside the arrivals terminal. While convenient, the prices are metered and can fluctuate depending on traffic, time of day (night tariffs are higher), and the amount of luggage.</p>
+          <p>You can catch a regular taxi outside the arrivals terminal. While convenient, the prices are metered and can fluctuate depending on traffic, late-night tariffs, and luggage surcharges.</p>
           <ul>
             <li><strong>Travel time:</strong> ~1 hour 30 minutes</li>
             <li><strong>Pros:</strong> Available 24/7 without pre-booking.</li>
-            <li><strong>Cons:</strong> Unpredictable pricing, potential language barriers, and you might have to wait in line during peak season.</li>
+            <li><strong>Cons:</strong> Unpredictable metered fare, potential waiting in line during peak season.</li>
           </ul>
 
           <h2>Conclusion</h2>
-          <p>For a hassle-free start to your holiday, pre-booking a private transfer is the best choice. At Cyprus Airport Transfer, we offer fixed rates, modern vehicles, and English-speaking drivers to ensure your journey from Larnaca to Paphos is smooth and enjoyable.</p>
+          <p>For a hassle-free start to your holiday, pre-booking a private transfer is the best choice. You can <a href="/routes/larnaca-airport-to-paphos">book Larnaca Airport to Paphos for €135</a> or check <a href="/routes/larnaca-airport-to-limassol">Larnaca Airport to Limassol (€75)</a> online with instant confirmation.</p>
         </>
       ),
       ru: (
         <>
-          <p>Поездка из аэропорта Ларнаки (LCA) в Пафос — популярный маршрут среди туристов, посещающих Кипр. Расстояние составляет около 135 км, и дорога может занять от 1,5 до 3 часов в зависимости от выбранного способа передвижения.</p>
+          <p>Поездка из аэропорта Ларнаки (LCA) в Пафос — один из самых популярных маршрутов на Кипре. Расстояние через Лимассол составляет около 135 км, а дорога занимает от 1,5 до 3,5 часов в зависимости от выбранного транспорта.</p>
           
-          <h2>1. Индивидуальный трансфер (Рекомендуем)</h2>
-          <p>Самый комфортный способ добраться до Пафоса — заказать индивидуальный трансфер. Профессиональный водитель будет ждать вас у главного выхода аэропорта, поможет с багажом и доставит прямо к дверям вашего отеля или виллы.</p>
+          <h2>1. Индивидуальный трансфер (Рекомендуем — фиксированно €135)</h2>
+          <p>Самый комфортный способ добраться до Пафоса без пересадок — заранее заказать <a href="/ru/routes/larnaca-airport-to-paphos">индивидуальный трансфер Аэропорт Ларнака (LCA) — Пафос</a>. Водитель нашей базы в Лимассоле встретит вас с табличкой в зале прилёта, поможет с чемоданами и доставит к отелю или вилле за фиксированные <strong>€135</strong> за весь седан (до 4 пассажиров и 3 чемоданов, −10% на обратный путь).</p>
           <ul>
-            <li><strong>Время в пути:</strong> ~1 час 30 минут</li>
-            <li><strong>Плюсы:</strong> Фиксированная цена, отсутствие ожидания, сервис "от двери до двери", комфортные автомобили с кондиционером.</li>
-            <li><strong>Минусы:</strong> Дороже автобуса для одного человека, но очень выгодно для семей и компаний.</li>
+            <li><strong>Время в пути:</strong> ~1 час 30 минут (135 км)</li>
+            <li><strong>Плюсы:</strong> Фиксированная цена €135, отслеживание рейса, доставка от двери до двери, комфортный седан с кондиционером.</li>
+            <li><strong>Минусы:</strong> Оплата за машину (особенно выгодно для 2–4 человек). Ночью (23:00–07:00) действует тариф +€10.</li>
           </ul>
 
           <h2>2. Междугородний автобус</h2>
-          <p>Если вы путешествуете с ограниченным бюджетом, можно воспользоваться автобусом. Однако прямого рейса из аэропорта Ларнаки в Пафос нет. Сначала вам нужно будет доехать до центра Ларнаки или Лимассола, а затем пересесть на автобус Intercity до Пафоса.</p>
+          <p>Если вы путешествуете с ограниченным бюджетом, можно воспользоваться автобусом. Однако прямого рейса из аэропорта Ларнаки в Пафос нет. Сначала нужно доехать до центра Ларнаки или Лимассола, а затем пересесть на автобус Intercity до Пафоса.</p>
           <ul>
             <li><strong>Время в пути:</strong> от 2,5 до 3,5 часов (включая ожидание и пересадки)</li>
-            <li><strong>Плюсы:</strong> Очень дешево.</li>
-            <li><strong>Минусы:</strong> Долго, неудобно с багажом, ограниченное расписание (особенно ночью).</li>
+            <li><strong>Плюсы:</strong> Дёшево для одного пассажира.</li>
+            <li><strong>Минусы:</strong> Долго, неудобно с чемоданами, ограниченное ночное расписание.</li>
           </ul>
 
           <h2>3. Обычное такси в аэропорту</h2>
-          <p>Вы можете взять обычное такси на стоянке у терминала. Это удобно, но цены рассчитываются по счетчику и могут меняться в зависимости от пробок, времени суток (ночной тариф выше) и количества багажа.</p>
+          <p>Вы можете взять обычное такси на стоянке у терминала. Цены рассчитываются по счётчику и меняются в зависимости от трафика, ночных надбавок и доплат за багаж.</p>
           <ul>
             <li><strong>Время в пути:</strong> ~1 час 30 минут</li>
             <li><strong>Плюсы:</strong> Доступно 24/7 без предварительного бронирования.</li>
-            <li><strong>Минусы:</strong> Непредсказуемая цена, возможный языковой барьер, очереди в высокий сезон.</li>
+            <li><strong>Минусы:</strong> Итоговая сумма заранее неизвестна, возможны очереди в высокий сезон.</li>
           </ul>
 
           <h2>Заключение</h2>
-          <p>Для беззаботного начала отпуска лучше всего заранее забронировать трансфер. Cyprus Airport Transfer предлагает фиксированные цены, современные автомобили и русскоговорящих водителей, чтобы ваша поездка из Ларнаки в Пафос была максимально комфортной.</p>
+          <p>Для спокойного начала отпуска лучше зафиксировать цену заранее. Вы можете оформить <a href="/ru/routes/larnaca-airport-to-paphos">трансфер Ларнака (LCA) — Пафос за €135</a> или <a href="/ru/routes/larnaca-airport-to-limassol">Ларнака (LCA) — Лимассол за €75</a> онлайн за 2 минуты.</p>
         </>
       )
     }
@@ -133,7 +133,7 @@ export const blogPosts: BlogPost[] = [
           <h2>5. Paphos Castle and Harbor</h2>
           <p>Take a stroll along the picturesque Paphos Harbor, lined with cafes and seafood tavernas. At the edge of the harbor stands the Paphos Castle, originally a Byzantine fort built to protect the harbor. It offers great views from the top.</p>
 
-          <p><strong>Need a ride?</strong> Book a comfortable transfer with us to visit any of these amazing locations around Paphos!</p>
+          <p><strong>Need a direct transfer to Paphos?</strong> Book a fixed-price ride from <a href="/routes/limassol-to-paphos">Limassol to Paphos (€75)</a> or <a href="/routes/larnaca-airport-to-paphos">Larnaca Airport (LCA) to Paphos (€135)</a>.</p>
         </>
       ),
       ru: (
@@ -155,7 +155,7 @@ export const blogPosts: BlogPost[] = [
           <h2>5. Замок Пафоса и Гавань</h2>
           <p>Прогуляйтесь по живописной гавани Пафоса, вдоль которой расположены кафе и рыбные таверны. На краю гавани стоит Пафосский замок, первоначально византийский форт, построенный для защиты гавани. Сверху открывается отличный вид.</p>
 
-          <p><strong>Нужна поездка?</strong> Забронируйте комфортный трансфер у нас, чтобы посетить любую из этих удивительных локаций в Пафосе и его окрестностях!</p>
+          <p><strong>Нужен прямой трансфер в Пафос?</strong> Забронируйте поездку по фиксированной цене из <a href="/ru/routes/limassol-to-paphos">Лимассола в Пафос (€75)</a> или из <a href="/ru/routes/larnaca-airport-to-paphos">аэропорта Ларнаки в Пафос (€135)</a>.</p>
         </>
       )
     }
@@ -179,22 +179,19 @@ export const blogPosts: BlogPost[] = [
           <p>When you land at Larnaca or Paphos airport after a long flight, the last thing you want to do is worry about how to get to your accommodation. While regular taxis are available outside the terminals, pre-booking a private transfer offers significant advantages.</p>
 
           <h2>1. Fixed, Transparent Pricing</h2>
-          <p>Regular taxis in Cyprus use meters. This means the final price depends on traffic, the route taken by the driver, and the time of day (night tariffs apply from 20:30 to 06:00). With a private transfer, you pay a fixed price agreed upon at the time of booking. No surprises, no hidden fees.</p>
+          <p>Regular taxis in Cyprus use meters, so the final bill rises with highway traffic or baggage fees. With our private transfer, you know the exact EUR rate upfront (for example, €75 between Larnaca or Paphos Airport and Limassol), with only a clear +€10 night tariff between 23:00 and 07:00.</p>
 
           <h2>2. Meet and Greet Service</h2>
-          <p>With a private transfer, your driver will be waiting for you at the main exit. They will contact you in advance, assist you with your luggage and guide you straight to the vehicle. With a regular taxi, you have to find the taxi rank and potentially wait in line, especially during the busy summer months.</p>
+          <p>With a private transfer, your Limassol-based driver waits inside the Arrivals Hall with a name sign, helps with bags, and guides you straight to the sedan—no taxi-rank lines during peak season.</p>
 
-          <h2>3. Guaranteed Vehicle Type</h2>
-          <p>If you are traveling with a large family, lots of luggage, or bulky items like golf clubs or strollers, a standard taxi might not be big enough. When you book a private transfer, you can select the exact vehicle size you need (e.g., a minivan or minibus), ensuring everyone and everything fits comfortably.</p>
+          <h2>3. Guaranteed Comfort &amp; Capacity</h2>
+          <p>Our private sedans (Mercedes E-Class, Opel Insignia, Toyota Camry or similar) comfortably accommodate up to 4 passengers and 3 large suitcases. Traveling with child seats? Request them free in your booking note (for larger groups of 5+ passengers, contact us directly via WhatsApp before booking).</p>
 
           <h2>4. Flight Tracking</h2>
-          <p>Flight delayed? No problem. Private transfer companies track your flight status and adjust the pickup time accordingly, at no extra cost. A regular taxi won't wait for you specifically.</p>
+          <p>Flight delayed? No problem. We monitor your arrival in real time and adjust the pickup time accordingly at zero extra cost.</p>
 
-          <h2>5. Safety and Quality</h2>
-          <p>Pre-booked transfer services rely on their reputation. Vehicles are regularly cleaned and maintained to a high standard, and drivers are professional and courteous. You can also request child seats in advance, which is not always possible with a random airport taxi.</p>
-
-          <h2>Summary</h2>
-          <p>For peace of mind, comfort, and often better value for money, a private airport transfer is the clear winner. Book your ride with Cyprus Airport Transfer today and start your holiday the right way!</p>
+          <h2>5. Safety and Reliability</h2>
+          <p>Licensed vehicles, experienced drivers, complimentary bottled water, and −10% automatic savings on round-trip reservations. Browse <a href="/routes">all 30 active routes and fixed EUR prices</a>.</p>
         </>
       ),
       ru: (
@@ -202,22 +199,19 @@ export const blogPosts: BlogPost[] = [
           <p>Когда вы приземляетесь в аэропорту Ларнаки или Пафоса после долгого перелета, последнее, о чем хочется думать — это как добраться до отеля. Хотя обычные такси всегда есть у терминалов, предварительное бронирование индивидуального трансфера имеет значительные преимущества.</p>
 
           <h2>1. Фиксированная, прозрачная цена</h2>
-          <p>Обычные такси на Кипре используют счетчики. Это означает, что итоговая цена зависит от пробок, маршрута и времени суток (ночной тариф действует с 20:30 до 06:00). При заказе трансфера вы платите фиксированную цену, согласованную при бронировании. Никаких сюрпризов и скрытых платежей.</p>
+          <p>Обычные такси на Кипре работают по счетчику, поэтому итог зависит от пробок и доплат за багаж. У нас стоимость фиксирована заранее (например, €75 из аэропорта Ларнаки или Пафоса в Лимассол), а ночная наценка (+€10 с 23:00 до 07:00) отображается сразу в калькуляторе.</p>
 
           <h2>2. Встреча в аэропорту</h2>
-          <p>При заказе трансфера водитель будет ждать вас у главного выхода. Он предварительно свяжется с вами, поможет с багажом и проводит прямо к автомобилю. В случае с обычным такси вам придется искать стоянку и, возможно, стоять в очереди, особенно в разгар летнего сезона.</p>
+          <p>Водитель из Лимассола ждет вас в зале прилета с именной табличкой, помогает с чемоданами и провожает к машине — без поиска стоянки и очередей в высокий сезон.</p>
 
-          <h2>3. Гарантированный тип автомобиля</h2>
-          <p>Если вы путешествуете большой семьей, с большим количеством багажа или нестандартным грузом (например, клюшки для гольфа или коляски), стандартного такси может оказаться недостаточно. При бронировании трансфера вы выбираете нужный размер автомобиля (например, минивэн или микроавтобус).</p>
+          <h2>3. Гарантированный комфорт седана</h2>
+          <p>Мы подаем комфортабельные седаны (Mercedes E-Class, Opel Insignia, Toyota Camry или аналоги), рассчитанные до 4 пассажиров и 3 чемоданов. Детские кресла устанавливаются по запросу при оформлении (для групп от 5 человек напишите нам в WhatsApp заранее).</p>
 
           <h2>4. Отслеживание рейса</h2>
-          <p>Рейс задерживается? Не проблема. Компании, предоставляющие трансфер, отслеживают статус вашего рейса и корректируют время подачи автомобиля без дополнительной платы. Обычное такси не будет ждать именно вас.</p>
+          <p>Рейс задерживается? Не проблема. Мы отслеживаем прилет в реальном времени и сдвигаем подачу автомобиля без доплат за ожидание.</p>
 
-          <h2>5. Безопасность и качество</h2>
-          <p>Сервисы предварительного бронирования дорожат своей репутацией. Автомобили регулярно проходят чистку и техобслуживание, а водители профессиональны и вежливы. Вы также можете заранее заказать детские кресла, что не всегда возможно в случайном такси в аэропорту.</p>
-
-          <h2>Итог</h2>
-          <p>Для душевного спокойствия, комфорта и часто лучшего соотношения цены и качества индивидуальный трансфер — явный победитель. Забронируйте поездку с Cyprus Airport Transfer сегодня и начните свой отпуск правильно!</p>
+          <h2>5. Безопасность и скидка 10% обратно</h2>
+          <p>Лицензированные авто, опытные водители, прохладная вода в салоне и скидка 10% при заказе трансфера туда-обратно. Смотрите <a href="/ru/routes">все 30 доступных маршрутов и цен</a>.</p>
         </>
       )
     }
@@ -359,14 +353,8 @@ export const blogPosts: BlogPost[] = [
             <li>Ease of communication with customer service</li>
           </ul>
 
-          <h2>3. Verify the Fleet and Vehicle Options</h2>
-          <p>Your transfer should match your specific needs. If you are a family of five with multiple suitcases, a standard sedan won't work. Check if the company offers a diverse fleet, including:</p>
-          <ul>
-            <li>Standard sedans for solo travelers or couples</li>
-            <li>Minivans for families or small groups (up to 6 passengers)</li>
-            <li>Minibuses for larger groups (up to 14 passengers)</li>
-          </ul>
-          <p>Ensure you can select the appropriate vehicle size during the booking process.</p>
+          <h2>3. Verify Vehicle Capacity and Comfort</h2>
+          <p>Ensure the vehicle comfortably fits your passengers and suitcases. Standard sedans (such as Mercedes E-Class, Opel Insignia, or Toyota Camry) comfortably carry up to 4 passengers and 3 full-size bags. If you are traveling as a larger group of 5+ people, confirm vehicle arrangements via WhatsApp in advance.</p>
 
           <h2>4. Flight Tracking and Meet & Greet Services</h2>
           <p>Flights get delayed—it's a reality of travel. A professional transfer service will ask for your flight number during booking so they can track your arrival in real-time. This ensures the driver is there when you land, regardless of delays, without charging you extra waiting time.</p>
@@ -406,14 +394,8 @@ export const blogPosts: BlogPost[] = [
             <li>Легкости общения со службой поддержки</li>
           </ul>
 
-          <h2>3. Проверьте автопарк и варианты автомобилей</h2>
-          <p>Ваш трансфер должен соответствовать вашим конкретным потребностям. Если вы семья из пяти человек с несколькими чемоданами, стандартный седан не подойдет. Проверьте, предлагает ли компания разнообразный автопарк, включая:</p>
-          <ul>
-            <li>Стандартные седаны для одиночных путешественников или пар</li>
-            <li>Минивэны для семей или небольших групп (до 6 пассажиров)</li>
-            <li>Микроавтобусы для больших групп (до 14 пассажиров)</li>
-          </ul>
-          <p>Убедитесь, что вы можете выбрать подходящий размер автомобиля в процессе бронирования.</p>
+          <h2>3. Проверьте вместимость автомобиля</h2>
+          <p>Убедитесь, что автомобиль подходит под количество пассажиров и багажа. Комфортабельные седаны (Mercedes E-Class, Opel Insignia, Toyota Camry и аналоги) вмещают до 4 пассажиров и 3 больших чемоданов. Если вас 5 и более человек, заранее согласуйте подачу авто с оператором в WhatsApp.</p>
 
           <h2>4. Отслеживание рейсов и услуга встречи (Meet & Greet)</h2>
           <p>Рейсы задерживаются — это реальность путешествий. Профессиональный сервис трансфера запросит номер вашего рейса при бронировании, чтобы они могли отслеживать ваше прибытие в режиме реального времени. Это гарантирует, что водитель будет на месте, когда вы приземлитесь, независимо от задержек, без взимания дополнительной платы за ожидание.</p>
@@ -455,7 +437,7 @@ export const blogPosts: BlogPost[] = [
           <p>Located near the old port, this medieval castle is where Richard the Lionheart allegedly married Berengaria of Navarre in 1191. It now houses the Cyprus Medieval Museum.</p>
           <h2>3. Kourion Archaeological Site</h2>
           <p>Just a short drive from the city center, Kourion offers breathtaking views of the Mediterranean and features a magnificent Greco-Roman amphitheater.</p>
-          <p><strong>Travel Tip:</strong> Book a private transfer from Larnaca or Paphos airport directly to your Limassol hotel for a seamless start to your vacation.</p>
+          <p><strong>Travel Tip:</strong> Our dispatch fleet is based right in Limassol! Book a fixed-price €75 transfer from <a href="/routes/larnaca-airport-to-limassol">Larnaca Airport (LCA) to Limassol</a> or <a href="/routes/paphos-airport-to-limassol">Paphos Airport (PFO) to Limassol</a> for a seamless arrival.</p>
         </>
       ),
       ru: (
@@ -467,7 +449,7 @@ export const blogPosts: BlogPost[] = [
           <p>Расположенный недалеко от старого порта, этот средневековый замок — место, где Ричард Львиное Сердце, по преданию, обвенчался с Беренгарией Наваррской в 1191 году. Сейчас здесь находится Кипрский музей средневековья.</p>
           <h2>3. Археологический парк Курион</h2>
           <p>Всего в нескольких минутах езды от центра города находится Курион, откуда открывается захватывающий вид на Средиземное море и где расположен великолепный греко-римский амфитеатр.</p>
-          <p><strong>Совет:</strong> Забронируйте индивидуальный трансфер из аэропорта Ларнаки или Пафоса прямо в ваш отель в Лимассоле для комфортного начала отпуска.</p>
+          <p><strong>Совет:</strong> Наша база находится именно в Лимассоле. Забронируйте трансфер по фиксированной цене €75 из <a href="/ru/routes/larnaca-airport-to-limassol">аэропорта Ларнаки в Лимассол</a> или из <a href="/ru/routes/paphos-airport-to-limassol">аэропорта Пафоса в Лимассол</a>.</p>
         </>
       )
     }
@@ -488,26 +470,26 @@ export const blogPosts: BlogPost[] = [
     content: {
       en: (
         <>
-          <p>The eastern coast of Cyprus is world-renowned for its stunning beaches. If you are flying into Larnaca Airport, Ayia Napa and Protaras are just a 40-50 minute transfer away.</p>
+          <p>The eastern coast of Cyprus is world-renowned for its stunning beaches, turquoise bays, and soft golden sand—easily reachable via highway A3 from Limassol or Paphos.</p>
           <h2>1. Nissi Beach (Ayia Napa)</h2>
           <p>Famous for its white sand and shallow turquoise waters, Nissi Beach is the most popular spot in Cyprus. It features a small islet you can walk to through the water and hosts vibrant beach parties in the summer.</p>
           <h2>2. Fig Tree Bay (Protaras)</h2>
           <p>Consistently ranked among the best beaches in Europe, Fig Tree Bay offers fine golden sand and calm waters, making it incredibly family-friendly.</p>
           <h2>3. Konnos Bay</h2>
           <p>Nestled between Ayia Napa and Protaras, this sheltered bay is surrounded by pine trees. It is perfect for snorkeling and escaping the strong winds.</p>
-          <p><strong>How to get there:</strong> The easiest way to reach these resorts is by booking a direct airport transfer from Larnaca Airport (LCA).</p>
+          <p><strong>How to get there:</strong> We operate direct private transfers to Ayia Napa and Protaras from <a href="/routes/limassol-to-ayia-napa">Limassol (€115)</a>, <a href="/routes/paphos-airport-to-ayia-napa">Paphos Airport PFO (€180)</a>, and <a href="/routes/paphos-airport-to-protaras">PFO to Protaras (€190)</a>.</p>
         </>
       ),
       ru: (
         <>
-          <p>Восточное побережье Кипра всемирно известно своими потрясающими пляжами. Если вы прилетаете в аэропорт Ларнаки, Айя-Напа и Протарас находятся всего в 40-50 минутах езды на трансфере.</p>
+          <p>Восточное побережье Кипра всемирно известно своими потрясающими пляжами и бирюзовыми бухтами, до которых удобно добраться по скоростной трассе A3 из Лимассола или Пафоса.</p>
           <h2>1. Нисси Бич (Айя-Напа)</h2>
           <p>Знаменитый своим белым песком и мелкой бирюзовой водой, Нисси Бич — самое популярное место на Кипре. Здесь есть небольшой островок, до которого можно дойти по воде, а летом здесь проходят яркие пляжные вечеринки.</p>
           <h2>2. Залив Фигового дерева (Протарас)</h2>
           <p>Стабильно входящий в число лучших пляжей Европы, Fig Tree Bay предлагает мелкий золотистый песок и спокойную воду, что делает его невероятно удобным для семейного отдыха.</p>
           <h2>3. Коннос Бэй</h2>
           <p>Расположенная между Айя-Напой и Протарасом, эта защищенная бухта окружена соснами. Она идеально подходит для сноркелинга и укрытия от сильных ветров.</p>
-          <p><strong>Как добраться:</strong> Самый простой способ добраться до этих курортов — забронировать прямой трансфер из аэропорта Ларнаки (LCA).</p>
+          <p><strong>Как добраться:</strong> Забронируйте у нас прямой трансфер из <a href="/ru/routes/limassol-to-ayia-napa">Лимассола в Айя-Напу (€115)</a>, из <a href="/ru/routes/paphos-airport-to-ayia-napa">аэропорта Пафоса (PFO) в Айя-Напу (€180)</a> или <a href="/ru/routes/paphos-airport-to-protaras">из PFO в Протарас (€190)</a>.</p>
         </>
       )
     }
@@ -631,7 +613,7 @@ export const blogPosts: BlogPost[] = [
           <p>Just a few minutes from the airport lies a complex of four salt lakes. During the winter months (November to March), the lakes fill with water and become home to thousands of migrating pink flamingos—a truly spectacular sight.</p>
           <h2>4. Hala Sultan Tekke</h2>
           <p>Located on the banks of the Salt Lake, this historic mosque is one of the holiest sites in Islam and is surrounded by beautiful, peaceful gardens.</p>
-          <p><strong>Need a ride?</strong> Whether you are staying in Larnaca or heading elsewhere, our premium transfer services from Larnaca Airport are available 24/7.</p>
+          <p><strong>Need a ride from Larnaca?</strong> Check our fixed rates for <a href="/routes/larnaca-airport-to-limassol">Larnaca Airport (LCA) to Limassol (€75)</a>, <a href="/routes/limassol-to-larnaca-city">Larnaca City to Limassol (€75)</a>, or <a href="/routes/paphos-airport-to-larnaca-city">Paphos Airport (PFO) to Larnaca (€135)</a>.</p>
         </>
       ),
       ru: (
@@ -645,7 +627,7 @@ export const blogPosts: BlogPost[] = [
           <p>Всего в нескольких минутах от аэропорта находится комплекс из четырех соленых озер. В зимние месяцы (с ноября по март) озера наполняются водой и становятся домом для тысяч мигрирующих розовых фламинго — поистине захватывающее зрелище.</p>
           <h2>4. Мечеть Хала Султан Текке</h2>
           <p>Расположенная на берегу Соленого озера, эта историческая мечеть является одной из главных святынь ислама и окружена красивыми, тихими садами.</p>
-          <p><strong>Нужна поездка?</strong> Независимо от того, останавливаетесь ли вы в Ларнаке или направляетесь в другое место, наши услуги премиум-трансфера из аэропорта Ларнаки доступны 24/7.</p>
+          <p><strong>Нужен трансфер из Ларнаки или аэропорта LCA?</strong> Смотрите наши фиксированные тарифы: <a href="/ru/routes/larnaca-airport-to-limassol">Аэропорт Ларнака — Лимассол (€75)</a>, <a href="/ru/routes/limassol-to-larnaca-city">Ларнака (Город) — Лимассол (€75)</a> или <a href="/ru/routes/paphos-airport-to-larnaca-city">Аэропорт Пафос — Ларнака (€135)</a>.</p>
         </>
       )
     }
@@ -713,7 +695,7 @@ export const blogPosts: BlogPost[] = [
           <p>The beach is fully equipped with sunbeds, umbrellas, showers, and changing rooms. For thrill-seekers, there is a wide variety of water sports available, including jet skiing, parasailing, and banana boat rides. The main strip above the beach is packed with restaurants, bars, and shops.</p>
           <h2>Nearby: The Akamas Peninsula</h2>
           <p>Coral Bay serves as the gateway to the Akamas Peninsula, a protected national park of immense natural beauty. From here, you can rent a buggy or join a jeep safari to explore the rugged coastline, the Avakas Gorge, and Lara Beach (a famous turtle nesting site).</p>
-          <p><strong>Airport Transfer:</strong> The transfer time from Paphos Airport (PFO) to Coral Bay is approximately 35-45 minutes. Pre-book your taxi with us for a direct, comfortable ride.</p>
+          <p><strong>Transfer Options:</strong> We operate direct private sedan transfers to Coral Bay from <a href="/routes/limassol-to-coral-bay">Limassol (€110, ~60 min)</a>, <a href="/routes/larnaca-airport-to-coral-bay">Larnaca Airport LCA (€150, ~100 min)</a>, and <a href="/routes/larnaca-city-to-coral-bay">Larnaca City (€160)</a>. Up to 4 passengers &amp; 3 suitcases per sedan, with 10% off round trips (+€10 night tariff 23:00–07:00).</p>
         </>
       ),
       ru: (
@@ -725,7 +707,7 @@ export const blogPosts: BlogPost[] = [
           <p>Пляж полностью оборудован шезлонгами, зонтиками, душевыми и кабинками для переодевания. Для любителей острых ощущений доступен широкий выбор водных видов спорта, включая гидроциклы, парасейлинг и катание на "банане". На главной улице над пляжем полно ресторанов, баров и магазинов.</p>
           <h2>Рядом: Полуостров Акамас</h2>
           <p>Корал Бэй служит воротами на полуостров Акамас — охраняемый национальный парк невероятной природной красоты. Отсюда вы можете арендовать багги или присоединиться к джип-сафари, чтобы исследовать изрезанное побережье, ущелье Авакас и пляж Лара (известное место гнездования черепах).</p>
-          <p><strong>Трансфер из аэропорта:</strong> Время в пути от аэропорта Пафоса (PFO) до Корал Бэй составляет примерно 35-45 минут. Забронируйте такси у нас заранее для прямой и комфортной поездки.</p>
+          <p><strong>Как добраться с комфортом:</strong> Мы выполняем прямые индивидуальные трансферы в Корал Бэй из <a href="/ru/routes/limassol-to-coral-bay">Лимассола (€110, ~60 мин)</a>, <a href="/ru/routes/larnaca-airport-to-coral-bay">аэропорта Ларнаки LCA (€150, ~100 мин)</a> и <a href="/ru/routes/larnaca-city-to-coral-bay">города Ларнаки (€160)</a>. До 4 пассажиров и 3 чемоданов в седане, скидка 10% на обратную дорогу (ночной тариф +€10 с 23:00 до 07:00).</p>
         </>
       )
     }
@@ -797,7 +779,7 @@ export const blogPosts: BlogPost[] = [
           <p>An independently owned hotel (not part of the global chain) that has set the standard for luxury in Cyprus for decades. It features a spectacular Shiseido Spa and immaculate tropical gardens.</p>
           <h2>5. Adams Beach Hotel (Ayia Napa)</h2>
           <p>Located right on the famous Nissi Beach, this hotel offers a dedicated adults-only Deluxe Wing, making it perfect for couples seeking a luxurious and vibrant beach holiday.</p>
-          <p><strong>Arrive in Style:</strong> Match your luxury accommodation with a premium airport transfer. We offer high-end vehicles like the Mercedes E-Class and V-Class to start your holiday in ultimate comfort.</p>
+          <p><strong>Arrive in Style:</strong> Match your luxury accommodation with a private door-to-door transfer in a modern Mercedes E-Class, Opel Insignia, or Toyota Camry sedan (up to 4 passengers &amp; 3 suitcases). For groups of 5+ passengers, contact us via WhatsApp in advance.</p>
         </>
       ),
       ru: (
@@ -813,7 +795,7 @@ export const blogPosts: BlogPost[] = [
           <p>Независимый отель (не входит в глобальную сеть), который десятилетиями устанавливает стандарты роскоши на Кипре. К услугам гостей впечатляющий спа-центр Shiseido и безупречные тропические сады.</p>
           <h2>5. Adams Beach Hotel (Айя-Напа)</h2>
           <p>Расположенный прямо на знаменитом пляже Нисси, этот отель предлагает отдельное крыло Deluxe только для взрослых, что делает его идеальным для пар.</p>
-          <p><strong>Прибывайте стильно:</strong> Дополните ваше роскошное проживание премиальным трансфером из аэропорта. Мы предлагаем автомобили высокого класса (Mercedes E-Class, V-Class), чтобы начать ваш отпуск с максимальным комфортом.</p>
+          <p><strong>Прибывайте стильно:</strong> Дополните ваше роскошное проживание комфортным индивидуальным трансфером на седане бизнес- и комфорт-класса (Mercedes E-Class, Opel Insignia, Toyota Camry — до 4 пассажиров и 3 чемоданов; для групп от 5 человек напишите нам в WhatsApp).</p>
         </>
       )
     }
@@ -844,76 +826,25 @@ export const blogPosts: BlogPost[] = [
           <p><em>Note: Extra charges apply for luggage over 12kg, waiting time, and travel on public holidays.</em></p>
           <h2>Airport Transfer Costs vs. Metered Taxis</h2>
           <p>Taking a metered taxi directly from the airport rank can be unpredictable. If there is heavy traffic or if your flight lands during the night tariff period, the cost can escalate quickly. Furthermore, intercity taxi rides (e.g., Larnaca to Paphos) are often negotiated rather than metered, which can lead to overcharging if you don't know the standard rates.</p>
-          <h2>The Private Transfer Advantage</h2>
-          <p>This is why booking a private airport transfer is highly recommended. With our service, you get a <strong>fixed, all-inclusive price</strong>. For example:</p>
-          <ul>
-            <li>Paphos Airport to Paphos City: Fixed rate, regardless of traffic.</li>
-            <li>Larnaca Airport to Ayia Napa: Fixed rate, no night surcharges.</li>
-            <li>Larnaca Airport to Limassol: Fixed rate, luggage included.</li>
-          </ul>
-          <p>By pre-booking, you secure your price in advance, pay securely online, and avoid any stressful negotiations upon arrival.</p>
-        </>
-      ),
-      ru: (
-        <>
-          <p>Планирование бюджета на транспорт — важная часть подготовки к отпуску на Кипре. Хотя общественные автобусы дешевы, они часто ходят редко и обслуживают не все районы. Такси и индивидуальные трансферы — самые удобные способы передвижения. Вот что вам нужно знать о ценах в 2026 году.</p>
-          <h2>Официальные тарифы на такси</h2>
-          <p>Городские такси на Кипре по закону обязаны использовать таксометры. Тарифы строго регулируются правительством и делятся на два типа:</p>
-          <ul>
-            <li><strong>Тариф 1 (Дневной: 06:00 - 20:30):</strong> Начальная плата ~€3.80, плюс ~€0.95 за километр.</li>
-            <li><strong>Тариф 2 (Ночной: 20:30 - 06:00):</strong> Начальная плата ~€4.80, плюс ~€1.15 за километр.</li>
-          </ul>
-          <p><em>Примечание: Дополнительная плата взимается за багаж весом более 12 кг, время ожидания и поездки в праздничные дни.</em></p>
-          <h2>Стоимость трансфера из аэропорта против такси по счетчику</h2>
-          <p>Поездка на такси по счетчику прямо со стоянки в аэропорту может быть непредсказуемой. Если на дорогах пробки или ваш рейс приземляется в период действия ночного тарифа, стоимость может быстро возрасти. Кроме того, междугородние поездки на такси (например, из Ларнаки в Пафос) часто осуществляются по договорной цене, а не по счетчику, что может привести к переплате.</p>
-          <h2>Преимущество индивидуального трансфера</h2>
-          <p>Именно поэтому настоятельно рекомендуется бронировать индивидуальный трансфер из аэропорта. С нашим сервисом вы получаете <strong>фиксированную цену "все включено"</strong>. Например:</p>
-          <ul>
-            <li>Аэропорт Пафоса в город Пафос: Фиксированная ставка, независимо от пробок.</li>
-            <li>Аэропорт Ларнаки в Айя-Напу: Фиксированная ставка, без ночных надбавок.</li>
-            <li>Аэропорт Ларнаки в Лимассол: Фиксированная ставка, багаж включен.</li>
-          </ul>
-          <p>Бронируя заранее, вы фиксируете цену, безопасно платите онлайн и избегаете любых стрессовых переговоров по прибытии.</p>
-        </>
-      )
-    }
-  },
-  {
-    id: '16',
-    slug: 'paphos-to-limassol-transfer-options',
-    date: '2026-05-15',
-    image: '/images/paphos-route.webp',
-    title: {
-      en: 'Paphos to Limassol Transfer: Best Travel Options',
-      ru: 'Трансфер из Пафоса в Лимассол: Лучшие варианты поездки'
-    },
-    excerpt: {
-      en: 'Need to get from Paphos to Limassol? Compare taxi prices, bus schedules, and private transfer services for this popular route.',
-      ru: 'Нужно добраться из Пафоса в Лимассол? Сравните цены на такси, расписание автобусов и услуги частного трансфера.'
-    },
-    content: {
-      en: (
-        <>
-          <p>The route between Paphos and Limassol is one of the most traveled on the island. Whether you are moving between hotels or heading to a business meeting, knowing your options is key.</p>
-          <h2>1. Private Transfer (Best Value)</h2>
-          <p>A private transfer offers a fixed price and door-to-door service. It takes about 45-60 minutes. It is especially cost-effective for groups of 3 or more.</p>
+          <h2>1. Private Transfer (Best Value — Fixed €75)</h2>
+          <p>Our <a href="/routes/limassol-to-paphos">Limassol ↔ Paphos private transfer</a> (and <a href="/routes/paphos-airport-to-limassol">Paphos Airport PFO ↔ Limassol</a>) costs a fixed <strong>€75 per sedan</strong> (up to 4 passengers &amp; 3 bags) and takes ~45 minutes door to door along the A6 highway—especially cost-effective for 2–4 travelers.</p>
           <h2>2. Intercity Bus</h2>
-          <p>The "Green Buses" run frequently between the main stops in Paphos and Limassol. It is the cheapest option but requires you to get to the bus station and handle your own luggage.</p>
+          <p>The "Green Buses" run between the main bus stations in Paphos and Limassol. It is the cheapest option per person, but requires getting to the station and managing luggage transfers.</p>
           <h2>3. Shared Taxi (Travel Express)</h2>
-          <p>A middle-ground option that picks up several passengers. It is cheaper than a private taxi but less flexible with timing and stops.</p>
-          <p><strong>Book with us:</strong> We provide reliable Paphos to Limassol transfers 24/7 with professional drivers.</p>
+          <p>A middle-ground option that picks up several passengers. Cheaper per seat than a private car, but less flexible with pickup times and direct hotel stops.</p>
+          <p><strong>Book with us:</strong> Lock in our fixed <strong>€75</strong> rate for <a href="/routes/limassol-to-paphos">Paphos ↔ Limassol</a> or <a href="/routes/paphos-airport-to-limassol">Paphos Airport ↔ Limassol</a> online 24/7.</p>
         </>
       ),
       ru: (
         <>
-          <p>Маршрут между Пафосом и Лимассолом — один из самых востребованных на острове. Независимо от того, переезжаете ли вы между отелями или едете на деловую встречу, важно знать свои варианты.</p>
-          <h2>1. Индивидуальный трансфер (Лучший выбор)</h2>
-          <p>Частный трансфер предлагает фиксированную цену и доставку "от двери до двери". Поездка занимает около 45-60 минут. Это особенно выгодно для групп от 3 человек.</p>
+          <p>Маршрут между Пафосом и Лимассолом — один из самых востребованных на острове. Независимо от того, переезжаете ли вы между отелями или прилетаете в аэропорт, важно выбрать оптимальный способ поездки.</p>
+          <h2>1. Индивидуальный трансфер (Лучший выбор — фиксированно €75)</h2>
+          <p>Частный <a href="/ru/routes/limassol-to-paphos">трансфер Лимассол ↔ Пафос</a> (как и <a href="/ru/routes/paphos-airport-to-limassol">Аэропорт Пафос PFO ↔ Лимассол</a>) стоит фиксированные <strong>€75 за весь седан</strong> (до 4 человек и 3 чемоданов) и занимает около 45 минут по трассе A6 от двери до двери.</p>
           <h2>2. Междугородний автобус</h2>
-          <p>"Зеленые автобусы" часто курсируют между главными остановками Пафоса и Лимассола. Это самый дешевый вариант, но вам придется самостоятельно добираться до станции с багажом.</p>
+          <p>"Зеленые автобусы" курсируют между главными автостанциями Пафоса и Лимассола. Это самый бюджетный вариант для одного, но нужно самостоятельно добираться до остановок с багажом.</p>
           <h2>3. Маршрутное такси (Travel Express)</h2>
-          <p>Промежуточный вариант, который собирает нескольких пассажиров. Это дешевле, чем частное такси, но менее гибко по времени и остановкам.</p>
-          <p><strong>Закажите у нас:</strong> Мы обеспечиваем надежные трансферы из Пафоса в Лимассол 24/7 с профессиональными водителями.</p>
+          <p>Промежуточный вариант, который собирает нескольких пассажиров по городу. Дешевле индивидуальной машины на 1 человека, но менее гибко по времени и адресу подачи.</p>
+          <p><strong>Забронируйте онлайн:</strong> Фиксированный тариф <strong>€75</strong> на <a href="/ru/routes/limassol-to-paphos">Пафос ↔ Лимассол</a> или <a href="/ru/routes/paphos-airport-to-limassol">аэропорт Пафос (PFO) ↔ Лимассол</a> с круглосуточной подачей.</p>
         </>
       )
     }
@@ -924,32 +855,42 @@ export const blogPosts: BlogPost[] = [
     date: '2026-05-20',
     image: '/images/larnaca-route.webp',
     title: {
-      en: 'Larnaca to Ayia Napa: Taxi vs Bus Guide',
-      ru: 'Из Ларнаки в Айя-Напу: Такси или автобус?'
+      en: 'Getting to Ayia Napa: Bus from Larnaca vs Direct Private Transfers',
+      ru: 'Как добраться в Айя-Напу: автобус из Ларнаки или прямой трансфер'
     },
     excerpt: {
-      en: 'Heading to the party capital of Cyprus? Find out the fastest and most convenient way to get from Larnaca to Ayia Napa.',
-      ru: 'Едете в тусовочную столицу Кипра? Узнайте самый быстрый и удобный способ добраться из Ларнаки в Айя-Напу.'
+      en: 'Heading to Ayia Napa? Compare bus routes from Larnaca with fixed-price private transfers from Limassol (€115) and Paphos Airport PFO (€180).',
+      ru: 'Едете в Айя-Напу? Сравните автобусы из Ларнаки и фиксированные индивидуальные трансферы из Лимассола (€115) и аэропорта Пафоса PFO (€180).'
     },
     content: {
       en: (
         <>
-          <p>Ayia Napa is just 45km from Larnaca Airport. Most travelers want to get to the beach as quickly as possible.</p>
-          <h2>Taxi from Larnaca Airport</h2>
-          <p>A taxi is the fastest way, taking about 35-40 minutes. Prices are usually fixed for this route if you book in advance.</p>
-          <h2>Bus Options</h2>
-          <p>There is a direct airport shuttle to Ayia Napa, but it runs less frequently than local buses. You can also take a bus to Larnaca center and change to an Intercity bus.</p>
-          <p><strong>Our Recommendation:</strong> For a stress-free start to your holiday, book a private transfer. No waiting in the heat, and direct delivery to your hotel.</p>
+          <p>Ayia Napa sits roughly 45 km east of Larnaca and is one of Cyprus's liveliest beach destinations. Depending on where you start your trip, your transport options differ.</p>
+          <h2>From Larnaca Airport (LCA): Bus vs Airport Rank Taxi</h2>
+          <p>If you land at Larnaca Airport and only need a short local ride into Ayia Napa, local metered taxis operate from the terminal rank, or you can take a public bus via Larnaca city center to an Intercity bus. (Our Limassol-based fleet specializes in transfers via Limassol and island-wide cross-routes rather than short local LCA → Ayia Napa hops.)</p>
+          <h2>Direct Private Transfers to Ayia Napa (Limassol &amp; Paphos)</h2>
+          <p>Traveling between resorts or arriving at Paphos Airport? We operate fixed-price private sedans straight to your Ayia Napa hotel:</p>
+          <ul>
+            <li><a href="/routes/limassol-to-ayia-napa">Limassol ↔ Ayia Napa</a>: <strong>€115</strong> (~75 min)</li>
+            <li><a href="/routes/paphos-airport-to-ayia-napa">Paphos Airport (PFO) ↔ Ayia Napa</a>: <strong>€180</strong> (~120 min)</li>
+            <li><a href="/routes/ayia-napa-to-paphos">Paphos City ↔ Ayia Napa</a>: <strong>€180</strong> (~120 min)</li>
+          </ul>
+          <p>Landing at Larnaca Airport heading west instead? Check our fixed <a href="/routes/larnaca-airport-to-limassol">LCA → Limassol (€75)</a> and <a href="/routes/larnaca-airport-to-paphos">LCA → Paphos (€135)</a> transfers.</p>
         </>
       ),
       ru: (
         <>
-          <p>Айя-Напа находится всего в 45 км от аэропорта Ларнаки. Большинство путешественников хотят добраться до пляжа как можно быстрее.</p>
-          <h2>Такси из аэропорта Ларнаки</h2>
-          <p>Такси — самый быстрый способ, дорога занимает около 35-40 минут. Цены на этот маршрут обычно фиксированные, если бронировать заранее.</p>
-          <h2>Варианты с автобусом</h2>
-          <p>Есть прямой шаттл из аэропорта в Айя-Напу, но он ходит реже, чем местные автобусы. Также можно доехать до центра Ларнаки и пересесть на автобус Intercity.</p>
-          <p><strong>Наша рекомендация:</strong> Для начала отпуска без стресса забронируйте индивидуальный трансфер. Никакого ожидания на жаре и доставка прямо к отелю.</p>
+          <p>Айя-Напа расположена примерно в 45 км к востоку от Ларнаки. В зависимости от того, в каком городе или аэропорту вы находитесь, способы добраться на курорт заметно отличаются.</p>
+          <h2>Из аэропорта Ларнаки (LCA): автобус или местное такси</h2>
+          <p>Если вы прилетели в Ларнаку и едете только до Айя-Напы, на выходе из терминала есть стоянка местных такси по счётчику, либо можно доехать на городском автобусе до центра Ларнаки и пересесть на Intercity до Айя-Напы. (Наша служба базируется в Лимассоле и специализируется на маршрутах через Лимассол и по западу/центру острова, не выполняя короткие локальные поездки LCA → Айя-Напа.)</p>
+          <h2>Прямые индивидуальные трансферы в Айя-Напу от нашей службы</h2>
+          <p>Если вы едете из Лимассола, Пафоса или аэропорта Пафоса (PFO), мы доставим вас прямо к отелю в Айя-Напе по фиксированному тарифу:</p>
+          <ul>
+            <li><a href="/ru/routes/limassol-to-ayia-napa">Лимассол ↔ Айя-Напа</a>: <strong>€115</strong> (~75 мин)</li>
+            <li><a href="/ru/routes/paphos-airport-to-ayia-napa">Аэропорт Пафос (PFO) ↔ Айя-Напа</a>: <strong>€180</strong> (~120 мин)</li>
+            <li><a href="/ru/routes/ayia-napa-to-paphos">Айя-Напа ↔ Пафос</a>: <strong>€180</strong> (~120 мин)</li>
+          </ul>
+          <p>А если вы прилетаете в Ларнаку (LCA) и направляетесь на юг или запад — бронируйте <a href="/ru/routes/larnaca-airport-to-limassol">LCA → Лимассол (€75)</a> или <a href="/ru/routes/larnaca-airport-to-paphos">LCA → Пафос (€135)</a>.</p>
         </>
       )
     }
@@ -1057,7 +998,7 @@ export const blogPosts: BlogPost[] = [
           <p>A classic choice for a traditional fish meze. The service is excellent, and the location is unbeatable for sunset views.</p>
           <h2>3. Ocean Basket</h2>
           <p>For a more modern and affordable option, this popular chain offers great platters that are perfect for families.</p>
-          <p><strong>Dining out?</strong> Don't worry about parking or driving after a glass of wine. Book a local transfer to take you to and from dinner.</p>
+          <p><strong>Dining in Paphos from Limassol?</strong> Book an intercity <a href="/routes/limassol-to-paphos">Limassol ↔ Paphos private transfer (€75)</a> or arrive directly from <a href="/routes/larnaca-airport-to-paphos">Larnaca Airport (€135)</a> without worrying about parking.</p>
         </>
       ),
       ru: (
@@ -1069,7 +1010,7 @@ export const blogPosts: BlogPost[] = [
           <p>Классический выбор для традиционного рыбного мезе. Отличный сервис и непревзойденное расположение для наблюдения за закатом.</p>
           <h2>3. Ocean Basket</h2>
           <p>Для более современного и доступного варианта эта популярная сеть предлагает отличные сеты, которые идеально подходят для семей.</p>
-          <p><strong>Идете в ресторан?</strong> Не беспокойтесь о парковке или вождении после бокала вина. Закажите местный трансфер, чтобы доехать до ужина и обратно.</p>
+          <p><strong>Едете в Пафос из Лимассола?</strong> Закажите междугородний трансфер <a href="/ru/routes/limassol-to-paphos">Лимассол ↔ Пафос за €75</a> или прямой рейс из <a href="/ru/routes/larnaca-airport-to-paphos">аэропорта Ларнаки (€135)</a>.</p>
         </>
       )
     }
@@ -1297,7 +1238,7 @@ export const blogPosts: BlogPost[] = [
           <p>Designed by Sir Nick Faldo, this course is known for its strategic layout and beautiful Mediterranean setting.</p>
           <h2>3. Minthis Golf Club</h2>
           <p>Located in the grounds of a 12th-century monastery, this course offers a unique and peaceful golfing experience.</p>
-          <p><strong>Golf Transfers:</strong> Don't worry about fitting your clubs in a small car. Book a spacious minivan transfer to get you and your gear to the course comfortably.</p>
+          <p><strong>Golf Transfers:</strong> Arriving in Larnaca (LCA) or staying in Limassol? Book a <a href="/routes/larnaca-airport-to-paphos">Larnaca Airport → Paphos transfer (€135)</a> or <a href="/routes/limassol-to-paphos">Limassol → Paphos (€75)</a>; sedans comfortably hold up to 3 suitcases/bags (message us on WhatsApp if carrying oversized golf travel bags).</p>
         </>
       ),
       ru: (
@@ -1309,7 +1250,7 @@ export const blogPosts: BlogPost[] = [
           <p>Спроектированное сэром Ником Фалдо, это поле известно своей стратегической планировкой и красивым средиземноморским окружением.</p>
           <h2>3. Minthis Golf Club</h2>
           <p>Расположенное на территории монастыря 12-го века, это поле предлагает уникальный и спокойный опыт игры в гольф.</p>
-          <p><strong>Трансфер для гольфистов:</strong> Не беспокойтесь о том, как уместить клюшки в маленькую машину. Забронируйте просторный минивэн для комфортной поездки со всем снаряжением.</p>
+          <p><strong>Трансфер для гольфистов:</strong> Забронируйте прямой седан <a href="/ru/routes/larnaca-airport-to-paphos">Аэропорт Ларнака → Пафос (€135)</a> или <a href="/ru/routes/limassol-to-paphos">Лимассол → Пафос (€75)</a>. Если у вас нестандартные чехлы для гольфа, просто предупредите нас в WhatsApp.</p>
         </>
       )
     }
