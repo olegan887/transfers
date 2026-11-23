@@ -237,7 +237,7 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
 function getBaseTaxiServiceSchema(lang: Language) {
   const copy = SEO_COPY[lang] || SEO_COPY.en;
   return {
-    '@type': 'TaxiService',
+    '@type': 'LocalBusiness',
     '@id': `${SITE_URL}/#organization`,
     name: copy.orgName,
     description: copy.orgDesc,
