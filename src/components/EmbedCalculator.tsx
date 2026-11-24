@@ -3,7 +3,7 @@ import { ArrowRight, CarFront, Clock, ArrowLeftRight } from 'lucide-react';
 import { locations, getPrice, getRouteTime } from '../data/pricing';
 import { airportRoutes } from '../data/routes';
 import { useLanguage } from '../i18n/LanguageContext';
-import { translations } from '../i18n/translations';
+import { getLoadedTranslation, isTranslationLoaded, loadTranslation } from '../i18n/localeLoader';
 import { Language, SITE_URL, buildLocalizedPath } from '../lib/routing';
 
 export type EmbedTheme = 'brutal' | 'light';
@@ -25,7 +25,21 @@ export default function EmbedCalculator({
 }: EmbedCalculatorProps) {
   const { language } = useLanguage();
   const activeLang: Language = previewLang || language;
-  const activeTrans = translations[activeLang] || translations.en;
+  const [, setLocaleTick] = useState(0);
+
+  useEffect(() => {
+    let active = true;
+    if (!isTranslationLoaded(activeLang)) {
+      loadTranslation(activeLang).then(() => {
+        if (active) setLocaleTick((v) => v + 1);
+      });
+    }
+    return () => {
+      active = false;
+    };
+  }, [activeLang]);
+
+  const activeTrans = getLoadedTranslation(activeLang);
   const te = activeTrans.embed;
 
   const [from, setFrom] = useState(previewFrom || 'lca');

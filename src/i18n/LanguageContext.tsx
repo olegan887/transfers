@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { translations, Language } from './translations';
-import { parseRoute, switchLanguagePath } from '../lib/routing';
+import { getLoadedTranslation, isTranslationLoaded, loadTranslation } from './localeLoader';
+import { parseRoute, switchLanguagePath, type Language } from '../lib/routing';
 
 interface LanguageContextType {
   language: Language;
@@ -23,18 +23,41 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLang
   initialLanguage,
 }) => {
   const [language, setLanguage] = useState<Language>(() => getInitialLanguage(initialLanguage));
+  const [localeTick, setLocaleTick] = useState(0);
+
+  useEffect(() => {
+    let active = true;
+    if (!isTranslationLoaded(language)) {
+      loadTranslation(language).then(() => {
+        if (active) setLocaleTick((v) => v + 1);
+      });
+    }
+    return () => {
+      active = false;
+    };
+  }, [language]);
 
   // Keep language synchronized with browser history navigation (back/forward)
   useEffect(() => {
-    const syncFromUrl = () => {
+    let active = true;
+    const syncFromUrl = async () => {
       const urlLang = parseRoute(window.location.pathname, window.location.search).lang;
-      setLanguage(urlLang);
+      if (!isTranslationLoaded(urlLang)) {
+        await loadTranslation(urlLang);
+      }
+      if (active) setLanguage(urlLang);
     };
     window.addEventListener('popstate', syncFromUrl);
-    return () => window.removeEventListener('popstate', syncFromUrl);
+    return () => {
+      active = false;
+      window.removeEventListener('popstate', syncFromUrl);
+    };
   }, []);
 
-  const handleSetLanguage = useCallback((lang: Language) => {
+  const handleSetLanguage = useCallback(async (lang: Language) => {
+    if (!isTranslationLoaded(lang)) {
+      await loadTranslation(lang);
+    }
     setLanguage(lang);
     if (typeof window !== 'undefined') {
       localStorage.setItem('app_language', lang);
@@ -58,7 +81,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLang
   const t = useCallback(
     (key: string, params?: Record<string, string | number>) => {
       const keys = key.split('.');
-      let value: any = translations[language] || translations.en;
+      let value: any = getLoadedTranslation(language);
 
       for (const k of keys) {
         if (value === undefined || value === null) {
@@ -69,7 +92,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLang
       }
 
       if (value === undefined || value === null) {
-        let fallback: any = translations.en;
+        let fallback: any = getLoadedTranslation('en');
         for (const k of keys) {
           if (fallback === undefined || fallback === null) return key;
           fallback = fallback[k];
@@ -87,7 +110,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLang
 
       return result;
     },
-    [language]
+    [language, localeTick]
   );
 
   return (

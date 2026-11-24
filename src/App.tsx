@@ -20,6 +20,7 @@ const BlogList = lazy(() => import('./components/BlogList'));
 const BlogPost = lazy(() => import('./components/BlogPost'));
 const RouteLandingPage = lazy(() => import('./components/RouteLandingPage'));
 const RoutesIndexPage = lazy(() => import('./components/RoutesIndexPage'));
+const HubLandingPage = lazy(() => import('./components/HubLandingPage'));
 const AboutPage = lazy(() => import('./components/AboutPage'));
 const ContactPage = lazy(() => import('./components/ContactPage'));
 const LegalPage = lazy(() => import('./components/LegalPage'));
@@ -158,6 +159,27 @@ function AppContent({ initialPath, initialSearch }: AppProps) {
       return (
         <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
           <RouteLandingPage slug={parsed.slug} />
+        </Suspense>
+      );
+    }
+    if (parsed.view === 'hub-lca') {
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <HubLandingPage hubId="lca" />
+        </Suspense>
+      );
+    }
+    if (parsed.view === 'hub-pfo') {
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <HubLandingPage hubId="pfo" />
+        </Suspense>
+      );
+    }
+    if (parsed.view === 'hub-limassol') {
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <HubLandingPage hubId="limassol" />
         </Suspense>
       );
     }

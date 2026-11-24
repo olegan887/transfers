@@ -7,12 +7,16 @@ const __dirname = path.dirname(__filename);
 
 const blogFilePath = path.join(__dirname, 'src', 'data', 'blog.tsx');
 const flagshipBlogFilePath = path.join(__dirname, 'src', 'data', 'flagshipBlogPosts.tsx');
+const flagshipExtraFilePath = path.join(__dirname, 'src', 'data', 'flagshipBlogPostsExtra.ts');
 const routesFilePath = path.join(__dirname, 'src', 'data', 'routes.ts');
 const routingFilePath = path.join(__dirname, 'src', 'lib', 'routing.ts');
 const sitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
 
 const blogContent = fs.readFileSync(blogFilePath, 'utf-8');
 const flagshipContent = fs.readFileSync(flagshipBlogFilePath, 'utf-8');
+const flagshipExtraContent = fs.existsSync(flagshipExtraFilePath)
+  ? fs.readFileSync(flagshipExtraFilePath, 'utf-8')
+  : '';
 const routesContent = fs.readFileSync(routesFilePath, 'utf-8');
 const routingContent = fs.readFileSync(routingFilePath, 'utf-8');
 
@@ -37,8 +41,10 @@ while ((match = slugRegex.exec(routesContent)) !== null) {
 }
 
 const flagshipArticles = [];
-while ((match = flagshipPairRegex.exec(flagshipContent)) !== null) {
-  flagshipArticles.push({ slug: match[1], date: match[2] });
+for (const srcText of [flagshipContent, flagshipExtraContent]) {
+  while ((match = flagshipPairRegex.exec(srcText)) !== null) {
+    flagshipArticles.push({ slug: match[1], date: match[2] });
+  }
 }
 
 slugRegex.lastIndex = 0;
@@ -110,6 +116,11 @@ for (const slug of routeSlugs) {
   sitemap += buildMultiLangEntries(`/routes/${slug}`, CORE_LANGS, today, 'weekly', '0.9');
 }
 
+// Commercial Airport & City Hubs (7 core languages)
+sitemap += buildMultiLangEntries('/larnaca-airport-transfer', CORE_LANGS, today, 'weekly', '0.95');
+sitemap += buildMultiLangEntries('/paphos-airport-transfer', CORE_LANGS, today, 'weekly', '0.95');
+sitemap += buildMultiLangEntries('/limassol-transfers', CORE_LANGS, today, 'weekly', '0.95');
+
 // Dedicated Trust & Legal Pages (7 core languages)
 sitemap += buildMultiLangEntries('/about', CORE_LANGS, today, 'monthly', '0.8');
 sitemap += buildMultiLangEntries('/contact', CORE_LANGS, today, 'monthly', '0.8');
@@ -147,7 +158,7 @@ for (const article of indexedLegacyArticles) {
 sitemap += `</urlset>\n`;
 
 fs.writeFileSync(sitemapPath, sitemap);
-const totalCore = (7 + routeSlugs.length) * CORE_LANGS.length;
+const totalCore = (10 + routeSlugs.length) * CORE_LANGS.length;
 const totalFlagshipBlog = (1 + flagshipArticles.length) * CORE_LANGS.length;
 const totalLegacyBlog = indexedLegacyArticles.length * LEGACY_BLOG_LANGS.length;
 console.log(

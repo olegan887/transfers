@@ -3,6 +3,9 @@ import { Writable } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
 import App from './App';
 import { getPageSeoAsync } from './lib/seo';
+import { parseRoute } from './lib/routing';
+import { loadTranslation } from './i18n/localeLoader';
+import { loadRouteDetails } from './data/routeDetails';
 
 function renderAppToString(element: React.ReactElement): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -44,6 +47,11 @@ function renderAppToString(element: React.ReactElement): Promise<string> {
 }
 
 export async function render(urlPath: string) {
+  const parsed = parseRoute(urlPath);
+  await loadTranslation(parsed.lang);
+  if (parsed.view === 'route') {
+    await loadRouteDetails(parsed.lang);
+  }
   const [html, seo] = await Promise.all([
     renderAppToString(<App initialPath={urlPath} />),
     getPageSeoAsync(urlPath),

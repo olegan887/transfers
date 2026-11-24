@@ -38,15 +38,19 @@ function extractRouteSlugs() {
 }
 
 function extractFlagshipBlogSlugs() {
-  const flagshipContent = fs.readFileSync(
+  const flagshipFiles = [
     path.join(rootDir, 'src', 'data', 'flagshipBlogPosts.tsx'),
-    'utf-8'
-  );
+    path.join(rootDir, 'src', 'data', 'flagshipBlogPostsExtra.ts'),
+  ];
   const slugs = [];
   const regex = /^\s*slug:\s*['"]([^'"]+)['"]\s*,\s*\r?\n\s*date:/gm;
-  let m;
-  while ((m = regex.exec(flagshipContent)) !== null) {
-    slugs.push(m[1]);
+  for (const filePath of flagshipFiles) {
+    if (!fs.existsSync(filePath)) continue;
+    const content = fs.readFileSync(filePath, 'utf-8');
+    let m;
+    while ((m = regex.exec(content)) !== null) {
+      slugs.push(m[1]);
+    }
   }
   return slugs;
 }
@@ -215,6 +219,9 @@ async function runPrerender() {
     // Core site in 7 languages: en, ru, de, pl, fr, el, it
     ...CORE_LANGS.map((l) => (l === 'en' ? '/' : `/${l}/`)),
     ...CORE_LANGS.map((l) => (l === 'en' ? '/routes/' : `/${l}/routes/`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/larnaca-airport-transfer/' : `/${l}/larnaca-airport-transfer/`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/paphos-airport-transfer/' : `/${l}/paphos-airport-transfer/`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/limassol-transfers/' : `/${l}/limassol-transfers/`)),
     ...CORE_LANGS.map((l) => (l === 'en' ? '/about/' : `/${l}/about/`)),
     ...CORE_LANGS.map((l) => (l === 'en' ? '/contact/' : `/${l}/contact/`)),
     ...CORE_LANGS.map((l) => (l === 'en' ? '/privacy-policy/' : `/${l}/privacy-policy/`)),

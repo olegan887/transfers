@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { getPageSeoAsync } from '../lib/seo';
 
 function upsertMeta(selector: string, attrName: 'name' | 'property', attrVal: string, content: string) {
   let el = document.querySelector(selector) as HTMLMetaElement | null;
@@ -27,8 +26,10 @@ export function useDocumentMeta(pathname: string, search = '') {
   useEffect(() => {
     let cancelled = false;
 
-    getPageSeoAsync(pathname, search).then((seo) => {
-      if (cancelled) return;
+    import('../lib/seo')
+      .then(({ getPageSeoAsync }) => getPageSeoAsync(pathname, search))
+      .then((seo) => {
+        if (cancelled) return;
 
       document.documentElement.lang = seo.lang;
       document.title = seo.title;

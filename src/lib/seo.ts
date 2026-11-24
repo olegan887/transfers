@@ -6,7 +6,8 @@ import {
 } from '../data/routes';
 import type { BlogPost } from '../data/blog';
 import { globalAirportFaqs } from '../data/seoContent';
-import { translations } from '../i18n/translations';
+import { getLoadedTranslation, loadTranslation } from '../i18n/localeLoader';
+import type { HubConfig, HubId, HubLocalizedContent } from '../data/hubPages';
 import {
   buildLocalizedPath,
   CORE_LANGUAGES,
@@ -456,11 +457,17 @@ function buildLocaleAndFeedMeta(
   };
 }
 
+export interface HubSeoData {
+  cfg: HubConfig;
+  loc: HubLocalizedContent;
+}
+
 function buildPageSeo(
   pathname: string,
   search = '',
   loadedBlogPosts?: BlogPost[],
-  extraRouteFaqs?: RouteFaqItem[]
+  extraRouteFaqs?: RouteFaqItem[],
+  hubData?: HubSeoData
 ): SeoMetadata {
   const parsed = parseRoute(pathname, search);
   const { lang, view, slug } = parsed;
@@ -480,7 +487,7 @@ function buildPageSeo(
       ? ''
       : alternates[lang] || `${SITE_URL}${buildLocalizedPath(view, lang, slug)}`;
   const copy = SEO_COPY[lang] || SEO_COPY.en;
-  const trans = translations[lang] || translations.en;
+  const trans = getLoadedTranslation(lang);
   const localeAndFeed = buildLocaleAndFeedMeta(lang, alternates);
 
   if (view === 'not-found') {
@@ -670,6 +677,92 @@ function buildPageSeo(
       ...buildLocaleAndFeedMeta(lang, {}),
       robots: 'noindex, follow',
       jsonLd: null,
+    };
+  }
+
+  if (
+    (view === 'hub-lca' || view === 'hub-pfo' || view === 'hub-limassol') &&
+    hubData
+  ) {
+    const { cfg, loc } = hubData;
+    const homeUrl = `${SITE_URL}${buildLocalizedPath('home', lang)}`;
+    const routesUrl = `${SITE_URL}${buildLocalizedPath('routes-index', lang)}`;
+    const hubOffers = cfg.routeSlugs
+      .map((routeSlug) => {
+        const r = getAirportRouteBySlug(routeSlug);
+        if (!r) return null;
+        return {
+          '@type': 'Offer',
+          name: getRouteContentForLanguage(r, lang).h1,
+          price: String(r.basePrice),
+          priceCurrency: 'EUR',
+          url: `${SITE_URL}${buildLocalizedPath('route', lang, r.slug)}`,
+        };
+      })
+      .filter((item): item is NonNullable<typeof item> => item !== null);
+
+    return {
+      lang,
+      title: loc.seoTitle,
+      description: loc.metaDescription,
+      canonicalUrl,
+      alternates,
+      xDefaultUrl,
+      ogType: 'website',
+      ogImage: `${SITE_URL}${cfg.image}`,
+      ...localeAndFeed,
+      robots: 'index, follow',
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@graph': [
+          getBaseTaxiServiceSchema(lang),
+          {
+            '@type': 'CollectionPage',
+            name: loc.h1,
+            description: loc.metaDescription,
+            url: canonicalUrl,
+            mainEntity: {
+              '@type': 'OfferCatalog',
+              name: loc.tableTitle,
+              itemListElement: hubOffers,
+            },
+          },
+          {
+            '@type': 'FAQPage',
+            mainEntity: loc.faqs.map((faq) => ({
+              '@type': 'Question',
+              name: faq.q,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.a,
+              },
+            })),
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: trans.common.home,
+                item: homeUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: trans.common.allRoutes,
+                item: routesUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: loc.breadcrumb,
+                item: canonicalUrl,
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -909,7 +1002,7 @@ function buildPageSeo(
       : lang === 'ru'
       ? 'ru'
       : 'en';
-    const activeTrans = translations[activeLang] || translations.en;
+    const activeTrans = getLoadedTranslation(activeLang);
     const activeCopy = SEO_COPY[activeLang] || SEO_COPY.en;
     const homeUrl = `${SITE_URL}${buildLocalizedPath('home', activeLang)}`;
     const blogUrl = `${SITE_URL}${buildLocalizedPath('blog-list', activeLang)}`;
@@ -1088,14 +1181,30 @@ function buildPageSeo(
 
 export async function getPageSeoAsync(pathname: string, search = ''): Promise<SeoMetadata> {
   const parsed = parseRoute(pathname, search);
+  await loadTranslation(parsed.lang);
+
   if (parsed.view === 'blog-post' && parsed.slug) {
+    await loadTranslation('ru');
     const { blogPosts } = await import('../data/blog');
     return buildPageSeo(pathname, search, blogPosts);
   }
   if (parsed.view === 'route' && parsed.slug) {
-    const { getRouteEnrichment } = await import('../data/routeDetails');
-    const enrichment = getRouteEnrichment(parsed.slug, parsed.lang);
+    const { loadRouteDetails, getLoadedRouteEnrichment } = await import('../data/routeDetails');
+    await loadRouteDetails(parsed.lang);
+    const enrichment = getLoadedRouteEnrichment(parsed.slug, parsed.lang);
     return buildPageSeo(pathname, search, undefined, enrichment?.extraFaqs);
+  }
+  if (
+    parsed.view === 'hub-lca' ||
+    parsed.view === 'hub-pfo' ||
+    parsed.view === 'hub-limassol'
+  ) {
+    const hubId: HubId =
+      parsed.view === 'hub-lca' ? 'lca' : parsed.view === 'hub-pfo' ? 'pfo' : 'limassol';
+    const { getHubConfig, getHubLocalized } = await import('../data/hubPages');
+    const cfg = getHubConfig(hubId);
+    const loc = getHubLocalized(hubId, parsed.lang);
+    return buildPageSeo(pathname, search, undefined, undefined, { cfg, loc });
   }
   return buildPageSeo(pathname, search);
 }

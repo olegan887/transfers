@@ -4,7 +4,45 @@ import { locations, getRouteTime, DEFAULT_FEATURED_ROUTES } from '../data/pricin
 import { airportRoutes } from '../data/routes';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useData } from '../context/DataContext';
-import { buildLocalizedPath } from '../lib/routing';
+import { buildLocalizedPath, Language } from '../lib/routing';
+
+const HUB_PILL_LABELS: Record<Language, { lca: string; pfo: string; limassol: string }> = {
+  en: {
+    lca: 'Larnaca Airport (LCA) Hub',
+    pfo: 'Paphos Airport (PFO) Hub',
+    limassol: 'Limassol Transfers Hub',
+  },
+  ru: {
+    lca: 'Аэропорт Ларнака (LCA)',
+    pfo: 'Аэропорт Пафос (PFO)',
+    limassol: 'Лимассол (Все рейсы)',
+  },
+  de: {
+    lca: 'Flughafen Larnaka (LCA)',
+    pfo: 'Flughafen Paphos (PFO)',
+    limassol: 'Limassol Hub',
+  },
+  pl: {
+    lca: 'Lotnisko Larnaka (LCA)',
+    pfo: 'Lotnisko Pafos (PFO)',
+    limassol: 'Hub Limassol',
+  },
+  fr: {
+    lca: 'Hub Larnaca (LCA)',
+    pfo: 'Hub Paphos (PFO)',
+    limassol: 'Hub Limassol',
+  },
+  el: {
+    lca: 'Αεροδρόμιο Λάρνακας (LCA)',
+    pfo: 'Αεροδρόμιο Πάφου (PFO)',
+    limassol: 'Κόμβος Λεμεσού',
+  },
+  it: {
+    lca: 'Hub Larnaca (LCA)',
+    pfo: 'Hub Paphos (PFO)',
+    limassol: 'Hub Limassol',
+  },
+};
 
 export default function Destinations() {
   const { language, t } = useLanguage();
@@ -95,7 +133,25 @@ export default function Destinations() {
           })}
         </div>
 
-        <div className="text-center mt-10">
+        <div className="flex flex-wrap items-center justify-center gap-3 mt-10 mb-5">
+          {(
+            [
+              ['hub-lca', (HUB_PILL_LABELS[language] || HUB_PILL_LABELS.en).lca],
+              ['hub-pfo', (HUB_PILL_LABELS[language] || HUB_PILL_LABELS.en).pfo],
+              ['hub-limassol', (HUB_PILL_LABELS[language] || HUB_PILL_LABELS.en).limassol],
+            ] as const
+          ).map(([view, label]) => (
+            <a
+              key={view}
+              href={buildLocalizedPath(view, language)}
+              className="px-4 py-2 bg-white border-2 border-black text-xs sm:text-sm font-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white transition-colors"
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+
+        <div className="text-center">
           <a
             href={buildLocalizedPath('routes-index', language)}
             className="brutal-btn brutal-btn-white px-6 py-3 text-sm sm:text-base uppercase"

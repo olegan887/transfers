@@ -1,6 +1,7 @@
 import React from 'react';
 import { Language, CORE_LANGUAGES, buildLocalizedPath } from '../lib/routing';
 import { getAirportRouteBySlug, getRouteContentForLanguage } from './routes';
+import { EXTRA_FLAGSHIP_DEFINITIONS } from './flagshipBlogPostsExtra';
 
 export interface BlogFaqItem {
   q: string;
@@ -1825,9 +1826,14 @@ const FLAGSHIP_DEFINITIONS: FlagshipPostDefinition[] = [
   },
 ];
 
-export const FLAGSHIP_BLOG_SLUGS = FLAGSHIP_DEFINITIONS.map((d) => d.slug);
+const ALL_FLAGSHIP_DEFINITIONS: FlagshipPostDefinition[] = [
+  ...FLAGSHIP_DEFINITIONS,
+  ...EXTRA_FLAGSHIP_DEFINITIONS,
+];
 
-export const flagshipBlogPosts = FLAGSHIP_DEFINITIONS.map((def) => {
+export const FLAGSHIP_BLOG_SLUGS = ALL_FLAGSHIP_DEFINITIONS.map((d) => d.slug);
+
+export const flagshipBlogPosts = ALL_FLAGSHIP_DEFINITIONS.map((def) => {
   const title = {} as Record<Language, string>;
   const excerpt = {} as Record<Language, string>;
   const content = {} as Record<Language, React.ReactNode>;

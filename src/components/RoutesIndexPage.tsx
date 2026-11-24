@@ -2,7 +2,55 @@ import React, { useState } from 'react';
 import { ArrowRight, MapPin, Plane } from 'lucide-react';
 import { airportRoutes, getRouteContentForLanguage, RouteCategory } from '../data/routes';
 import { useLanguage } from '../i18n/LanguageContext';
-import { buildLocalizedPath } from '../lib/routing';
+import { buildLocalizedPath, Language } from '../lib/routing';
+
+const HUB_STRIP_LABELS: Record<
+  Language,
+  { heading: string; lca: string; pfo: string; limassol: string }
+> = {
+  en: {
+    heading: 'Main Transfer Hubs',
+    lca: 'Larnaca Airport (LCA) Hub',
+    pfo: 'Paphos Airport (PFO) Hub',
+    limassol: 'Limassol Base Hub',
+  },
+  ru: {
+    heading: 'Главные хабы трансфера',
+    lca: 'Аэропорт Ларнака (LCA)',
+    pfo: 'Аэропорт Пафос (PFO)',
+    limassol: 'Лимассол (База)',
+  },
+  de: {
+    heading: 'Haupt-Transfer-Hubs',
+    lca: 'Flughafen Larnaka (LCA)',
+    pfo: 'Flughafen Paphos (PFO)',
+    limassol: 'Limassol Basis-Hub',
+  },
+  pl: {
+    heading: 'Główne huby transferowe',
+    lca: 'Lotnisko Larnaka (LCA)',
+    pfo: 'Lotnisko Pafos (PFO)',
+    limassol: 'Baza w Limassol',
+  },
+  fr: {
+    heading: 'Pôles principaux de transfert',
+    lca: 'Aéroport Larnaca (LCA)',
+    pfo: 'Aéroport Paphos (PFO)',
+    limassol: 'Base de Limassol',
+  },
+  el: {
+    heading: 'Κύριοι κόμβοι μεταφοράς',
+    lca: 'Αεροδρόμιο Λάρνακας (LCA)',
+    pfo: 'Αεροδρόμιο Πάφου (PFO)',
+    limassol: 'Βάση Λεμεσού',
+  },
+  it: {
+    heading: 'Hub principali di transfer',
+    lca: 'Aeroporto Larnaca (LCA)',
+    pfo: 'Aeroporto Paphos (PFO)',
+    limassol: 'Sede di Limassol',
+  },
+};
 
 export default function RoutesIndexPage() {
   const { language, t } = useLanguage();
@@ -33,6 +81,46 @@ export default function RoutesIndexPage() {
           <p className="text-base sm:text-lg text-gray-800 font-medium">
             {t('routesPage.subtitle')}
           </p>
+        </div>
+
+        {/* 3 Commercial Hub Cards */}
+        <div className="mb-8">
+          <div className="text-xs font-black uppercase tracking-wider text-gray-600 mb-3">
+            {(HUB_STRIP_LABELS[language] || HUB_STRIP_LABELS.en).heading}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {(
+              [
+                {
+                  view: 'hub-lca' as const,
+                  label: (HUB_STRIP_LABELS[language] || HUB_STRIP_LABELS.en).lca,
+                  price: '€75–€180',
+                },
+                {
+                  view: 'hub-pfo' as const,
+                  label: (HUB_STRIP_LABELS[language] || HUB_STRIP_LABELS.en).pfo,
+                  price: '€75–€190',
+                },
+                {
+                  view: 'hub-limassol' as const,
+                  label: (HUB_STRIP_LABELS[language] || HUB_STRIP_LABELS.en).limassol,
+                  price: '€75–€120',
+                },
+              ]
+            ).map((hub) => (
+              <a
+                key={hub.view}
+                href={buildLocalizedPath(hub.view, language)}
+                className="bg-yellow-400 border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-transform flex items-center justify-between gap-3"
+              >
+                <div>
+                  <div className="font-black text-black text-sm sm:text-base">{hub.label}</div>
+                  <div className="text-xs font-bold text-black/80 tabular-nums">{hub.price}</div>
+                </div>
+                <ArrowRight className="w-4 h-4 shrink-0 text-black" />
+              </a>
+            ))}
+          </div>
         </div>
 
         {/* Interactive Category Filter Tabs */}

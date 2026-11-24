@@ -1,10 +1,170 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowRight, CheckCircle2, Clock, MapPin, ChevronDown, Plane } from 'lucide-react';
 import { getAirportRouteBySlug, airportRoutes, getRouteContentForLanguage } from '../data/routes';
-import { getRouteEnrichment } from '../data/routeDetails';
+import {
+  getLoadedRouteEnrichment,
+  isRouteDetailsLoaded,
+  loadRouteDetails,
+} from '../data/routeDetails';
 import { useLanguage } from '../i18n/LanguageContext';
-import { buildLocalizedPath } from '../lib/routing';
+import { buildLocalizedPath, Language } from '../lib/routing';
 import BookingWidget from './BookingWidget';
+
+interface CompareCopy {
+  heading: string;
+  colService: string;
+  colCost: string;
+  colTime: string;
+  colDetails: string;
+  rowPrivateTitle: string;
+  rowPrivateDetails: string;
+  rowTaxiTitle: string;
+  rowTaxiDetails: string;
+  rowBusTitle: string;
+  rowBusCost: string;
+  rowBusDetails: string;
+  roundTripLabel: string;
+  nightLabel: string;
+  hubLcaLabel: string;
+  hubPfoLabel: string;
+  hubLimassolLabel: string;
+}
+
+const COMPARE_COPY: Record<Language, CompareCopy> = {
+  en: {
+    heading: 'Private Transfer vs. Metered Taxi vs. Public Bus',
+    colService: 'Transport Option',
+    colCost: 'Total Cost (1–4 Pax)',
+    colTime: 'Travel Time',
+    colDetails: 'Pickup, Luggage & Night Rules',
+    rowPrivateTitle: 'Private Sedan (Pre-Booked)',
+    rowPrivateDetails: 'Door-to-door 24/7, up to 4 pax & 3 suitcases, +€10 flat night (23:00–07:00)',
+    rowTaxiTitle: 'Metered Rank Taxi',
+    rowTaxiDetails: 'Taximeter Tariff 1/2 + extra fees for luggage (>12 kg), waiting & holidays',
+    rowBusTitle: 'Public / Intercity Bus',
+    rowBusCost: 'Low per-seat ticket (paid per person)',
+    rowBusDetails: 'Hub-to-hub station stops with luggage transfers; no overnight departures',
+    roundTripLabel: 'Round Trip −10%',
+    nightLabel: 'flat night',
+    hubLcaLabel: 'All Larnaca Airport (LCA) Routes',
+    hubPfoLabel: 'All Paphos Airport (PFO) Routes',
+    hubLimassolLabel: 'All Limassol Transfers',
+  },
+  ru: {
+    heading: 'Индивидуальный трансфер vs Такси по счётчику vs Автобус',
+    colService: 'Способ поездки',
+    colCost: 'Стоимость (1–4 чел.)',
+    colTime: 'Время в пути',
+    colDetails: 'Подача, багаж и ночной тариф',
+    rowPrivateTitle: 'Частный седан (Фикс)',
+    rowPrivateDetails: 'От двери до двери 24/7, до 4 мест и 3 чемоданов, фикс +€10 ночью (23:00–07:00)',
+    rowTaxiTitle: 'Такси со стоянки (по счётчику)',
+    rowTaxiDetails: 'Счётчик Тариф 1/2 + доплаты за чемоданы (>12 кг), трафик и праздники',
+    rowBusTitle: 'Междугородний автобус',
+    rowBusCost: 'Билет за каждого пассажира',
+    rowBusDetails: 'Только между автостанциями с пересадкой с чемоданами; ночью не ходит',
+    roundTripLabel: 'Туда-обратно −10%',
+    nightLabel: 'ночь фикс',
+    hubLcaLabel: 'Все маршруты Аэропорта Ларнака (LCA)',
+    hubPfoLabel: 'Все маршруты Аэропорта Пафос (PFO)',
+    hubLimassolLabel: 'Все трансферы из Лимассола',
+  },
+  de: {
+    heading: 'Privattransfer vs. Taxameter-Taxi vs. Linienbus',
+    colService: 'Option',
+    colCost: 'Gesamtpreis (1–4 Pers.)',
+    colTime: 'Fahrzeit',
+    colDetails: 'Abholung, Gepäck & Nachtregel',
+    rowPrivateTitle: 'Privat-Limousine (Festpreis)',
+    rowPrivateDetails: 'Tür-zu-Tür 24/7, bis 4 Pers. & 3 Koffer, pauschal +€10 nachts (23:00–07:00)',
+    rowTaxiTitle: 'Taxi mit Taxameter',
+    rowTaxiDetails: 'Tarif 1/2 je km plus Zuschläge für Gepäck (>12 kg), Wartezeit & Feiertage',
+    rowBusTitle: 'Linien- / Überlandbus',
+    rowBusCost: 'Einzelticket je Reisendem',
+    rowBusDetails: 'Umstieg an Fernbushaltestellen mit Koffern; keine Nachtfahrten',
+    roundTripLabel: 'Hin & Zurück −10 %',
+    nightLabel: 'pauschal nachts',
+    hubLcaLabel: 'Alle Strecken Flughafen Larnaka (LCA)',
+    hubPfoLabel: 'Alle Strecken Flughafen Paphos (PFO)',
+    hubLimassolLabel: 'Alle Transfers ab Limassol',
+  },
+  pl: {
+    heading: 'Prywatny transfer vs Taksówka z licznikiem vs Autobus',
+    colService: 'Opcja transportu',
+    colCost: 'Koszt (1–4 os.)',
+    colTime: 'Czas jazdy',
+    colDetails: 'Odbiór, bagaż i taryfa nocna',
+    rowPrivateTitle: 'Prywatny sedan (Stała cena)',
+    rowPrivateDetails: 'Pod drzwi 24/7, do 4 os. i 3 walizek, stałe +€10 nocą (23:00–07:00)',
+    rowTaxiTitle: 'Taksówka z postoju (licznik)',
+    rowTaxiDetails: 'Taryfa 1/2 za km oraz dopłaty za bagaż (>12 kg), korki i święta',
+    rowBusTitle: 'Autobus międzymiastowy',
+    rowBusCost: 'Bilet płatny za osobę',
+    rowBusDetails: 'Przesiadki między dworcami z bagażem; brak kursów nocnych',
+    roundTripLabel: 'W obie strony −10%',
+    nightLabel: 'nocą płasko',
+    hubLcaLabel: 'Wszystkie trasy Lotnisko Larnaka (LCA)',
+    hubPfoLabel: 'Wszystkie trasy Lotnisko Pafos (PFO)',
+    hubLimassolLabel: 'Wszystkie transfery z Limassol',
+  },
+  fr: {
+    heading: 'Transfert privé vs Taxi au compteur vs Bus public',
+    colService: 'Option',
+    colCost: 'Coût total (1–4 pers.)',
+    colTime: 'Durée',
+    colDetails: 'Prise en charge, bagages & nuit',
+    rowPrivateTitle: 'Berline privée (Tarif fixe)',
+    rowPrivateDetails: 'Porte-à-porte 24h/24, 4 pax & 3 valises, forfait +10 € la nuit (23h–07h)',
+    rowTaxiTitle: 'Taxi au compteur',
+    rowTaxiDetails: 'Tarif 1/2 au km + suppléments bagages (>12 kg), trafic et jours fériés',
+    rowBusTitle: 'Bus interurbain',
+    rowBusCost: 'Billet individuel par passager',
+    rowBusDetails: 'Arrêts aux gares routières avec changements ; pas de bus de nuit',
+    roundTripLabel: 'Aller-retour −10 %',
+    nightLabel: 'forfait nuit',
+    hubLcaLabel: 'Tous trajets Aéroport Larnaca (LCA)',
+    hubPfoLabel: 'Tous trajets Aéroport Paphos (PFO)',
+    hubLimassolLabel: 'Tous transferts Limassol',
+  },
+  el: {
+    heading: 'Ιδιωτική μεταφορά vs Ταξί με ταξίμετρο vs Λεωφορείο',
+    colService: 'Επιλογή μεταφοράς',
+    colCost: 'Συνολικό κόστος (1–4 άτ.)',
+    colTime: 'Χρόνος διαδρομής',
+    colDetails: 'Παραλαβή, αποσκευές & νύχτα',
+    rowPrivateTitle: 'Ιδιωτικό Sedan (Σταθερή τιμή)',
+    rowPrivateDetails: 'Πόρτα-πόρτα 24/7, έως 4 άτομα & 3 βαλίτσες, ενιαίο +€10 νύχτα (23:00–07:00)',
+    rowTaxiTitle: 'Ταξί πιάτσας με ταξίμετρο',
+    rowTaxiDetails: 'Ταρίφα 1/2 ανά χλμ + έξτρα χρέωση για αποσκευές (>12 kg), κίνηση & αργίες',
+    rowBusTitle: 'Υπεραστικό λεωφορείο',
+    rowBusCost: 'Χαμηλό εισιτήριο ανά επιβάτη',
+    rowBusDetails: 'Μόνο μεταξύ σταθμών με μετεπιβίβαση αποσκευών· χωρίς νυχτερινά',
+    roundTripLabel: 'Μετ’ επιστροφής −10%',
+    nightLabel: 'νύχτα σταθερά',
+    hubLcaLabel: 'Όλες οι διαδρομές Αερ. Λάρνακας (LCA)',
+    hubPfoLabel: 'Όλες οι διαδρομές Αερ. Πάφου (PFO)',
+    hubLimassolLabel: 'Όλες οι μεταφορές Λεμεσού',
+  },
+  it: {
+    heading: 'Transfer privato vs Taxi a tassametro vs Bus pubblico',
+    colService: 'Opzione di viaggio',
+    colCost: 'Costo totale (1–4 pax)',
+    colTime: 'Durata',
+    colDetails: 'Ritiro, bagagli e regola notturna',
+    rowPrivateTitle: 'Berlina privata (Tariffa fissa)',
+    rowPrivateDetails: 'Porta a porta 24/7, fino a 4 pax e 3 valigie, +€10 fissi di notte (23:00–07:00)',
+    rowTaxiTitle: 'Taxi a tassametro',
+    rowTaxiDetails: 'Tariffa 1/2 a km + extra per bagagli (>12 kg), traffico e festivi',
+    rowBusTitle: 'Bus interurbano pubblico',
+    rowBusCost: 'Biglietto economico a passeggero',
+    rowBusDetails: 'Fermate alle stazioni con cambi valigia; nessuna corsa notturna',
+    roundTripLabel: 'Andata/Ritorno −10%',
+    nightLabel: 'notte fisso',
+    hubLcaLabel: 'Tutte le tratte Aeroporto Larnaca (LCA)',
+    hubPfoLabel: 'Tutte le tratte Aeroporto Paphos (PFO)',
+    hubLimassolLabel: 'Tutti i transfer da Limassol',
+  },
+};
 
 interface RouteLandingPageProps {
   slug: string;
@@ -14,6 +174,19 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
   const { language, t } = useLanguage();
   const route = getAirportRouteBySlug(slug);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [, setDetailsTick] = useState(0);
+
+  useEffect(() => {
+    let active = true;
+    if (!isRouteDetailsLoaded(language)) {
+      loadRouteDetails(language).then(() => {
+        if (active) setDetailsTick((v) => v + 1);
+      });
+    }
+    return () => {
+      active = false;
+    };
+  }, [language]);
 
   if (!route) {
     return (
@@ -33,11 +206,25 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
   }
 
   const content = getRouteContentForLanguage(route, language);
-  const enrichment = getRouteEnrichment(route.slug, language);
+  const enrichment = getLoadedRouteEnrichment(route.slug, language);
   const allFaqs = [...content.faqs, ...(enrichment?.extraFaqs || [])];
+  const comp = COMPARE_COPY[language] || COMPARE_COPY.en;
   const homeHref = buildLocalizedPath('home', language);
   const routesHref = buildLocalizedPath('routes-index', language);
+  const parentHubView =
+    route.category === 'LCA' ? 'hub-lca' : route.category === 'PFO' ? 'hub-pfo' : 'hub-limassol';
+  const parentHubLabel =
+    route.category === 'LCA'
+      ? comp.hubLcaLabel
+      : route.category === 'PFO'
+      ? comp.hubPfoLabel
+      : comp.hubLimassolLabel;
   const returnPrice = Math.round(route.basePrice * 2 * 0.9);
+  const meterMin = Math.round(3.8 + route.distanceKm * 0.95);
+  const meterMax = Math.round(4.8 + route.distanceKm * 1.15 + 15);
+  const taxiMaxDur = route.durationMin + 15;
+  const busMinDur = Math.round(route.durationMin * 1.8);
+  const busMaxDur = Math.round(route.durationMin * 2.4);
   const relatedRoutes = route.relatedSlugs
     .map((s) => getAirportRouteBySlug(s))
     .filter((r): r is NonNullable<typeof r> => Boolean(r));
@@ -214,6 +401,57 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
         </section>
       )}
 
+      {/* Transport Comparison Table */}
+      <section className="py-14 bg-gray-50 border-b-4 border-black">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <h2 className="text-2xl md:text-3xl font-black text-black uppercase tracking-tight mb-6">
+            {comp.heading}
+          </h2>
+          <div className="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-black text-white text-xs font-black uppercase">
+                  <th className="py-3.5 px-4">{comp.colService}</th>
+                  <th className="py-3.5 px-4">{comp.colCost}</th>
+                  <th className="py-3.5 px-4">{comp.colTime}</th>
+                  <th className="py-3.5 px-4">{comp.colDetails}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y-2 divide-black text-sm">
+                <tr className="bg-yellow-50 font-bold">
+                  <td className="py-3.5 px-4 font-black text-black">{comp.rowPrivateTitle}</td>
+                  <td className="py-3.5 px-4 tabular-nums">
+                    €{route.basePrice} ({comp.roundTripLabel}: €{returnPrice})
+                  </td>
+                  <td className="py-3.5 px-4 tabular-nums">
+                    ~{route.durationMin} {t('common.min')}
+                  </td>
+                  <td className="py-3.5 px-4">{comp.rowPrivateDetails}</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-black text-black">{comp.rowTaxiTitle}</td>
+                  <td className="py-3.5 px-4 tabular-nums">
+                    ~€{meterMin}–€{meterMax}
+                  </td>
+                  <td className="py-3.5 px-4 tabular-nums">
+                    ~{route.durationMin}–{taxiMaxDur} {t('common.min')}
+                  </td>
+                  <td className="py-3.5 px-4">{comp.rowTaxiDetails}</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-black text-black">{comp.rowBusTitle}</td>
+                  <td className="py-3.5 px-4">{comp.rowBusCost}</td>
+                  <td className="py-3.5 px-4 tabular-nums">
+                    ~{busMinDur}–{busMaxDur} {t('common.min')}
+                  </td>
+                  <td className="py-3.5 px-4">{comp.rowBusDetails}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       {/* Route-Specific FAQ */}
       <section className="py-14 bg-white border-b-4 border-black">
         <div className="container mx-auto px-4 max-w-4xl">
@@ -266,9 +504,17 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
             <h2 className="text-2xl font-black text-black uppercase tracking-tight">
               {t('routeDetail.relatedTitle')}
             </h2>
-            <a href={routesHref} className="font-black text-sm underline hover:text-yellow-600">
-              {t('routeDetail.viewAllRoutes')}
-            </a>
+            <div className="flex flex-wrap items-center gap-4">
+              <a
+                href={buildLocalizedPath(parentHubView, language)}
+                className="font-black text-sm underline hover:text-yellow-600"
+              >
+                {parentHubLabel}
+              </a>
+              <a href={routesHref} className="font-black text-sm underline hover:text-yellow-600">
+                {t('routeDetail.viewAllRoutes')}
+              </a>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

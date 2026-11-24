@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Code2, Copy, Check, Rss, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { translations } from '../i18n/translations';
+import { getLoadedTranslation, isTranslationLoaded, loadTranslation } from '../i18n/localeLoader';
 import { locations, getPrice } from '../data/pricing';
 import {
   CORE_LANGUAGES,
@@ -20,6 +20,19 @@ export default function WidgetBuilderPage() {
   const [defaultTo, setDefaultTo] = useState('limassol');
   const [widthMode, setWidthMode] = useState<'responsive' | 'compact'>('responsive');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [, setLocaleTick] = useState(0);
+
+  useEffect(() => {
+    let active = true;
+    if (!isTranslationLoaded(widgetLang)) {
+      loadTranslation(widgetLang).then(() => {
+        if (active) setLocaleTick((v) => v + 1);
+      });
+    }
+    return () => {
+      active = false;
+    };
+  }, [widgetLang]);
 
   const availableDestinations = useMemo(() => {
     return locations.filter(
@@ -42,7 +55,7 @@ export default function WidgetBuilderPage() {
     defaultTo
   )}&theme=${widgetTheme}`;
   const maxWidthStyle = widthMode === 'compact' ? 'max-width:380px;' : 'max-width:100%;';
-  const widgetTrans = translations[widgetLang] || translations.en;
+  const widgetTrans = getLoadedTranslation(widgetLang);
 
   const embedSnippet = `<div style="${maxWidthStyle}margin:0 auto;">
   <iframe src="${embedSrc}" width="100%" height="445" style="border:0;overflow:hidden;border-radius:14px;" loading="lazy" title="${widgetTrans.embed.title}"></iframe>

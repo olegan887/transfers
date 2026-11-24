@@ -13,6 +13,44 @@ import { airportRoutes } from '../data/routes';
 import { reportContactClick } from '../lib/analytics';
 import Logo from './Logo';
 
+const FOOTER_HUB_LABELS: Record<Language, { lca: string; pfo: string; limassol: string }> = {
+  en: {
+    lca: 'Larnaca Airport (LCA) Hub',
+    pfo: 'Paphos Airport (PFO) Hub',
+    limassol: 'Limassol Transfers Hub',
+  },
+  ru: {
+    lca: 'Хаб Аэропорт Ларнака (LCA)',
+    pfo: 'Хаб Аэропорт Пафос (PFO)',
+    limassol: 'Трансферы из Лимассола',
+  },
+  de: {
+    lca: 'Flughafen Larnaka (LCA) Hub',
+    pfo: 'Flughafen Paphos (PFO) Hub',
+    limassol: 'Limassol Transfers Hub',
+  },
+  pl: {
+    lca: 'Hub Lotnisko Larnaka (LCA)',
+    pfo: 'Hub Lotnisko Pafos (PFO)',
+    limassol: 'Hub Transfery Limassol',
+  },
+  fr: {
+    lca: 'Hub Aéroport Larnaca (LCA)',
+    pfo: 'Hub Aéroport Paphos (PFO)',
+    limassol: 'Hub Transferts Limassol',
+  },
+  el: {
+    lca: 'Κόμβος Αεροδρομίου Λάρνακας (LCA)',
+    pfo: 'Κόμβος Αεροδρομίου Πάφου (PFO)',
+    limassol: 'Βάση Μεταφορών Λεμεσού',
+  },
+  it: {
+    lca: 'Hub Aeroporto Larnaca (LCA)',
+    pfo: 'Hub Aeroporto Paphos (PFO)',
+    limassol: 'Hub Transfer Limassol',
+  },
+};
+
 interface FooterProps {
   currentPath?: string;
 }
@@ -74,6 +112,30 @@ export default function Footer({ currentPath }: FooterProps = {}) {
                   </a>
                 </li>
               ))}
+              <li className="pt-2 border-t border-black/20">
+                <a
+                  href={buildLocalizedPath('hub-lca', language)}
+                  className="hover:text-yellow-600 transition-colors underline"
+                >
+                  {(FOOTER_HUB_LABELS[language] || FOOTER_HUB_LABELS.en).lca}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={buildLocalizedPath('hub-pfo', language)}
+                  className="hover:text-yellow-600 transition-colors underline"
+                >
+                  {(FOOTER_HUB_LABELS[language] || FOOTER_HUB_LABELS.en).pfo}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={buildLocalizedPath('hub-limassol', language)}
+                  className="hover:text-yellow-600 transition-colors underline"
+                >
+                  {(FOOTER_HUB_LABELS[language] || FOOTER_HUB_LABELS.en).limassol}
+                </a>
+              </li>
             </ul>
           </div>
 

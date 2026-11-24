@@ -7,6 +7,9 @@ export const MULTILINGUAL_BLOG_SLUGS = [
   'larnaca-paphos-airport-to-limassol-transfer-guide',
   'paphos-airport-to-ayia-napa-protaras-nicosia-transfer',
   'cyprus-night-airport-transfer-flight-delays-guide',
+  'cyprus-taxi-transfer-prices-2026-guide',
+  'larnaca-vs-paphos-airport-which-to-choose',
+  'cyprus-airport-transfer-with-kids-luggage-guide',
 ] as const;
 
 export const NOINDEX_BLOG_SLUGS = [
@@ -49,6 +52,9 @@ export type RouteView =
   | 'home'
   | 'routes-index'
   | 'route'
+  | 'hub-lca'
+  | 'hub-pfo'
+  | 'hub-limassol'
   | 'blog-list'
   | 'blog-post'
   | 'about'
@@ -140,6 +146,18 @@ export function parseRoute(pathname: string, search = ''): ParsedRoute {
     return { lang: detectedLang, view: 'terms', cleanPath: `${prefix}/terms/` };
   }
 
+  if (subPath === '/larnaca-airport-transfer') {
+    return { lang: detectedLang, view: 'hub-lca', cleanPath: `${prefix}/larnaca-airport-transfer/` };
+  }
+
+  if (subPath === '/paphos-airport-transfer') {
+    return { lang: detectedLang, view: 'hub-pfo', cleanPath: `${prefix}/paphos-airport-transfer/` };
+  }
+
+  if (subPath === '/limassol-transfers') {
+    return { lang: detectedLang, view: 'hub-limassol', cleanPath: `${prefix}/limassol-transfers/` };
+  }
+
   if (subPath === '/routes') {
     return { lang: detectedLang, view: 'routes-index', cleanPath: `${prefix}/routes/` };
   }
@@ -214,6 +232,12 @@ export function buildLocalizedPath(view: RouteView, lang: Language, slug?: strin
       return `${prefix}/routes/`;
     case 'route':
       return slug ? `${prefix}/routes/${slug}/` : `${prefix}/routes/`;
+    case 'hub-lca':
+      return `${prefix}/larnaca-airport-transfer/`;
+    case 'hub-pfo':
+      return `${prefix}/paphos-airport-transfer/`;
+    case 'hub-limassol':
+      return `${prefix}/limassol-transfers/`;
     case 'blog-list':
       return `${prefix}/blog/`;
     case 'blog-post':
