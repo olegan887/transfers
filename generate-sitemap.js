@@ -46,9 +46,10 @@ const CORE_LANGS = ['en', 'ru', 'de', 'pl', 'fr', 'el', 'it'];
 const LEGACY_BLOG_LANGS = ['en', 'ru'];
 
 function buildCorePath(subPath, lang) {
-  if (lang === 'en') return subPath;
-  if (subPath === '/') return `/${lang}/`;
-  return `/${lang}${subPath}`;
+  const normalized = subPath === '/' ? '/' : subPath.endsWith('/') ? subPath : `${subPath}/`;
+  if (lang === 'en') return normalized;
+  if (normalized === '/') return `/${lang}/`;
+  return `/${lang}${normalized}`;
 }
 
 function buildMultiLangEntries(subPath, langs, lastmod, changefreq, priority) {

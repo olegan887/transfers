@@ -134,10 +134,10 @@ function buildItems(lang: Language): FeedItem[] {
   );
 
   const blogItems: FeedItem[] = filteredPosts.map((post) => {
-    const url = `${SITE_URL}${prefix}/blog/${post.slug}?utm_source=rss&utm_medium=syndication`;
+    const url = `${SITE_URL}${prefix}/blog/${post.slug}/?utm_source=rss&utm_medium=syndication`;
     const image = post.image.startsWith('http') ? post.image : `${SITE_URL}${post.image}`;
     return {
-      id: `${SITE_URL}${prefix}/blog/${post.slug}`,
+      id: `${SITE_URL}${prefix}/blog/${post.slug}/`,
       url,
       title: post.title[lang] || post.title.en,
       summary: post.excerpt[lang] || post.excerpt.en,
@@ -150,11 +150,11 @@ function buildItems(lang: Language): FeedItem[] {
   const routeItems: FeedItem[] = airportRoutes.map((route, idx) => {
     const baseDate = new Date('2026-06-01T08:00:00Z');
     baseDate.setDate(baseDate.getDate() - idx);
-    const url = `${SITE_URL}${prefix}/routes/${route.slug}?utm_source=rss&utm_medium=syndication`;
+    const url = `${SITE_URL}${prefix}/routes/${route.slug}/?utm_source=rss&utm_medium=syndication`;
     const image = route.image.startsWith('http') ? route.image : `${SITE_URL}${route.image}`;
     const localized = getRouteContentForLanguage(route, lang);
     return {
-      id: `${SITE_URL}${prefix}/routes/${route.slug}`,
+      id: `${SITE_URL}${prefix}/routes/${route.slug}/`,
       url,
       title: `${localized.h1} — €${route.basePrice}`,
       summary: `${localized.subtitle} (${route.distanceKm} km, ~${route.durationMin} min).`,

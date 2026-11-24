@@ -24,8 +24,8 @@ function buildPool(): SyndicationItem[] {
     ruTitle: `${r.ru.h1} — фиксированно €${r.basePrice}`,
     enSummary: r.en.subtitle,
     ruSummary: r.ru.subtitle,
-    enUrl: `${SITE_URL}/routes/${r.slug}?utm_source=syndication&utm_medium=social`,
-    ruUrl: `${SITE_URL}/ru/routes/${r.slug}?utm_source=syndication&utm_medium=social`,
+    enUrl: `${SITE_URL}/routes/${r.slug}/?utm_source=syndication&utm_medium=social`,
+    ruUrl: `${SITE_URL}/ru/routes/${r.slug}/?utm_source=syndication&utm_medium=social`,
     highlightsEn: r.en.highlights,
     highlightsRu: r.ru.highlights,
   }));
@@ -37,8 +37,8 @@ function buildPool(): SyndicationItem[] {
     ruTitle: p.title.ru,
     enSummary: p.excerpt.en,
     ruSummary: p.excerpt.ru,
-    enUrl: `${SITE_URL}/blog/${p.slug}?utm_source=syndication&utm_medium=social`,
-    ruUrl: `${SITE_URL}/ru/blog/${p.slug}?utm_source=syndication&utm_medium=social`,
+    enUrl: `${SITE_URL}/blog/${p.slug}/?utm_source=syndication&utm_medium=social`,
+    ruUrl: `${SITE_URL}/ru/blog/${p.slug}/?utm_source=syndication&utm_medium=social`,
     highlightsEn: [
       'Fixed sedan rates €75–€200 (up to 4 passengers & 3 suitcases)',
       'Limassol dispatch base, 24/7 airport meet & greet, −10% round trip',
@@ -98,8 +98,8 @@ async function publishToTelegraph(item: SyndicationItem, lang: 'en' | 'ru') {
         isRu ? 'Калькулятор для отелей и блогов: ' : 'Free calculator widget for Cyprus websites: ',
         {
           tag: 'a',
-          attrs: { href: `${SITE_URL}${isRu ? '/ru/widget' : '/widget'}` },
-          children: [`${SITE_URL}${isRu ? '/ru/widget' : '/widget'}`],
+          attrs: { href: `${SITE_URL}${isRu ? '/ru/widget/' : '/widget/'}` },
+          children: [`${SITE_URL}${isRu ? '/ru/widget/' : '/widget/'}`],
         },
       ],
     },

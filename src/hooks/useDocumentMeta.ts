@@ -35,15 +35,20 @@ export function useDocumentMeta(pathname: string, search = '') {
     upsertMeta('meta[property="og:title"]', 'property', 'og:title', seo.title);
     upsertMeta('meta[property="og:description"]', 'property', 'og:description', seo.description);
     upsertMeta('meta[property="og:type"]', 'property', 'og:type', seo.ogType);
-    upsertMeta('meta[property="og:url"]', 'property', 'og:url', seo.canonicalUrl);
     upsertMeta('meta[property="og:image"]', 'property', 'og:image', seo.ogImage);
     upsertMeta('meta[name="twitter:title"]', 'name', 'twitter:title', seo.title);
     upsertMeta('meta[name="twitter:description"]', 'name', 'twitter:description', seo.description);
     upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', seo.ogImage);
 
-    upsertLink('link[rel="canonical"]', { rel: 'canonical', href: seo.canonicalUrl });
+    if (seo.canonicalUrl) {
+      upsertMeta('meta[property="og:url"]', 'property', 'og:url', seo.canonicalUrl);
+      upsertLink('link[rel="canonical"]', { rel: 'canonical', href: seo.canonicalUrl });
+    } else {
+      document.querySelector('meta[property="og:url"]')?.remove();
+      document.querySelector('link[rel="canonical"]')?.remove();
+    }
 
-    // Remove existing hreflang links cleanly so blog routes don't keep unused DE/PL/FR/EL/IT alternates
+    // Remove existing hreflang links cleanly so blog/noindex routes don't keep unused alternates
     document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
 
     const canonicalEl = document.querySelector('link[rel="canonical"]');
@@ -59,7 +64,9 @@ export function useDocumentMeta(pathname: string, search = '') {
       }
     };
 
-    insertHreflang('x-default', seo.xDefaultUrl);
+    if (seo.xDefaultUrl) {
+      insertHreflang('x-default', seo.xDefaultUrl);
+    }
     Object.entries(seo.alternates)
       .reverse()
       .forEach(([code, href]) => {
@@ -67,12 +74,16 @@ export function useDocumentMeta(pathname: string, search = '') {
       });
 
     let jsonLdEl = document.getElementById('seo-json-ld') as HTMLScriptElement | null;
-    if (!jsonLdEl) {
-      jsonLdEl = document.createElement('script');
-      jsonLdEl.id = 'seo-json-ld';
-      jsonLdEl.type = 'application/ld+json';
-      document.head.appendChild(jsonLdEl);
+    if (seo.jsonLd) {
+      if (!jsonLdEl) {
+        jsonLdEl = document.createElement('script');
+        jsonLdEl.id = 'seo-json-ld';
+        jsonLdEl.type = 'application/ld+json';
+        document.head.appendChild(jsonLdEl);
+      }
+      jsonLdEl.textContent = JSON.stringify(seo.jsonLd);
+    } else if (jsonLdEl) {
+      jsonLdEl.remove();
     }
-    jsonLdEl.textContent = JSON.stringify(seo.jsonLd);
   }, [pathname, search]);
 }

@@ -24,7 +24,7 @@
  *    - Запуск от имени (Execute as): "Я" (Me).
  *    - Кто имеет доступ (Who has access): "Все" (Anyone).
  * 7. Нажмите "Развернуть" (Deploy), разрешите доступ (предоставьте гуглу права на работу со своими таблицами) и скопируйте полученный Web App URL!
- * 8. Настройте Telegram Bot: Пропишите ваши TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID ниже в коде (строки 46-47).
+ * 8. Настройте Telegram Bot: В Script Properties добавьте TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID (никогда не храните токен в коде/Git).
  * 
  * EN:
  * 1. Go to your Google Sheet -> Extensions -> Apps Script.
@@ -36,15 +36,15 @@
  *    - Name: STRIPE_SECRET_KEY
  *    - Value: Paste your Stripe Secret Key (starts with sk_live_... or sk_test_...).
  *    - Click "Save properties".
- * 4. Update TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID below in lines 46-47.
+ * 4. Add TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID in Project Settings -> Script Properties (do not commit secrets to Git).
  * 5. Click Deploy -> New Deployment -> Select "Web App".
  *    - Execute as: "Me"
  *    - Who has access: "Anyone"
  * 6. Authorize the application and copy your final Web App URL.
  */
 
-const TELEGRAM_BOT_TOKEN = '8715085806:AAGOT47PlW6y_t8MMnIQzJN84zXqZ8itwTY';
-const TELEGRAM_CHAT_ID = '8529666732';
+const TELEGRAM_BOT_TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN';
+const TELEGRAM_CHAT_ID = 'YOUR_TELEGRAM_CHAT_ID';
 
 /**
  * Функция первоначальной настройки таблиц.

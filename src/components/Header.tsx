@@ -12,17 +12,24 @@ import {
 } from '../lib/routing';
 import Logo from './Logo';
 
-export default function Header() {
+interface HeaderProps {
+  currentPath?: string;
+}
+
+export default function Header({ currentPath: propPath }: HeaderProps = {}) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
-  const [currentPath, setCurrentPath] = useState('/');
+  const [clientPath, setClientPath] = useState(() =>
+    typeof window !== 'undefined' ? window.location.pathname : '/'
+  );
   const langDropdownRef = useRef<HTMLDivElement>(null);
   const { language, setLanguage, t } = useLanguage();
+  const currentPath = propPath ?? clientPath;
 
   useEffect(() => {
     const syncPath = () => {
-      setCurrentPath(window.location.pathname);
+      setClientPath(window.location.pathname);
     };
     syncPath();
 

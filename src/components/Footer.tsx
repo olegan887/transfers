@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, Mail, MapPin } from 'lucide-react';
+import { MessageCircle, Mail, MapPin, Globe } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { WHATSAPP_NUMBER } from '../config';
-import { buildLocalizedPath } from '../lib/routing';
+import {
+  buildLocalizedPath,
+  CORE_LANGUAGES,
+  LANGUAGE_LABELS,
+  switchLanguagePath,
+  Language,
+} from '../lib/routing';
 import { airportRoutes } from '../data/routes';
 import LegalModal from './LegalModal';
 import Logo from './Logo';
 
-export default function Footer() {
-  const { t, language } = useLanguage();
+interface FooterProps {
+  currentPath?: string;
+}
+
+export default function Footer({ currentPath }: FooterProps = {}) {
+  const { t, language, setLanguage } = useLanguage();
   const [year, setYear] = useState(2026);
   const [legalModal, setLegalModal] = useState<{ isOpen: boolean; type: 'terms' | 'privacy' }>({
     isOpen: false,
@@ -22,6 +32,13 @@ export default function Footer() {
   const openLegal = (e: React.MouseEvent, type: 'terms' | 'privacy') => {
     e.preventDefault();
     setLegalModal({ isOpen: true, type });
+  };
+
+  const activePath = currentPath ?? (typeof window !== 'undefined' ? window.location.pathname : '/');
+
+  const handleLanguageLinkClick = (e: React.MouseEvent, langCode: Language) => {
+    e.preventDefault();
+    setLanguage(langCode);
   };
 
   const homeHref = buildLocalizedPath('home', language);
@@ -169,6 +186,37 @@ export default function Footer() {
             </div>
           </div>
         </div>
+
+        <nav
+          aria-label="Languages"
+          className="mb-8 pt-6 border-t-2 border-black flex flex-wrap items-center justify-center md:justify-start gap-2"
+        >
+          <span className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-black mr-2">
+            <Globe className="w-4 h-4 shrink-0" />
+            <span>Languages:</span>
+          </span>
+          {CORE_LANGUAGES.map((langCode) => {
+            const info = LANGUAGE_LABELS[langCode];
+            const isActive = langCode === language;
+            const href = switchLanguagePath(activePath, langCode);
+            return (
+              <a
+                key={langCode}
+                href={href}
+                hrefLang={langCode}
+                aria-current={isActive ? 'page' : undefined}
+                onClick={(e) => handleLanguageLinkClick(e, langCode)}
+                className={`px-2.5 py-1 text-xs font-black border-2 border-black rounded-lg transition-colors ${
+                  isActive
+                    ? 'bg-yellow-400 text-black'
+                    : 'bg-white text-black hover:bg-yellow-100'
+                }`}
+              >
+                {info.code} · {info.native}
+              </a>
+            );
+          })}
+        </nav>
 
         <div className="pt-6 border-t-4 border-black text-xs text-center flex flex-col md:flex-row justify-between items-center gap-4 font-bold">
           <p>

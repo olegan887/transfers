@@ -63,15 +63,18 @@ function extractLegacyBlogSlugs() {
 }
 
 function buildHreflangBlock(seo) {
-  const lines = [];
-  const entries = Object.entries(seo.alternates || {});
-  for (const [code, href] of entries) {
-    if (href) {
-      lines.push(`    <link rel="alternate" hreflang="${escapeHtmlAttr(code)}" href="${escapeHtmlAttr(href)}" />`);
-    }
+  const entries = Object.entries(seo.alternates || {}).filter(([, href]) => Boolean(href));
+  if (entries.length === 0) {
+    return '';
   }
+  const lines = entries.map(
+    ([code, href]) =>
+      `    <link rel="alternate" hreflang="${escapeHtmlAttr(code)}" href="${escapeHtmlAttr(href)}" />`
+  );
   if (seo.xDefaultUrl) {
-    lines.push(`    <link rel="alternate" hreflang="x-default" href="${escapeHtmlAttr(seo.xDefaultUrl)}" />`);
+    lines.push(
+      `    <link rel="alternate" hreflang="x-default" href="${escapeHtmlAttr(seo.xDefaultUrl)}" />`
+    );
   }
   return lines.join('\n');
 }
@@ -89,10 +92,14 @@ function injectHeadTags(template, seo) {
     /<meta name="robots" content="[^"]*"\s*\/?>/,
     `<meta name="robots" content="${escapeHtmlAttr(seo.robots)}" />`
   );
-  html = html.replace(
-    /<link rel="canonical" href="[^"]*"\s*\/?>/,
-    `<link rel="canonical" href="${escapeHtmlAttr(seo.canonicalUrl)}" />`
-  );
+  if (seo.canonicalUrl) {
+    html = html.replace(
+      /<link rel="canonical" href="[^"]*"\s*\/?>/,
+      `<link rel="canonical" href="${escapeHtmlAttr(seo.canonicalUrl)}" />`
+    );
+  } else {
+    html = html.replace(/\s*<link rel="canonical" href="[^"]*"\s*\/?>/, '');
+  }
 
   const hreflangHtml = buildHreflangBlock(seo);
   html = html.replace(
@@ -112,10 +119,14 @@ function injectHeadTags(template, seo) {
     /<meta property="og:type" content="[^"]*"\s*\/?>/,
     `<meta property="og:type" content="${escapeHtmlAttr(seo.ogType)}" />`
   );
-  html = html.replace(
-    /<meta property="og:url" content="[^"]*"\s*\/?>/,
-    `<meta property="og:url" content="${escapeHtmlAttr(seo.canonicalUrl)}" />`
-  );
+  if (seo.canonicalUrl) {
+    html = html.replace(
+      /<meta property="og:url" content="[^"]*"\s*\/?>/,
+      `<meta property="og:url" content="${escapeHtmlAttr(seo.canonicalUrl)}" />`
+    );
+  } else {
+    html = html.replace(/\s*<meta property="og:url" content="[^"]*"\s*\/?>/, '');
+  }
   html = html.replace(
     /<meta property="og:image" content="[^"]*"\s*\/?>/,
     `<meta property="og:image" content="${escapeHtmlAttr(seo.ogImage)}" />`
@@ -134,11 +145,18 @@ function injectHeadTags(template, seo) {
     `<meta name="twitter:image" content="${escapeHtmlAttr(seo.ogImage)}" />`
   );
 
-  const safeJsonLd = JSON.stringify(seo.jsonLd).replace(/<\/script>/gi, '<\\/script>');
-  html = html.replace(
-    /<script id="seo-json-ld" type="application\/ld\+json">[\s\S]*?<\/script>/,
-    `<script id="seo-json-ld" type="application/ld+json">${safeJsonLd}</script>`
-  );
+  if (seo.jsonLd) {
+    const safeJsonLd = JSON.stringify(seo.jsonLd).replace(/<\/script>/gi, '<\\/script>');
+    html = html.replace(
+      /<script id="seo-json-ld" type="application\/ld\+json">[\s\S]*?<\/script>/,
+      `<script id="seo-json-ld" type="application/ld+json">${safeJsonLd}</script>`
+    );
+  } else {
+    html = html.replace(
+      /\s*<script id="seo-json-ld" type="application\/ld\+json">[\s\S]*?<\/script>/,
+      ''
+    );
+  }
 
   return html;
 }
@@ -147,11 +165,17 @@ async function runPrerender() {
   const templatePath = path.join(distDir, 'index.html');
   const template = fs.readFileSync(templatePath, 'utf-8');
 
-  // Keep a clean SPA shell copy as 404.html for GitHub Pages fallback
-  fs.writeFileSync(path.join(distDir, '404.html'), template.replace('<!--app-html-->', ''));
-
   const serverEntryPath = pathToFileURL(path.join(ssrDir, 'entry-server.js')).href;
   const { render } = await import(serverEntryPath);
+
+  // Prerender dedicated noindex 404.html for GitHub Pages fallback
+  const notFoundRendered = render('/404.html');
+  let notFoundHtml = injectHeadTags(template, notFoundRendered.seo);
+  notFoundHtml = notFoundHtml.replace(
+    '<div id="root"><!--app-html--></div>',
+    `<div id="root" data-ssr-path="/404.html">${notFoundRendered.html}</div>`
+  );
+  fs.writeFileSync(path.join(distDir, '404.html'), notFoundHtml, 'utf-8');
 
   const routeSlugs = extractRouteSlugs();
   const flagshipBlogSlugs = extractFlagshipBlogSlugs();
@@ -160,21 +184,21 @@ async function runPrerender() {
   const pathsToRender = [
     // Core site in 7 languages: en, ru, de, pl, fr, el, it
     ...CORE_LANGS.map((l) => (l === 'en' ? '/' : `/${l}/`)),
-    ...CORE_LANGS.map((l) => (l === 'en' ? '/routes' : `/${l}/routes`)),
-    ...CORE_LANGS.map((l) => (l === 'en' ? '/widget' : `/${l}/widget`)),
-    ...CORE_LANGS.map((l) => (l === 'en' ? '/embed' : `/${l}/embed`)),
-    ...CORE_LANGS.map((l) => (l === 'en' ? '/success' : `/${l}/success`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/routes/' : `/${l}/routes/`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/widget/' : `/${l}/widget/`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/embed/' : `/${l}/embed/`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/success/' : `/${l}/success/`)),
     ...routeSlugs.flatMap((slug) =>
-      CORE_LANGS.map((l) => (l === 'en' ? `/routes/${slug}` : `/${l}/routes/${slug}`))
+      CORE_LANGS.map((l) => (l === 'en' ? `/routes/${slug}/` : `/${l}/routes/${slug}/`))
     ),
     // Blog index + 3 flagship articles in all 7 languages
-    ...CORE_LANGS.map((l) => (l === 'en' ? '/blog' : `/${l}/blog`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/blog/' : `/${l}/blog/`)),
     ...flagshipBlogSlugs.flatMap((slug) =>
-      CORE_LANGS.map((l) => (l === 'en' ? `/blog/${slug}` : `/${l}/blog/${slug}`))
+      CORE_LANGS.map((l) => (l === 'en' ? `/blog/${slug}/` : `/${l}/blog/${slug}/`))
     ),
     // Legacy blog articles strictly EN & RU only
     ...legacyBlogSlugs.flatMap((slug) =>
-      LEGACY_BLOG_LANGS.map((l) => (l === 'en' ? `/blog/${slug}` : `/${l}/blog/${slug}`))
+      LEGACY_BLOG_LANGS.map((l) => (l === 'en' ? `/blog/${slug}/` : `/${l}/blog/${slug}/`))
     ),
   ];
 

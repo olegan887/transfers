@@ -14,13 +14,14 @@ import RouteLandingPage from './components/RouteLandingPage';
 import RoutesIndexPage from './components/RoutesIndexPage';
 import WidgetBuilderPage from './components/WidgetBuilderPage';
 import EmbedCalculator from './components/EmbedCalculator';
+import NotFoundPage from './components/NotFoundPage';
 import CookieConsent from './components/CookieConsent';
 import ExitIntentPopup from './components/ExitIntentPopup';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { DataProvider } from './context/DataContext';
 import { WHATSAPP_NUMBER, ENABLE_EXIT_INTENT_POPUP } from './config';
 import { initDeferredAnalytics, reportConversion } from './lib/analytics';
-import { parseRoute } from './lib/routing';
+import { normalizePathname, parseRoute } from './lib/routing';
 import { useDocumentMeta } from './hooks/useDocumentMeta';
 
 interface AppProps {
@@ -65,7 +66,7 @@ function AppContent({ initialPath, initialSearch }: AppProps) {
       if (url.origin !== window.location.origin) return;
 
       // Pure hash on current page
-      if (url.pathname === window.location.pathname && url.hash) {
+      if (normalizePathname(url.pathname) === normalizePathname(window.location.pathname) && url.hash) {
         return;
       }
 
@@ -133,6 +134,9 @@ function AppContent({ initialPath, initialSearch }: AppProps) {
     if (parsed.view === 'blog-post' && parsed.slug) {
       return <BlogPost slug={parsed.slug} />;
     }
+    if (parsed.view === 'not-found') {
+      return <NotFoundPage />;
+    }
     return (
       <main>
         <Hero defaultFrom={prefillRoute.from} defaultTo={prefillRoute.to} />
@@ -146,9 +150,9 @@ function AppContent({ initialPath, initialSearch }: AppProps) {
 
   return (
     <div className="min-h-screen font-sans text-black selection:bg-yellow-400 selection:text-black relative">
-      <Header />
+      <Header currentPath={locationState.pathname} />
       {renderContent()}
-      <Footer />
+      <Footer currentPath={locationState.pathname} />
 
       {/* Floating WhatsApp Button */}
       <a

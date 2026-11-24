@@ -27,7 +27,8 @@ export type RouteView =
   | 'blog-post'
   | 'widget'
   | 'embed'
-  | 'success';
+  | 'success'
+  | 'not-found';
 
 export interface ParsedRoute {
   lang: Language;
@@ -82,25 +83,25 @@ export function parseRoute(pathname: string, search = ''): ParsedRoute {
     subPath === '/success';
 
   if (hasSuccess) {
-    return { lang: detectedLang, view: 'success', cleanPath: `${prefix}/success` };
+    return { lang: detectedLang, view: 'success', cleanPath: `${prefix}/success/` };
   }
 
   if (subPath === '/widget') {
-    return { lang: detectedLang, view: 'widget', cleanPath: `${prefix}/widget` };
+    return { lang: detectedLang, view: 'widget', cleanPath: `${prefix}/widget/` };
   }
 
   if (subPath === '/embed') {
-    return { lang: detectedLang, view: 'embed', cleanPath: `${prefix}/embed` };
+    return { lang: detectedLang, view: 'embed', cleanPath: `${prefix}/embed/` };
   }
 
   if (subPath === '/routes') {
-    return { lang: detectedLang, view: 'routes-index', cleanPath: `${prefix}/routes` };
+    return { lang: detectedLang, view: 'routes-index', cleanPath: `${prefix}/routes/` };
   }
 
   if (subPath.startsWith('/routes/')) {
     const slug = subPath.replace('/routes/', '').trim();
-    if (slug) {
-      return { lang: detectedLang, view: 'route', slug, cleanPath: clean };
+    if (slug && !slug.includes('/')) {
+      return { lang: detectedLang, view: 'route', slug, cleanPath: `${prefix}/routes/${slug}/` };
     }
   }
 
@@ -109,19 +110,19 @@ export function parseRoute(pathname: string, search = ''): ParsedRoute {
     return {
       lang: detectedLang,
       view: 'blog-list',
-      cleanPath: `${prefix}/blog`,
+      cleanPath: `${prefix}/blog/`,
     };
   }
 
   if (subPath.startsWith('/blog/')) {
     const slug = subPath.replace('/blog/', '').trim();
-    if (slug) {
+    if (slug && !slug.includes('/')) {
       if (isMultilingualBlogSlug(slug)) {
         return {
           lang: detectedLang,
           view: 'blog-post',
           slug,
-          cleanPath: `${prefix}/blog/${slug}`,
+          cleanPath: `${prefix}/blog/${slug}/`,
         };
       }
       // Legacy 34 articles stay EN & RU only
@@ -130,15 +131,23 @@ export function parseRoute(pathname: string, search = ''): ParsedRoute {
         lang: blogLang,
         view: 'blog-post',
         slug,
-        cleanPath: blogLang === 'ru' ? `/ru/blog/${slug}` : `/blog/${slug}`,
+        cleanPath: blogLang === 'ru' ? `/ru/blog/${slug}/` : `/blog/${slug}/`,
       };
     }
   }
 
+  if (subPath === '/' || subPath === '/index.html') {
+    return {
+      lang: detectedLang,
+      view: 'home',
+      cleanPath: detectedLang === 'en' ? '/' : `/${detectedLang}/`,
+    };
+  }
+
   return {
     lang: detectedLang,
-    view: 'home',
-    cleanPath: detectedLang === 'en' ? '/' : `/${detectedLang}`,
+    view: 'not-found',
+    cleanPath: clean,
   };
 }
 
@@ -146,36 +155,45 @@ export function buildLocalizedPath(view: RouteView, lang: Language, slug?: strin
   // Legacy blog posts stay EN/RU; multilingual flagship posts & blog index support all 7 languages
   if (view === 'blog-post' && !isMultilingualBlogSlug(slug)) {
     const blogPrefix = lang === 'ru' ? '/ru' : '';
-    return `${blogPrefix}/blog/${slug || ''}`;
+    return slug ? `${blogPrefix}/blog/${slug}/` : `${blogPrefix}/blog/`;
   }
 
   const prefix = lang === 'en' ? '' : `/${lang}`;
 
   switch (view) {
     case 'home':
+    case 'not-found':
       return lang === 'en' ? '/' : `/${lang}/`;
     case 'routes-index':
-      return `${prefix}/routes`;
+      return `${prefix}/routes/`;
     case 'route':
-      return `${prefix}/routes/${slug || ''}`;
+      return slug ? `${prefix}/routes/${slug}/` : `${prefix}/routes/`;
     case 'blog-list':
-      return `${prefix}/blog`;
+      return `${prefix}/blog/`;
     case 'blog-post':
-      return `${prefix}/blog/${slug || ''}`;
+      return slug ? `${prefix}/blog/${slug}/` : `${prefix}/blog/`;
     case 'widget':
-      return `${prefix}/widget`;
+      return `${prefix}/widget/`;
     case 'embed':
-      return `${prefix}/embed`;
+      return `${prefix}/embed/`;
     case 'success':
-      return `${prefix}/success`;
+      return `${prefix}/success/`;
   }
 }
 
 export function getAlternatePaths(
   pathname: string,
   search = ''
-): Partial<Record<Language, string>> & { en: string; ru: string } {
+): Partial<Record<Language, string>> {
   const parsed = parseRoute(pathname, search);
+
+  if (
+    parsed.view === 'not-found' ||
+    parsed.view === 'embed' ||
+    parsed.view === 'success'
+  ) {
+    return {};
+  }
 
   if (parsed.view === 'blog-post' && !isMultilingualBlogSlug(parsed.slug)) {
     return {
@@ -184,10 +202,7 @@ export function getAlternatePaths(
     };
   }
 
-  const map: Partial<Record<Language, string>> & { en: string; ru: string } = {
-    en: buildLocalizedPath(parsed.view, 'en', parsed.slug),
-    ru: buildLocalizedPath(parsed.view, 'ru', parsed.slug),
-  };
+  const map: Partial<Record<Language, string>> = {};
 
   for (const lang of CORE_LANGUAGES) {
     map[lang] = buildLocalizedPath(parsed.view, lang, parsed.slug);
@@ -198,6 +213,9 @@ export function getAlternatePaths(
 
 export function switchLanguagePath(pathname: string, targetLang: Language, search = ''): string {
   const parsed = parseRoute(pathname, search);
+  if (parsed.view === 'not-found') {
+    return buildLocalizedPath('home', targetLang);
+  }
   if (
     parsed.view === 'blog-post' &&
     !isMultilingualBlogSlug(parsed.slug) &&

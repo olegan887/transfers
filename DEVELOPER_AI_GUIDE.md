@@ -9,9 +9,9 @@ This document provides a highly detailed, technical explanation of the architect
 *   **App Domain:** `cyprus-airport-transfer.co`
 *   **Active Google Apps Script Web App URL:** 
     `https://script.google.com/macros/s/AKfycbyRfIswYifcjHxMtoTJidzftEvVEJkOv-8kPowYGckT21gXiLkXY2OE4v6_FG278Jlp/exec`
-*   **Active Telegram Bot Configurations (baked into Apps Script):**
-    *   `TELEGRAM_BOT_TOKEN`: `8715085806:AAGOT47PlW6y_t8MMnIQzJN84zXqZ8itwTY`
-    *   `TELEGRAM_CHAT_ID`: `8529666732`
+*   **Telegram Bot Configurations (stored in Apps Script `ScriptProperties`, never committed to Git):**
+    *   `TELEGRAM_BOT_TOKEN`: `<set-in-apps-script-properties>`
+    *   `TELEGRAM_CHAT_ID`: `<set-in-apps-script-properties>`
 *   **Third-Party Analytics IDs:**
     *   Google Analytics (gtag): `AW-17973746217`
     *   Microsoft Clarity: `vzu4kcc9x2`

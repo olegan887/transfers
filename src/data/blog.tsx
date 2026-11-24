@@ -36,7 +36,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Traveling from Larnaca Airport (LCA) to Paphos is a common route for many tourists visiting Cyprus. The distance is approximately 135 km via Limassol, and the journey takes anywhere from 1.5 to 3.5 hours depending on your chosen method of transportation.</p>
           
           <h2>1. Private Airport Transfer (Recommended — Fixed €135)</h2>
-          <p>The most comfortable and stress-free way to reach Paphos is by booking our <a href="/routes/larnaca-airport-to-paphos">Larnaca Airport (LCA) to Paphos private transfer</a>. Our Limassol-based driver waits inside the Arrivals Hall with a name sign, helps with your luggage, and drives you directly along the highway for a fixed <strong>€135</strong> per sedan (up to 4 passengers &amp; 3 bags, −10% off round-trip bookings).</p>
+          <p>The most comfortable and stress-free way to reach Paphos is by booking our <a href="/routes/larnaca-airport-to-paphos/">Larnaca Airport (LCA) to Paphos private transfer</a>. Our Limassol-based driver waits inside the Arrivals Hall with a name sign, helps with your luggage, and drives you directly along the highway for a fixed <strong>€135</strong> per sedan (up to 4 passengers &amp; 3 bags, −10% off round-trip bookings).</p>
           <ul>
             <li><strong>Travel time:</strong> ~1 hour 30 minutes (135 km)</li>
             <li><strong>Pros:</strong> Fixed €135 rate, flight tracking included, door-to-door service, air-conditioned sedan.</li>
@@ -60,7 +60,7 @@ const legacyBlogPosts: BlogPost[] = [
           </ul>
 
           <h2>Conclusion</h2>
-          <p>For a hassle-free start to your holiday, pre-booking a private transfer is the best choice. You can <a href="/routes/larnaca-airport-to-paphos">book Larnaca Airport to Paphos for €135</a> or check <a href="/routes/larnaca-airport-to-limassol">Larnaca Airport to Limassol (€75)</a> online with instant confirmation.</p>
+          <p>For a hassle-free start to your holiday, pre-booking a private transfer is the best choice. You can <a href="/routes/larnaca-airport-to-paphos/">book Larnaca Airport to Paphos for €135</a> or check <a href="/routes/larnaca-airport-to-limassol/">Larnaca Airport to Limassol (€75)</a> online with instant confirmation.</p>
         </>
       ),
       ru: (
@@ -68,7 +68,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Поездка из аэропорта Ларнаки (LCA) в Пафос — один из самых популярных маршрутов на Кипре. Расстояние через Лимассол составляет около 135 км, а дорога занимает от 1,5 до 3,5 часов в зависимости от выбранного транспорта.</p>
           
           <h2>1. Индивидуальный трансфер (Рекомендуем — фиксированно €135)</h2>
-          <p>Самый комфортный способ добраться до Пафоса без пересадок — заранее заказать <a href="/ru/routes/larnaca-airport-to-paphos">индивидуальный трансфер Аэропорт Ларнака (LCA) — Пафос</a>. Водитель нашей базы в Лимассоле встретит вас с табличкой в зале прилёта, поможет с чемоданами и доставит к отелю или вилле за фиксированные <strong>€135</strong> за весь седан (до 4 пассажиров и 3 чемоданов, −10% на обратный путь).</p>
+          <p>Самый комфортный способ добраться до Пафоса без пересадок — заранее заказать <a href="/ru/routes/larnaca-airport-to-paphos/">индивидуальный трансфер Аэропорт Ларнака (LCA) — Пафос</a>. Водитель нашей базы в Лимассоле встретит вас с табличкой в зале прилёта, поможет с чемоданами и доставит к отелю или вилле за фиксированные <strong>€135</strong> за весь седан (до 4 пассажиров и 3 чемоданов, −10% на обратный путь).</p>
           <ul>
             <li><strong>Время в пути:</strong> ~1 час 30 минут (135 км)</li>
             <li><strong>Плюсы:</strong> Фиксированная цена €135, отслеживание рейса, доставка от двери до двери, комфортный седан с кондиционером.</li>
@@ -92,7 +92,7 @@ const legacyBlogPosts: BlogPost[] = [
           </ul>
 
           <h2>Заключение</h2>
-          <p>Для спокойного начала отпуска лучше зафиксировать цену заранее. Вы можете оформить <a href="/ru/routes/larnaca-airport-to-paphos">трансфер Ларнака (LCA) — Пафос за €135</a> или <a href="/ru/routes/larnaca-airport-to-limassol">Ларнака (LCA) — Лимассол за €75</a> онлайн за 2 минуты.</p>
+          <p>Для спокойного начала отпуска лучше зафиксировать цену заранее. Вы можете оформить <a href="/ru/routes/larnaca-airport-to-paphos/">трансфер Ларнака (LCA) — Пафос за €135</a> или <a href="/ru/routes/larnaca-airport-to-limassol/">Ларнака (LCA) — Лимассол за €75</a> онлайн за 2 минуты.</p>
         </>
       )
     }
@@ -130,7 +130,7 @@ const legacyBlogPosts: BlogPost[] = [
           <h2>5. Paphos Castle and Harbor</h2>
           <p>Take a stroll along the picturesque Paphos Harbor, lined with cafes and seafood tavernas. At the edge of the harbor stands the Paphos Castle, originally a Byzantine fort built to protect the harbor. It offers great views from the top.</p>
 
-          <p><strong>Need a direct transfer to Paphos?</strong> Book a fixed-price ride from <a href="/routes/limassol-to-paphos">Limassol to Paphos (€75)</a> or <a href="/routes/larnaca-airport-to-paphos">Larnaca Airport (LCA) to Paphos (€135)</a>.</p>
+          <p><strong>Need a direct transfer to Paphos?</strong> Book a fixed-price ride from <a href="/routes/limassol-to-paphos/">Limassol to Paphos (€75)</a> or <a href="/routes/larnaca-airport-to-paphos/">Larnaca Airport (LCA) to Paphos (€135)</a>.</p>
         </>
       ),
       ru: (
@@ -152,7 +152,7 @@ const legacyBlogPosts: BlogPost[] = [
           <h2>5. Замок Пафоса и Гавань</h2>
           <p>Прогуляйтесь по живописной гавани Пафоса, вдоль которой расположены кафе и рыбные таверны. На краю гавани стоит Пафосский замок, первоначально византийский форт, построенный для защиты гавани. Сверху открывается отличный вид.</p>
 
-          <p><strong>Нужен прямой трансфер в Пафос?</strong> Забронируйте поездку по фиксированной цене из <a href="/ru/routes/limassol-to-paphos">Лимассола в Пафос (€75)</a> или из <a href="/ru/routes/larnaca-airport-to-paphos">аэропорта Ларнаки в Пафос (€135)</a>.</p>
+          <p><strong>Нужен прямой трансфер в Пафос?</strong> Забронируйте поездку по фиксированной цене из <a href="/ru/routes/limassol-to-paphos/">Лимассола в Пафос (€75)</a> или из <a href="/ru/routes/larnaca-airport-to-paphos/">аэропорта Ларнаки в Пафос (€135)</a>.</p>
         </>
       )
     }
@@ -188,7 +188,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Flight delayed? No problem. We monitor your arrival in real time and adjust the pickup time accordingly at zero extra cost.</p>
 
           <h2>5. Safety and Reliability</h2>
-          <p>Licensed vehicles, experienced drivers, complimentary bottled water, and −10% automatic savings on round-trip reservations. Browse <a href="/routes">all 30 active routes and fixed EUR prices</a>.</p>
+          <p>Licensed vehicles, experienced drivers, complimentary bottled water, and −10% automatic savings on round-trip reservations. Browse <a href="/routes/">all 30 active routes and fixed EUR prices</a>.</p>
         </>
       ),
       ru: (
@@ -208,7 +208,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Рейс задерживается? Не проблема. Мы отслеживаем прилет в реальном времени и сдвигаем подачу автомобиля без доплат за ожидание.</p>
 
           <h2>5. Безопасность и скидка 10% обратно</h2>
-          <p>Лицензированные авто, опытные водители, прохладная вода в салоне и скидка 10% при заказе трансфера туда-обратно. Смотрите <a href="/ru/routes">все 30 доступных маршрутов и цен</a>.</p>
+          <p>Лицензированные авто, опытные водители, прохладная вода в салоне и скидка 10% при заказе трансфера туда-обратно. Смотрите <a href="/ru/routes/">все 30 доступных маршрутов и цен</a>.</p>
         </>
       )
     }
@@ -434,7 +434,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Located near the old port, this medieval castle is where Richard the Lionheart allegedly married Berengaria of Navarre in 1191. It now houses the Cyprus Medieval Museum.</p>
           <h2>3. Kourion Archaeological Site</h2>
           <p>Just a short drive from the city center, Kourion offers breathtaking views of the Mediterranean and features a magnificent Greco-Roman amphitheater.</p>
-          <p><strong>Travel Tip:</strong> Our dispatch fleet is based right in Limassol! Book a fixed-price €75 transfer from <a href="/routes/larnaca-airport-to-limassol">Larnaca Airport (LCA) to Limassol</a> or <a href="/routes/paphos-airport-to-limassol">Paphos Airport (PFO) to Limassol</a> for a seamless arrival.</p>
+          <p><strong>Travel Tip:</strong> Our dispatch fleet is based right in Limassol! Book a fixed-price €75 transfer from <a href="/routes/larnaca-airport-to-limassol/">Larnaca Airport (LCA) to Limassol</a> or <a href="/routes/paphos-airport-to-limassol/">Paphos Airport (PFO) to Limassol</a> for a seamless arrival.</p>
         </>
       ),
       ru: (
@@ -446,7 +446,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Расположенный недалеко от старого порта, этот средневековый замок — место, где Ричард Львиное Сердце, по преданию, обвенчался с Беренгарией Наваррской в 1191 году. Сейчас здесь находится Кипрский музей средневековья.</p>
           <h2>3. Археологический парк Курион</h2>
           <p>Всего в нескольких минутах езды от центра города находится Курион, откуда открывается захватывающий вид на Средиземное море и где расположен великолепный греко-римский амфитеатр.</p>
-          <p><strong>Совет:</strong> Наша база находится именно в Лимассоле. Забронируйте трансфер по фиксированной цене €75 из <a href="/ru/routes/larnaca-airport-to-limassol">аэропорта Ларнаки в Лимассол</a> или из <a href="/ru/routes/paphos-airport-to-limassol">аэропорта Пафоса в Лимассол</a>.</p>
+          <p><strong>Совет:</strong> Наша база находится именно в Лимассоле. Забронируйте трансфер по фиксированной цене €75 из <a href="/ru/routes/larnaca-airport-to-limassol/">аэропорта Ларнаки в Лимассол</a> или из <a href="/ru/routes/paphos-airport-to-limassol/">аэропорта Пафоса в Лимассол</a>.</p>
         </>
       )
     }
@@ -474,7 +474,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Consistently ranked among the best beaches in Europe, Fig Tree Bay offers fine golden sand and calm waters, making it incredibly family-friendly.</p>
           <h2>3. Konnos Bay</h2>
           <p>Nestled between Ayia Napa and Protaras, this sheltered bay is surrounded by pine trees. It is perfect for snorkeling and escaping the strong winds.</p>
-          <p><strong>How to get there:</strong> We operate direct private transfers to Ayia Napa and Protaras from <a href="/routes/limassol-to-ayia-napa">Limassol (€115)</a>, <a href="/routes/paphos-airport-to-ayia-napa">Paphos Airport PFO (€180)</a>, and <a href="/routes/paphos-airport-to-protaras">PFO to Protaras (€190)</a>.</p>
+          <p><strong>How to get there:</strong> We operate direct private transfers to Ayia Napa and Protaras from <a href="/routes/limassol-to-ayia-napa/">Limassol (€115)</a>, <a href="/routes/paphos-airport-to-ayia-napa/">Paphos Airport PFO (€180)</a>, and <a href="/routes/paphos-airport-to-protaras/">PFO to Protaras (€190)</a>.</p>
         </>
       ),
       ru: (
@@ -486,7 +486,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Стабильно входящий в число лучших пляжей Европы, Fig Tree Bay предлагает мелкий золотистый песок и спокойную воду, что делает его невероятно удобным для семейного отдыха.</p>
           <h2>3. Коннос Бэй</h2>
           <p>Расположенная между Айя-Напой и Протарасом, эта защищенная бухта окружена соснами. Она идеально подходит для сноркелинга и укрытия от сильных ветров.</p>
-          <p><strong>Как добраться:</strong> Забронируйте у нас прямой трансфер из <a href="/ru/routes/limassol-to-ayia-napa">Лимассола в Айя-Напу (€115)</a>, из <a href="/ru/routes/paphos-airport-to-ayia-napa">аэропорта Пафоса (PFO) в Айя-Напу (€180)</a> или <a href="/ru/routes/paphos-airport-to-protaras">из PFO в Протарас (€190)</a>.</p>
+          <p><strong>Как добраться:</strong> Забронируйте у нас прямой трансфер из <a href="/ru/routes/limassol-to-ayia-napa/">Лимассола в Айя-Напу (€115)</a>, из <a href="/ru/routes/paphos-airport-to-ayia-napa/">аэропорта Пафоса (PFO) в Айя-Напу (€180)</a> или <a href="/ru/routes/paphos-airport-to-protaras/">из PFO в Протарас (€190)</a>.</p>
         </>
       )
     }
@@ -610,7 +610,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Just a few minutes from the airport lies a complex of four salt lakes. During the winter months (November to March), the lakes fill with water and become home to thousands of migrating pink flamingos—a truly spectacular sight.</p>
           <h2>4. Hala Sultan Tekke</h2>
           <p>Located on the banks of the Salt Lake, this historic mosque is one of the holiest sites in Islam and is surrounded by beautiful, peaceful gardens.</p>
-          <p><strong>Need a ride from Larnaca?</strong> Check our fixed rates for <a href="/routes/larnaca-airport-to-limassol">Larnaca Airport (LCA) to Limassol (€75)</a>, <a href="/routes/limassol-to-larnaca-city">Larnaca City to Limassol (€75)</a>, or <a href="/routes/paphos-airport-to-larnaca-city">Paphos Airport (PFO) to Larnaca (€135)</a>.</p>
+          <p><strong>Need a ride from Larnaca?</strong> Check our fixed rates for <a href="/routes/larnaca-airport-to-limassol/">Larnaca Airport (LCA) to Limassol (€75)</a>, <a href="/routes/limassol-to-larnaca-city/">Larnaca City to Limassol (€75)</a>, or <a href="/routes/paphos-airport-to-larnaca-city/">Paphos Airport (PFO) to Larnaca (€135)</a>.</p>
         </>
       ),
       ru: (
@@ -624,7 +624,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Всего в нескольких минутах от аэропорта находится комплекс из четырех соленых озер. В зимние месяцы (с ноября по март) озера наполняются водой и становятся домом для тысяч мигрирующих розовых фламинго — поистине захватывающее зрелище.</p>
           <h2>4. Мечеть Хала Султан Текке</h2>
           <p>Расположенная на берегу Соленого озера, эта историческая мечеть является одной из главных святынь ислама и окружена красивыми, тихими садами.</p>
-          <p><strong>Нужен трансфер из Ларнаки или аэропорта LCA?</strong> Смотрите наши фиксированные тарифы: <a href="/ru/routes/larnaca-airport-to-limassol">Аэропорт Ларнака — Лимассол (€75)</a>, <a href="/ru/routes/limassol-to-larnaca-city">Ларнака (Город) — Лимассол (€75)</a> или <a href="/ru/routes/paphos-airport-to-larnaca-city">Аэропорт Пафос — Ларнака (€135)</a>.</p>
+          <p><strong>Нужен трансфер из Ларнаки или аэропорта LCA?</strong> Смотрите наши фиксированные тарифы: <a href="/ru/routes/larnaca-airport-to-limassol/">Аэропорт Ларнака — Лимассол (€75)</a>, <a href="/ru/routes/limassol-to-larnaca-city/">Ларнака (Город) — Лимассол (€75)</a> или <a href="/ru/routes/paphos-airport-to-larnaca-city/">Аэропорт Пафос — Ларнака (€135)</a>.</p>
         </>
       )
     }
@@ -692,7 +692,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>The beach is fully equipped with sunbeds, umbrellas, showers, and changing rooms. For thrill-seekers, there is a wide variety of water sports available, including jet skiing, parasailing, and banana boat rides. The main strip above the beach is packed with restaurants, bars, and shops.</p>
           <h2>Nearby: The Akamas Peninsula</h2>
           <p>Coral Bay serves as the gateway to the Akamas Peninsula, a protected national park of immense natural beauty. From here, you can rent a buggy or join a jeep safari to explore the rugged coastline, the Avakas Gorge, and Lara Beach (a famous turtle nesting site).</p>
-          <p><strong>Transfer Options:</strong> We operate direct private sedan transfers to Coral Bay from <a href="/routes/limassol-to-coral-bay">Limassol (€110, ~60 min)</a>, <a href="/routes/larnaca-airport-to-coral-bay">Larnaca Airport LCA (€150, ~100 min)</a>, and <a href="/routes/larnaca-city-to-coral-bay">Larnaca City (€160)</a>. Up to 4 passengers &amp; 3 suitcases per sedan, with 10% off round trips (+€10 night tariff 23:00–07:00).</p>
+          <p><strong>Transfer Options:</strong> We operate direct private sedan transfers to Coral Bay from <a href="/routes/limassol-to-coral-bay/">Limassol (€110, ~60 min)</a>, <a href="/routes/larnaca-airport-to-coral-bay/">Larnaca Airport LCA (€150, ~100 min)</a>, and <a href="/routes/larnaca-city-to-coral-bay/">Larnaca City (€160)</a>. Up to 4 passengers &amp; 3 suitcases per sedan, with 10% off round trips (+€10 night tariff 23:00–07:00).</p>
         </>
       ),
       ru: (
@@ -704,7 +704,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Пляж полностью оборудован шезлонгами, зонтиками, душевыми и кабинками для переодевания. Для любителей острых ощущений доступен широкий выбор водных видов спорта, включая гидроциклы, парасейлинг и катание на "банане". На главной улице над пляжем полно ресторанов, баров и магазинов.</p>
           <h2>Рядом: Полуостров Акамас</h2>
           <p>Корал Бэй служит воротами на полуостров Акамас — охраняемый национальный парк невероятной природной красоты. Отсюда вы можете арендовать багги или присоединиться к джип-сафари, чтобы исследовать изрезанное побережье, ущелье Авакас и пляж Лара (известное место гнездования черепах).</p>
-          <p><strong>Как добраться с комфортом:</strong> Мы выполняем прямые индивидуальные трансферы в Корал Бэй из <a href="/ru/routes/limassol-to-coral-bay">Лимассола (€110, ~60 мин)</a>, <a href="/ru/routes/larnaca-airport-to-coral-bay">аэропорта Ларнаки LCA (€150, ~100 мин)</a> и <a href="/ru/routes/larnaca-city-to-coral-bay">города Ларнаки (€160)</a>. До 4 пассажиров и 3 чемоданов в седане, скидка 10% на обратную дорогу (ночной тариф +€10 с 23:00 до 07:00).</p>
+          <p><strong>Как добраться с комфортом:</strong> Мы выполняем прямые индивидуальные трансферы в Корал Бэй из <a href="/ru/routes/limassol-to-coral-bay/">Лимассола (€110, ~60 мин)</a>, <a href="/ru/routes/larnaca-airport-to-coral-bay/">аэропорта Ларнаки LCA (€150, ~100 мин)</a> и <a href="/ru/routes/larnaca-city-to-coral-bay/">города Ларнаки (€160)</a>. До 4 пассажиров и 3 чемоданов в седане, скидка 10% на обратную дорогу (ночной тариф +€10 с 23:00 до 07:00).</p>
         </>
       )
     }
@@ -824,24 +824,24 @@ const legacyBlogPosts: BlogPost[] = [
           <h2>Airport Transfer Costs vs. Metered Taxis</h2>
           <p>Taking a metered taxi directly from the airport rank can be unpredictable. If there is heavy traffic or if your flight lands during the night tariff period, the cost can escalate quickly. Furthermore, intercity taxi rides (e.g., Larnaca to Paphos) are often negotiated rather than metered, which can lead to overcharging if you don't know the standard rates.</p>
           <h2>1. Private Transfer (Best Value — Fixed €75)</h2>
-          <p>Our <a href="/routes/limassol-to-paphos">Limassol ↔ Paphos private transfer</a> (and <a href="/routes/paphos-airport-to-limassol">Paphos Airport PFO ↔ Limassol</a>) costs a fixed <strong>€75 per sedan</strong> (up to 4 passengers &amp; 3 bags) and takes ~45 minutes door to door along the A6 highway—especially cost-effective for 2–4 travelers.</p>
+          <p>Our <a href="/routes/limassol-to-paphos/">Limassol ↔ Paphos private transfer</a> (and <a href="/routes/paphos-airport-to-limassol/">Paphos Airport PFO ↔ Limassol</a>) costs a fixed <strong>€75 per sedan</strong> (up to 4 passengers &amp; 3 bags) and takes ~45 minutes door to door along the A6 highway—especially cost-effective for 2–4 travelers.</p>
           <h2>2. Intercity Bus</h2>
           <p>The "Green Buses" run between the main bus stations in Paphos and Limassol. It is the cheapest option per person, but requires getting to the station and managing luggage transfers.</p>
           <h2>3. Shared Taxi (Travel Express)</h2>
           <p>A middle-ground option that picks up several passengers. Cheaper per seat than a private car, but less flexible with pickup times and direct hotel stops.</p>
-          <p><strong>Book with us:</strong> Lock in our fixed <strong>€75</strong> rate for <a href="/routes/limassol-to-paphos">Paphos ↔ Limassol</a> or <a href="/routes/paphos-airport-to-limassol">Paphos Airport ↔ Limassol</a> online 24/7.</p>
+          <p><strong>Book with us:</strong> Lock in our fixed <strong>€75</strong> rate for <a href="/routes/limassol-to-paphos/">Paphos ↔ Limassol</a> or <a href="/routes/paphos-airport-to-limassol/">Paphos Airport ↔ Limassol</a> online 24/7.</p>
         </>
       ),
       ru: (
         <>
           <p>Маршрут между Пафосом и Лимассолом — один из самых востребованных на острове. Независимо от того, переезжаете ли вы между отелями или прилетаете в аэропорт, важно выбрать оптимальный способ поездки.</p>
           <h2>1. Индивидуальный трансфер (Лучший выбор — фиксированно €75)</h2>
-          <p>Частный <a href="/ru/routes/limassol-to-paphos">трансфер Лимассол ↔ Пафос</a> (как и <a href="/ru/routes/paphos-airport-to-limassol">Аэропорт Пафос PFO ↔ Лимассол</a>) стоит фиксированные <strong>€75 за весь седан</strong> (до 4 человек и 3 чемоданов) и занимает около 45 минут по трассе A6 от двери до двери.</p>
+          <p>Частный <a href="/ru/routes/limassol-to-paphos/">трансфер Лимассол ↔ Пафос</a> (как и <a href="/ru/routes/paphos-airport-to-limassol/">Аэропорт Пафос PFO ↔ Лимассол</a>) стоит фиксированные <strong>€75 за весь седан</strong> (до 4 человек и 3 чемоданов) и занимает около 45 минут по трассе A6 от двери до двери.</p>
           <h2>2. Междугородний автобус</h2>
           <p>"Зеленые автобусы" курсируют между главными автостанциями Пафоса и Лимассола. Это самый бюджетный вариант для одного, но нужно самостоятельно добираться до остановок с багажом.</p>
           <h2>3. Маршрутное такси (Travel Express)</h2>
           <p>Промежуточный вариант, который собирает нескольких пассажиров по городу. Дешевле индивидуальной машины на 1 человека, но менее гибко по времени и адресу подачи.</p>
-          <p><strong>Забронируйте онлайн:</strong> Фиксированный тариф <strong>€75</strong> на <a href="/ru/routes/limassol-to-paphos">Пафос ↔ Лимассол</a> или <a href="/ru/routes/paphos-airport-to-limassol">аэропорт Пафос (PFO) ↔ Лимассол</a> с круглосуточной подачей.</p>
+          <p><strong>Забронируйте онлайн:</strong> Фиксированный тариф <strong>€75</strong> на <a href="/ru/routes/limassol-to-paphos/">Пафос ↔ Лимассол</a> или <a href="/ru/routes/paphos-airport-to-limassol/">аэропорт Пафос (PFO) ↔ Лимассол</a> с круглосуточной подачей.</p>
         </>
       )
     }
@@ -868,11 +868,11 @@ const legacyBlogPosts: BlogPost[] = [
           <h2>Direct Private Transfers to Ayia Napa (Limassol &amp; Paphos)</h2>
           <p>Traveling between resorts or arriving at Paphos Airport? We operate fixed-price private sedans straight to your Ayia Napa hotel:</p>
           <ul>
-            <li><a href="/routes/limassol-to-ayia-napa">Limassol ↔ Ayia Napa</a>: <strong>€115</strong> (~75 min)</li>
-            <li><a href="/routes/paphos-airport-to-ayia-napa">Paphos Airport (PFO) ↔ Ayia Napa</a>: <strong>€180</strong> (~120 min)</li>
-            <li><a href="/routes/ayia-napa-to-paphos">Paphos City ↔ Ayia Napa</a>: <strong>€180</strong> (~120 min)</li>
+            <li><a href="/routes/limassol-to-ayia-napa/">Limassol ↔ Ayia Napa</a>: <strong>€115</strong> (~75 min)</li>
+            <li><a href="/routes/paphos-airport-to-ayia-napa/">Paphos Airport (PFO) ↔ Ayia Napa</a>: <strong>€180</strong> (~120 min)</li>
+            <li><a href="/routes/ayia-napa-to-paphos/">Paphos City ↔ Ayia Napa</a>: <strong>€180</strong> (~120 min)</li>
           </ul>
-          <p>Landing at Larnaca Airport heading west instead? Check our fixed <a href="/routes/larnaca-airport-to-limassol">LCA → Limassol (€75)</a> and <a href="/routes/larnaca-airport-to-paphos">LCA → Paphos (€135)</a> transfers.</p>
+          <p>Landing at Larnaca Airport heading west instead? Check our fixed <a href="/routes/larnaca-airport-to-limassol/">LCA → Limassol (€75)</a> and <a href="/routes/larnaca-airport-to-paphos/">LCA → Paphos (€135)</a> transfers.</p>
         </>
       ),
       ru: (
@@ -883,11 +883,11 @@ const legacyBlogPosts: BlogPost[] = [
           <h2>Прямые индивидуальные трансферы в Айя-Напу от нашей службы</h2>
           <p>Если вы едете из Лимассола, Пафоса или аэропорта Пафоса (PFO), мы доставим вас прямо к отелю в Айя-Напе по фиксированному тарифу:</p>
           <ul>
-            <li><a href="/ru/routes/limassol-to-ayia-napa">Лимассол ↔ Айя-Напа</a>: <strong>€115</strong> (~75 мин)</li>
-            <li><a href="/ru/routes/paphos-airport-to-ayia-napa">Аэропорт Пафос (PFO) ↔ Айя-Напа</a>: <strong>€180</strong> (~120 мин)</li>
-            <li><a href="/ru/routes/ayia-napa-to-paphos">Айя-Напа ↔ Пафос</a>: <strong>€180</strong> (~120 мин)</li>
+            <li><a href="/ru/routes/limassol-to-ayia-napa/">Лимассол ↔ Айя-Напа</a>: <strong>€115</strong> (~75 мин)</li>
+            <li><a href="/ru/routes/paphos-airport-to-ayia-napa/">Аэропорт Пафос (PFO) ↔ Айя-Напа</a>: <strong>€180</strong> (~120 мин)</li>
+            <li><a href="/ru/routes/ayia-napa-to-paphos/">Айя-Напа ↔ Пафос</a>: <strong>€180</strong> (~120 мин)</li>
           </ul>
-          <p>А если вы прилетаете в Ларнаку (LCA) и направляетесь на юг или запад — бронируйте <a href="/ru/routes/larnaca-airport-to-limassol">LCA → Лимассол (€75)</a> или <a href="/ru/routes/larnaca-airport-to-paphos">LCA → Пафос (€135)</a>.</p>
+          <p>А если вы прилетаете в Ларнаку (LCA) и направляетесь на юг или запад — бронируйте <a href="/ru/routes/larnaca-airport-to-limassol/">LCA → Лимассол (€75)</a> или <a href="/ru/routes/larnaca-airport-to-paphos/">LCA → Пафос (€135)</a>.</p>
         </>
       )
     }
@@ -995,7 +995,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>A classic choice for a traditional fish meze. The service is excellent, and the location is unbeatable for sunset views.</p>
           <h2>3. Ocean Basket</h2>
           <p>For a more modern and affordable option, this popular chain offers great platters that are perfect for families.</p>
-          <p><strong>Dining in Paphos from Limassol?</strong> Book an intercity <a href="/routes/limassol-to-paphos">Limassol ↔ Paphos private transfer (€75)</a> or arrive directly from <a href="/routes/larnaca-airport-to-paphos">Larnaca Airport (€135)</a> without worrying about parking.</p>
+          <p><strong>Dining in Paphos from Limassol?</strong> Book an intercity <a href="/routes/limassol-to-paphos/">Limassol ↔ Paphos private transfer (€75)</a> or arrive directly from <a href="/routes/larnaca-airport-to-paphos/">Larnaca Airport (€135)</a> without worrying about parking.</p>
         </>
       ),
       ru: (
@@ -1007,7 +1007,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Классический выбор для традиционного рыбного мезе. Отличный сервис и непревзойденное расположение для наблюдения за закатом.</p>
           <h2>3. Ocean Basket</h2>
           <p>Для более современного и доступного варианта эта популярная сеть предлагает отличные сеты, которые идеально подходят для семей.</p>
-          <p><strong>Едете в Пафос из Лимассола?</strong> Закажите междугородний трансфер <a href="/ru/routes/limassol-to-paphos">Лимассол ↔ Пафос за €75</a> или прямой рейс из <a href="/ru/routes/larnaca-airport-to-paphos">аэропорта Ларнаки (€135)</a>.</p>
+          <p><strong>Едете в Пафос из Лимассола?</strong> Закажите междугородний трансфер <a href="/ru/routes/limassol-to-paphos/">Лимассол ↔ Пафос за €75</a> или прямой рейс из <a href="/ru/routes/larnaca-airport-to-paphos/">аэропорта Ларнаки (€135)</a>.</p>
         </>
       )
     }
@@ -1235,7 +1235,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Designed by Sir Nick Faldo, this course is known for its strategic layout and beautiful Mediterranean setting.</p>
           <h2>3. Minthis Golf Club</h2>
           <p>Located in the grounds of a 12th-century monastery, this course offers a unique and peaceful golfing experience.</p>
-          <p><strong>Golf Transfers:</strong> Arriving in Larnaca (LCA) or staying in Limassol? Book a <a href="/routes/larnaca-airport-to-paphos">Larnaca Airport → Paphos transfer (€135)</a> or <a href="/routes/limassol-to-paphos">Limassol → Paphos (€75)</a>; sedans comfortably hold up to 3 suitcases/bags (message us on WhatsApp if carrying oversized golf travel bags).</p>
+          <p><strong>Golf Transfers:</strong> Arriving in Larnaca (LCA) or staying in Limassol? Book a <a href="/routes/larnaca-airport-to-paphos/">Larnaca Airport → Paphos transfer (€135)</a> or <a href="/routes/limassol-to-paphos/">Limassol → Paphos (€75)</a>; sedans comfortably hold up to 3 suitcases/bags (message us on WhatsApp if carrying oversized golf travel bags).</p>
         </>
       ),
       ru: (
@@ -1247,7 +1247,7 @@ const legacyBlogPosts: BlogPost[] = [
           <p>Спроектированное сэром Ником Фалдо, это поле известно своей стратегической планировкой и красивым средиземноморским окружением.</p>
           <h2>3. Minthis Golf Club</h2>
           <p>Расположенное на территории монастыря 12-го века, это поле предлагает уникальный и спокойный опыт игры в гольф.</p>
-          <p><strong>Трансфер для гольфистов:</strong> Забронируйте прямой седан <a href="/ru/routes/larnaca-airport-to-paphos">Аэропорт Ларнака → Пафос (€135)</a> или <a href="/ru/routes/limassol-to-paphos">Лимассол → Пафос (€75)</a>. Если у вас нестандартные чехлы для гольфа, просто предупредите нас в WhatsApp.</p>
+          <p><strong>Трансфер для гольфистов:</strong> Забронируйте прямой седан <a href="/ru/routes/larnaca-airport-to-paphos/">Аэропорт Ларнака → Пафос (€135)</a> или <a href="/ru/routes/limassol-to-paphos/">Лимассол → Пафос (€75)</a>. Если у вас нестандартные чехлы для гольфа, просто предупредите нас в WhatsApp.</p>
         </>
       )
     }

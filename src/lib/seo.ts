@@ -21,7 +21,7 @@ export interface SeoMetadata {
   ogType: 'website' | 'article';
   ogImage: string;
   robots: string;
-  jsonLd: Record<string, any>;
+  jsonLd: Record<string, any> | null;
 }
 
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-cover.jpg`;
@@ -46,6 +46,8 @@ interface LocalizedSeoCopy {
   blogListDesc: string;
   blogName: string;
   blogNotFoundTitle: string;
+  notFoundTitle: string;
+  notFoundDesc: string;
 }
 
 const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
@@ -75,6 +77,8 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
       'Helpful Cyprus travel guides: getting from Larnaca (LCA) and Paphos (PFO) airports, fixed transfer rates, night arrival rules, and resort comparisons.',
     blogName: 'Cyprus Airport Transfers Blog',
     blogNotFoundTitle: 'Article Not Found | Cyprus Airport Transfers',
+    notFoundTitle: '404 — Page Not Found | Cyprus Airport Transfers',
+    notFoundDesc: 'The requested page or transfer route could not be found.',
   },
   ru: {
     orgName: 'Cyprus Airport Transfers — Лимассол, LCA и PFO',
@@ -101,6 +105,8 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
       'Полезные гиды для туристов на Кипре: как добраться из аэропортов Ларнака и Пафос, ночной тариф, межгородские маршруты и сравнение с такси.',
     blogName: 'Блог Cyprus Airport Transfers',
     blogNotFoundTitle: 'Статья не найдена | Cyprus Airport Transfers',
+    notFoundTitle: '404 — Страница не найдена | Cyprus Airport Transfers',
+    notFoundDesc: 'Запрошенная страница или маршрут трансфера не найдены.',
   },
   de: {
     orgName: 'Cyprus Airport Transfers (Limassol, LCA & PFO)',
@@ -127,6 +133,8 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
       'Aktuelle Reiseführer für Zypern: Festpreise ab Flughafen Larnaka (LCA) und Paphos (PFO) nach Limassol, Ayia Napa, Protaras & Regeln für Nachtankünfte.',
     blogName: 'Cyprus Airport Transfers Blog (DE)',
     blogNotFoundTitle: 'Artikel nicht gefunden | Cyprus Airport Transfers',
+    notFoundTitle: '404 — Seite nicht gefunden | Cyprus Airport Transfers',
+    notFoundDesc: 'Die angeforderte Seite oder Transferstrecke wurde nicht gefunden.',
   },
   pl: {
     orgName: 'Cyprus Airport Transfers (Limassol, LCA i PFO)',
@@ -153,6 +161,8 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
       'Praktyczne przewodniki po Cyprze: dojazd z lotnisk Larnaka (LCA) i Pafos (PFO) do Limassol, Ayia Napa i Protaras, taryfa nocna oraz porównanie cen.',
     blogName: 'Blog Cyprus Airport Transfers (PL)',
     blogNotFoundTitle: 'Nie znaleziono artykułu | Cyprus Airport Transfers',
+    notFoundTitle: '404 — Nie znaleziono strony | Cyprus Airport Transfers',
+    notFoundDesc: 'Szukana strona lub trasa transferu nie została znaleziona.',
   },
   fr: {
     orgName: 'Cyprus Airport Transfers (Limassol, LCA & PFO)',
@@ -179,6 +189,8 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
       'Guides pratiques pour vos arrivées à Chypre : tarifs fixes depuis Larnaca (LCA) et Paphos (PFO) vers Limassol, Ayia Napa, Protaras et transferts de nuit.',
     blogName: 'Blog Cyprus Airport Transfers (FR)',
     blogNotFoundTitle: 'Article introuvable | Cyprus Airport Transfers',
+    notFoundTitle: '404 — Page introuvable | Cyprus Airport Transfers',
+    notFoundDesc: 'La page ou l’itinéraire de transfert demandé est introuvable.',
   },
   el: {
     orgName: 'Cyprus Airport Transfers (Λεμεσός, LCA & PFO)',
@@ -205,6 +217,8 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
       'Χρήσιμοι οδηγοί για Κύπρο: σταθερές τιμές από LCA και PFO προς Λεμεσό, Αγία Νάπα, Πρωταρά, Λευκωσία και κανόνες νυχτερινών αφίξεων.',
     blogName: 'Blog Cyprus Airport Transfers (EL)',
     blogNotFoundTitle: 'Το άρθρο δεν βρέθηκε | Cyprus Airport Transfers',
+    notFoundTitle: '404 — Η σελίδα δεν βρέθηκε | Cyprus Airport Transfers',
+    notFoundDesc: 'Η σελίδα ή η διαδρομή μεταφοράς που ζητήσατε δεν βρέθηκε.',
   },
   it: {
     orgName: 'Cyprus Airport Transfers (Limassol, LCA & PFO)',
@@ -231,6 +245,8 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
       'Guide pratiche per Cipro: tariffe fisse da Larnaca (LCA) e Paphos (PFO) a Limassol, Ayia Napa, Protaras, Nicosia e regole per arrivi notturni.',
     blogName: 'Blog Cyprus Airport Transfers (IT)',
     blogNotFoundTitle: 'Articolo non trovato | Cyprus Airport Transfers',
+    notFoundTitle: '404 — Pagina non trovata | Cyprus Airport Transfers',
+    notFoundDesc: 'La pagina o la tratta transfer richiesta non è stata trovata.',
   },
 };
 
@@ -333,10 +349,29 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
     }
   });
 
-  const xDefaultUrl = alternates.en || `${SITE_URL}/`;
-  const canonicalUrl = alternates[lang] || xDefaultUrl;
+  const hasAlternates = Object.keys(alternates).length > 0;
+  const xDefaultUrl = hasAlternates ? alternates.en || `${SITE_URL}/` : '';
+  const canonicalUrl =
+    view === 'not-found'
+      ? ''
+      : alternates[lang] || `${SITE_URL}${buildLocalizedPath(view, lang, slug)}`;
   const copy = SEO_COPY[lang] || SEO_COPY.en;
   const trans = translations[lang] || translations.en;
+
+  if (view === 'not-found') {
+    return {
+      lang,
+      title: copy.notFoundTitle,
+      description: copy.notFoundDesc,
+      canonicalUrl: '',
+      alternates: {},
+      xDefaultUrl: '',
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      robots: 'noindex, follow',
+      jsonLd: null,
+    };
+  }
 
   if (view === 'success') {
     return {
@@ -424,8 +459,8 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
     };
   }
 
-  if (view === 'route' && slug) {
-    const route = getAirportRouteBySlug(slug);
+  if (view === 'route') {
+    const route = slug ? getAirportRouteBySlug(slug) : undefined;
     if (route) {
       const content = getRouteContentForLanguage(route, lang);
       const homeUrl = `${SITE_URL}${buildLocalizedPath('home', lang)}`;
@@ -497,6 +532,19 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
         },
       };
     }
+
+    return {
+      lang,
+      title: copy.notFoundTitle,
+      description: copy.notFoundDesc,
+      canonicalUrl: '',
+      alternates: {},
+      xDefaultUrl: '',
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      robots: 'noindex, follow',
+      jsonLd: null,
+    };
   }
 
   if (view === 'routes-index') {
@@ -689,16 +737,13 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
       lang: activeLang,
       title: activeCopy.blogNotFoundTitle,
       description: '',
-      canonicalUrl,
-      alternates,
-      xDefaultUrl,
+      canonicalUrl: '',
+      alternates: {},
+      xDefaultUrl: '',
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
       robots: 'noindex, follow',
-      jsonLd: {
-        '@context': 'https://schema.org',
-        '@graph': [getBaseTaxiServiceSchema(activeLang)],
-      },
+      jsonLd: null,
     };
   }
 
