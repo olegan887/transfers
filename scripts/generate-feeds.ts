@@ -120,7 +120,31 @@ interface FeedItem {
   summary: string;
   dateIso: string;
   image: string;
+  imageLength: number;
+  imageType: string;
   category: string;
+}
+
+function getLocalImageMeta(imagePath: string): { length: number; type: string } {
+  if (!imagePath || imagePath.startsWith('http')) {
+    return { length: 0, type: 'image/webp' };
+  }
+  const rel = imagePath.replace(/^\/+/, '');
+  const fullPath = path.join(publicDir, rel);
+  let length = 0;
+  try {
+    length = fs.statSync(fullPath).size;
+  } catch {
+    length = 0;
+  }
+  const ext = path.extname(rel).toLowerCase();
+  const type =
+    ext === '.jpg' || ext === '.jpeg'
+      ? 'image/jpeg'
+      : ext === '.png'
+      ? 'image/png'
+      : 'image/webp';
+  return { length, type };
 }
 
 function buildItems(lang: Language): FeedItem[] {
@@ -136,6 +160,7 @@ function buildItems(lang: Language): FeedItem[] {
   const blogItems: FeedItem[] = filteredPosts.map((post) => {
     const url = `${SITE_URL}${prefix}/blog/${post.slug}/?utm_source=rss&utm_medium=syndication`;
     const image = post.image.startsWith('http') ? post.image : `${SITE_URL}${post.image}`;
+    const imgMeta = getLocalImageMeta(post.image);
     return {
       id: `${SITE_URL}${prefix}/blog/${post.slug}/`,
       url,
@@ -143,6 +168,8 @@ function buildItems(lang: Language): FeedItem[] {
       summary: post.excerpt[lang] || post.excerpt.en,
       dateIso: new Date(`${post.date}T08:00:00Z`).toISOString(),
       image,
+      imageLength: imgMeta.length,
+      imageType: imgMeta.type,
       category: meta.guideCategory,
     };
   });
@@ -152,6 +179,7 @@ function buildItems(lang: Language): FeedItem[] {
     baseDate.setDate(baseDate.getDate() - idx);
     const url = `${SITE_URL}${prefix}/routes/${route.slug}/?utm_source=rss&utm_medium=syndication`;
     const image = route.image.startsWith('http') ? route.image : `${SITE_URL}${route.image}`;
+    const imgMeta = getLocalImageMeta(route.image);
     const localized = getRouteContentForLanguage(route, lang);
     return {
       id: `${SITE_URL}${prefix}/routes/${route.slug}/`,
@@ -160,6 +188,8 @@ function buildItems(lang: Language): FeedItem[] {
       summary: `${localized.subtitle} (${route.distanceKm} km, ~${route.durationMin} min).`,
       dateIso: baseDate.toISOString(),
       image,
+      imageLength: imgMeta.length,
+      imageType: imgMeta.type,
       category: meta.routeCategory,
     };
   });
@@ -185,8 +215,11 @@ function renderRssXml(lang: Language, items: FeedItem[]): string {
       <category>${escapeXml(item.category)}</category>
       <description>${escapeXml(
         `${item.summary} <a href="${item.url}">${meta.readAction}</a>`
-      )}</description>
-      <enclosure url="${escapeXml(item.image)}" type="image/webp" />
+      )}</description>${
+        item.imageLength > 0
+          ? `\n      <enclosure url="${escapeXml(item.image)}" length="${item.imageLength}" type="${escapeXml(item.imageType)}" />`
+          : ''
+      }
     </item>`
     )
     .join('\n');

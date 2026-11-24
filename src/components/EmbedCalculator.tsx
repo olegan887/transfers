@@ -236,7 +236,7 @@ export default function EmbedCalculator({
             <a
               href={brandHomeUrl}
               target="_blank"
-              rel="noopener"
+              rel="noopener nofollow"
               className="text-black underline hover:text-yellow-600"
             >
               Cyprus Airport Transfers

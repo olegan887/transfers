@@ -69,9 +69,9 @@ export default function Footer({ currentPath }: FooterProps = {}) {
           </div>
 
           <div>
-            <h4 className="text-black font-black mb-5 uppercase tracking-wider text-sm bg-yellow-400 inline-block px-2.5 py-1 border-2 border-black">
+            <p className="text-black font-black mb-5 uppercase tracking-wider text-sm bg-yellow-400 inline-block px-2.5 py-1 border-2 border-black">
               {t('footer.routes')}
-            </h4>
+            </p>
             <ul className="space-y-2.5 text-sm font-bold">
               {topFooterRoutes.map((route) => (
                 <li key={route.slug}>
@@ -87,9 +87,9 @@ export default function Footer({ currentPath }: FooterProps = {}) {
           </div>
 
           <div>
-            <h4 className="text-black font-black mb-5 uppercase tracking-wider text-sm bg-yellow-400 inline-block px-2.5 py-1 border-2 border-black">
+            <p className="text-black font-black mb-5 uppercase tracking-wider text-sm bg-yellow-400 inline-block px-2.5 py-1 border-2 border-black">
               {t('footer.nav')}
-            </h4>
+            </p>
             <ul className="space-y-3 text-sm font-bold">
               <li>
                 <a href={`${homeHref}#destinations`} className="hover:text-yellow-600 transition-colors">
@@ -142,9 +142,9 @@ export default function Footer({ currentPath }: FooterProps = {}) {
           </div>
 
           <div>
-            <h4 className="text-black font-black mb-5 uppercase tracking-wider text-sm bg-yellow-400 inline-block px-2.5 py-1 border-2 border-black">
+            <p className="text-black font-black mb-5 uppercase tracking-wider text-sm bg-yellow-400 inline-block px-2.5 py-1 border-2 border-black">
               {t('footer.contacts')}
-            </h4>
+            </p>
             <ul className="space-y-3 text-sm font-bold mb-6">
               <li>
                 <a

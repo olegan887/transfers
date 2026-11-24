@@ -79,6 +79,24 @@ function buildHreflangBlock(seo) {
   return lines.join('\n');
 }
 
+function buildFeedsBlock(seo) {
+  const label = seo.lang.toUpperCase();
+  return [
+    `    <link rel="alternate" type="application/rss+xml" title="Cyprus Airport Transfers RSS (${escapeHtmlAttr(label)})" href="${escapeHtmlAttr(seo.rssUrl)}" />`,
+    `    <link rel="alternate" type="application/feed+json" title="Cyprus Airport Transfers JSON Feed (${escapeHtmlAttr(label)})" href="${escapeHtmlAttr(seo.jsonFeedUrl)}" />`,
+  ].join('\n');
+}
+
+function buildOgLocaleBlock(seo) {
+  const lines = [
+    `    <meta property="og:locale" content="${escapeHtmlAttr(seo.ogLocale)}" />`,
+  ];
+  for (const alt of seo.ogLocaleAlternates || []) {
+    lines.push(`    <meta property="og:locale:alternate" content="${escapeHtmlAttr(alt)}" />`);
+  }
+  return lines.join('\n');
+}
+
 function injectHeadTags(template, seo) {
   let html = template;
 
@@ -107,6 +125,12 @@ function injectHeadTags(template, seo) {
     hreflangHtml
   );
 
+  const feedsHtml = buildFeedsBlock(seo);
+  html = html.replace(
+    /<!--seo-feeds-start-->[\s\S]*?<!--seo-feeds-end-->/,
+    feedsHtml
+  );
+
   html = html.replace(
     /<meta property="og:title" content="[^"]*"\s*\/?>/,
     `<meta property="og:title" content="${escapeHtmlAttr(seo.title)}" />`
@@ -130,6 +154,12 @@ function injectHeadTags(template, seo) {
   html = html.replace(
     /<meta property="og:image" content="[^"]*"\s*\/?>/,
     `<meta property="og:image" content="${escapeHtmlAttr(seo.ogImage)}" />`
+  );
+
+  const ogLocaleHtml = buildOgLocaleBlock(seo);
+  html = html.replace(
+    /<!--seo-og-locale-start-->[\s\S]*?<!--seo-og-locale-end-->/,
+    ogLocaleHtml
   );
 
   html = html.replace(
@@ -169,7 +199,7 @@ async function runPrerender() {
   const { render } = await import(serverEntryPath);
 
   // Prerender dedicated noindex 404.html for GitHub Pages fallback
-  const notFoundRendered = render('/404.html');
+  const notFoundRendered = await render('/404.html');
   let notFoundHtml = injectHeadTags(template, notFoundRendered.seo);
   notFoundHtml = notFoundHtml.replace(
     '<div id="root"><!--app-html--></div>',
@@ -203,7 +233,7 @@ async function runPrerender() {
   ];
 
   for (const urlPath of pathsToRender) {
-    const { html, seo } = render(urlPath);
+    const { html, seo } = await render(urlPath);
     let pageHtml = injectHeadTags(template, seo);
     pageHtml = pageHtml.replace(
       '<div id="root"><!--app-html--></div>',

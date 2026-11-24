@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getPageSeo } from '../lib/seo';
+import { getPageSeoAsync } from '../lib/seo';
 
 function upsertMeta(selector: string, attrName: 'name' | 'property', attrVal: string, content: string) {
   let el = document.querySelector(selector) as HTMLMetaElement | null;
@@ -25,65 +25,90 @@ function upsertLink(selector: string, attrs: Record<string, string>) {
  */
 export function useDocumentMeta(pathname: string, search = '') {
   useEffect(() => {
-    const seo = getPageSeo(pathname, search);
+    let cancelled = false;
 
-    document.documentElement.lang = seo.lang;
-    document.title = seo.title;
+    getPageSeoAsync(pathname, search).then((seo) => {
+      if (cancelled) return;
 
-    upsertMeta('meta[name="description"]', 'name', 'description', seo.description);
-    upsertMeta('meta[name="robots"]', 'name', 'robots', seo.robots);
-    upsertMeta('meta[property="og:title"]', 'property', 'og:title', seo.title);
-    upsertMeta('meta[property="og:description"]', 'property', 'og:description', seo.description);
-    upsertMeta('meta[property="og:type"]', 'property', 'og:type', seo.ogType);
-    upsertMeta('meta[property="og:image"]', 'property', 'og:image', seo.ogImage);
-    upsertMeta('meta[name="twitter:title"]', 'name', 'twitter:title', seo.title);
-    upsertMeta('meta[name="twitter:description"]', 'name', 'twitter:description', seo.description);
-    upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', seo.ogImage);
+      document.documentElement.lang = seo.lang;
+      document.title = seo.title;
 
-    if (seo.canonicalUrl) {
-      upsertMeta('meta[property="og:url"]', 'property', 'og:url', seo.canonicalUrl);
-      upsertLink('link[rel="canonical"]', { rel: 'canonical', href: seo.canonicalUrl });
-    } else {
-      document.querySelector('meta[property="og:url"]')?.remove();
-      document.querySelector('link[rel="canonical"]')?.remove();
-    }
+      upsertMeta('meta[name="description"]', 'name', 'description', seo.description);
+      upsertMeta('meta[name="robots"]', 'name', 'robots', seo.robots);
+      upsertMeta('meta[property="og:title"]', 'property', 'og:title', seo.title);
+      upsertMeta('meta[property="og:description"]', 'property', 'og:description', seo.description);
+      upsertMeta('meta[property="og:type"]', 'property', 'og:type', seo.ogType);
+      upsertMeta('meta[property="og:image"]', 'property', 'og:image', seo.ogImage);
+      upsertMeta('meta[property="og:locale"]', 'property', 'og:locale', seo.ogLocale);
+      upsertMeta('meta[name="twitter:title"]', 'name', 'twitter:title', seo.title);
+      upsertMeta('meta[name="twitter:description"]', 'name', 'twitter:description', seo.description);
+      upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', seo.ogImage);
 
-    // Remove existing hreflang links cleanly so blog/noindex routes don't keep unused alternates
-    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
+      document.querySelectorAll('meta[property="og:locale:alternate"]').forEach((el) => el.remove());
+      const ogLocaleEl = document.querySelector('meta[property="og:locale"]');
+      seo.ogLocaleAlternates
+        .slice()
+        .reverse()
+        .forEach((loc) => {
+          const metaEl = document.createElement('meta');
+          metaEl.setAttribute('property', 'og:locale:alternate');
+          metaEl.setAttribute('content', loc);
+          if (ogLocaleEl && ogLocaleEl.parentNode) {
+            ogLocaleEl.parentNode.insertBefore(metaEl, ogLocaleEl.nextSibling);
+          } else {
+            document.head.appendChild(metaEl);
+          }
+        });
 
-    const canonicalEl = document.querySelector('link[rel="canonical"]');
-    const insertHreflang = (hreflang: string, href: string) => {
-      const linkEl = document.createElement('link');
-      linkEl.rel = 'alternate';
-      linkEl.setAttribute('hreflang', hreflang);
-      linkEl.href = href;
-      if (canonicalEl && canonicalEl.parentNode) {
-        canonicalEl.parentNode.insertBefore(linkEl, canonicalEl.nextSibling);
+      if (seo.canonicalUrl) {
+        upsertMeta('meta[property="og:url"]', 'property', 'og:url', seo.canonicalUrl);
+        upsertLink('link[rel="canonical"]', { rel: 'canonical', href: seo.canonicalUrl });
       } else {
-        document.head.appendChild(linkEl);
+        document.querySelector('meta[property="og:url"]')?.remove();
+        document.querySelector('link[rel="canonical"]')?.remove();
       }
+
+      // Remove existing hreflang links cleanly so blog/noindex routes don't keep unused alternates
+      document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
+
+      const canonicalEl = document.querySelector('link[rel="canonical"]');
+      const insertHreflang = (hreflang: string, href: string) => {
+        const linkEl = document.createElement('link');
+        linkEl.rel = 'alternate';
+        linkEl.setAttribute('hreflang', hreflang);
+        linkEl.href = href;
+        if (canonicalEl && canonicalEl.parentNode) {
+          canonicalEl.parentNode.insertBefore(linkEl, canonicalEl.nextSibling);
+        } else {
+          document.head.appendChild(linkEl);
+        }
+      };
+
+      if (seo.xDefaultUrl) {
+        insertHreflang('x-default', seo.xDefaultUrl);
+      }
+      Object.entries(seo.alternates)
+        .reverse()
+        .forEach(([code, href]) => {
+          if (href) insertHreflang(code, href);
+        });
+
+      let jsonLdEl = document.getElementById('seo-json-ld') as HTMLScriptElement | null;
+      if (seo.jsonLd) {
+        if (!jsonLdEl) {
+          jsonLdEl = document.createElement('script');
+          jsonLdEl.id = 'seo-json-ld';
+          jsonLdEl.type = 'application/ld+json';
+          document.head.appendChild(jsonLdEl);
+        }
+        jsonLdEl.textContent = JSON.stringify(seo.jsonLd);
+      } else if (jsonLdEl) {
+        jsonLdEl.remove();
+      }
+    });
+
+    return () => {
+      cancelled = true;
     };
-
-    if (seo.xDefaultUrl) {
-      insertHreflang('x-default', seo.xDefaultUrl);
-    }
-    Object.entries(seo.alternates)
-      .reverse()
-      .forEach(([code, href]) => {
-        if (href) insertHreflang(code, href);
-      });
-
-    let jsonLdEl = document.getElementById('seo-json-ld') as HTMLScriptElement | null;
-    if (seo.jsonLd) {
-      if (!jsonLdEl) {
-        jsonLdEl = document.createElement('script');
-        jsonLdEl.id = 'seo-json-ld';
-        jsonLdEl.type = 'application/ld+json';
-        document.head.appendChild(jsonLdEl);
-      }
-      jsonLdEl.textContent = JSON.stringify(seo.jsonLd);
-    } else if (jsonLdEl) {
-      jsonLdEl.remove();
-    }
   }, [pathname, search]);
 }

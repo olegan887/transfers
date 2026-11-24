@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { getGoogleScriptUrl, safeFetchGoogleScript } from '../lib/utils';
-import { reportConversion } from '../lib/analytics';
+import { reportLead } from '../lib/analytics';
 import { handleInvalid } from '../lib/formUtils';
 
 export default function ContactForm() {
@@ -35,7 +35,7 @@ export default function ContactForm() {
       }
 
       setStatus('success');
-      reportConversion();
+      reportLead('contact_form');
       setFormData({ name: '', phone: '', email: '', comment: '' });
 
       setTimeout(() => setStatus('idle'), 5000);

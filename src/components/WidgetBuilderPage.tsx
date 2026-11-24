@@ -47,7 +47,7 @@ export default function WidgetBuilderPage() {
   const embedSnippet = `<div style="${maxWidthStyle}margin:0 auto;">
   <iframe src="${embedSrc}" width="100%" height="445" style="border:0;overflow:hidden;border-radius:14px;" loading="lazy" title="${widgetTrans.embed.title}"></iframe>
   <p style="margin:6px 0 0;font-size:12px;text-align:center;font-family:sans-serif;">
-    <a href="${SITE_URL}${buildLocalizedPath('home', widgetLang)}?utm_source=widget&utm_medium=embed" target="_blank" rel="noopener">${widgetTrans.hero.title1} ${widgetTrans.hero.title2}</a>
+    <a href="${SITE_URL}${buildLocalizedPath('home', widgetLang)}?utm_source=widget&utm_medium=embed" target="_blank" rel="noopener nofollow">Cyprus Airport Transfers</a>
   </p>
 </div>`;
 

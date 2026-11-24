@@ -219,7 +219,7 @@ const ROUTE_SEEDS: RouteSeed[] = [
     toId: 'peyia',
     distanceKm: 152,
     durationMin: 105,
-    basePrice: 155,
+    basePrice: 160,
     enFrom: 'Larnaca Airport (LCA)',
     enTo: 'Peyia',
     ruFrom: 'Аэропорт Ларнака (LCA)',

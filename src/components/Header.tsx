@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, MessageCircle, Globe, ChevronDown, Check } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { WHATSAPP_NUMBER } from '../config';
-import { reportConversion } from '../lib/analytics';
+import { reportContactClick } from '../lib/analytics';
 import {
   buildLocalizedPath,
   CORE_LANGUAGES,
@@ -75,7 +75,7 @@ export default function Header({ currentPath: propPath }: HeaderProps = {}) {
   };
 
   const handleWhatsAppClick = () => {
-    reportConversion();
+    reportContactClick('whatsapp');
   };
 
   const homeHref = buildLocalizedPath('home', language);

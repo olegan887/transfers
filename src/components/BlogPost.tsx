@@ -139,6 +139,8 @@ export default function BlogPost({ slug }: BlogPostProps) {
               alt={postTitle}
               width={800}
               height={600}
+              loading="eager"
+              fetchPriority="high"
               className="w-full h-full object-cover"
             />
           </div>

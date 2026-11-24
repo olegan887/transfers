@@ -1,6 +1,6 @@
 import { airportRoutes, getAirportRouteBySlug, getRouteContentForLanguage } from '../data/routes';
-import { blogPosts } from '../data/blog';
-import { globalAirportFaqs, passengerReviews } from '../data/seoContent';
+import type { BlogPost } from '../data/blog';
+import { globalAirportFaqs } from '../data/seoContent';
 import { translations } from '../i18n/translations';
 import {
   buildLocalizedPath,
@@ -11,6 +11,16 @@ import {
   SITE_URL,
 } from './routing';
 
+export const OG_LOCALE_MAP: Record<Language, string> = {
+  en: 'en_GB',
+  ru: 'ru_RU',
+  de: 'de_DE',
+  pl: 'pl_PL',
+  fr: 'fr_FR',
+  el: 'el_GR',
+  it: 'it_IT',
+};
+
 export interface SeoMetadata {
   lang: Language;
   title: string;
@@ -20,11 +30,21 @@ export interface SeoMetadata {
   xDefaultUrl: string;
   ogType: 'website' | 'article';
   ogImage: string;
+  ogLocale: string;
+  ogLocaleAlternates: string[];
+  rssUrl: string;
+  jsonFeedUrl: string;
   robots: string;
   jsonLd: Record<string, any> | null;
 }
 
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-cover.jpg`;
+const RASTER_LOGO = {
+  '@type': 'ImageObject',
+  url: `${SITE_URL}/logo.png`,
+  width: 512,
+  height: 512,
+};
 
 interface LocalizedSeoCopy {
   orgName: string;
@@ -254,11 +274,12 @@ function getBaseTaxiServiceSchema(lang: Language) {
   const copy = SEO_COPY[lang] || SEO_COPY.en;
   return {
     '@type': 'LocalBusiness',
+    additionalType: 'https://schema.org/TaxiService',
     '@id': `${SITE_URL}/#organization`,
     name: copy.orgName,
     description: copy.orgDesc,
     url: `${SITE_URL}/`,
-    logo: `${SITE_URL}/logo.svg`,
+    logo: RASTER_LOGO,
     image: DEFAULT_OG_IMAGE,
     telephone: '+35796867289',
     email: 'info@cyprus-airport-transfer.co',
@@ -315,29 +336,27 @@ function getBaseTaxiServiceSchema(lang: Language) {
       url: 'https://wa.me/35796867289',
       availableLanguage: ['English', 'Russian', 'German', 'Polish', 'French', 'Greek', 'Italian'],
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      reviewCount: String(passengerReviews.length),
-      bestRating: '5',
-      worstRating: '1',
-    },
-    review: passengerReviews.map((r) => ({
-      '@type': 'Review',
-      author: { '@type': 'Person', name: r.author },
-      datePublished: r.date,
-      reviewBody: r.text[lang] || r.text.en,
-      reviewRating: {
-        '@type': 'Rating',
-        ratingValue: String(r.rating),
-        bestRating: '5',
-        worstRating: '1',
-      },
-    })),
   };
 }
 
-export function getPageSeo(pathname: string, search = ''): SeoMetadata {
+function buildLocaleAndFeedMeta(
+  activeLang: Language,
+  alternates: Partial<Record<Language, string>>
+) {
+  const prefix = activeLang === 'en' ? '' : `/${activeLang}`;
+  const ogLocale = OG_LOCALE_MAP[activeLang] || OG_LOCALE_MAP.en;
+  const ogLocaleAlternates = (Object.keys(alternates) as Language[])
+    .filter((code) => code !== activeLang && Boolean(alternates[code]))
+    .map((code) => OG_LOCALE_MAP[code]);
+  return {
+    ogLocale,
+    ogLocaleAlternates,
+    rssUrl: `${SITE_URL}${prefix}/rss.xml`,
+    jsonFeedUrl: `${SITE_URL}${prefix}/feed.json`,
+  };
+}
+
+function buildPageSeo(pathname: string, search = '', loadedBlogPosts?: BlogPost[]): SeoMetadata {
   const parsed = parseRoute(pathname, search);
   const { lang, view, slug } = parsed;
   const rawAlternates = getAlternatePaths(pathname, search);
@@ -357,6 +376,7 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
       : alternates[lang] || `${SITE_URL}${buildLocalizedPath(view, lang, slug)}`;
   const copy = SEO_COPY[lang] || SEO_COPY.en;
   const trans = translations[lang] || translations.en;
+  const localeAndFeed = buildLocaleAndFeedMeta(lang, alternates);
 
   if (view === 'not-found') {
     return {
@@ -368,6 +388,7 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
       xDefaultUrl: '',
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
+      ...buildLocaleAndFeedMeta(lang, {}),
       robots: 'noindex, follow',
       jsonLd: null,
     };
@@ -383,11 +404,9 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
       xDefaultUrl,
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
+      ...localeAndFeed,
       robots: 'noindex, nofollow',
-      jsonLd: {
-        '@context': 'https://schema.org',
-        '@graph': [getBaseTaxiServiceSchema(lang)],
-      },
+      jsonLd: null,
     };
   }
 
@@ -401,11 +420,9 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
       xDefaultUrl,
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
+      ...localeAndFeed,
       robots: 'noindex, follow',
-      jsonLd: {
-        '@context': 'https://schema.org',
-        '@graph': [getBaseTaxiServiceSchema(lang)],
-      },
+      jsonLd: null,
     };
   }
 
@@ -420,6 +437,7 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
       xDefaultUrl,
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
+      ...localeAndFeed,
       robots: 'index, follow',
       jsonLd: {
         '@context': 'https://schema.org',
@@ -474,6 +492,7 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
         xDefaultUrl,
         ogType: 'website',
         ogImage: `${SITE_URL}${route.image}`,
+        ...localeAndFeed,
         robots: 'index, follow',
         jsonLd: {
           '@context': 'https://schema.org',
@@ -542,6 +561,7 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
       xDefaultUrl: '',
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
+      ...buildLocaleAndFeedMeta(lang, {}),
       robots: 'noindex, follow',
       jsonLd: null,
     };
@@ -558,6 +578,7 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
       xDefaultUrl,
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
+      ...localeAndFeed,
       robots: 'index, follow',
       jsonLd: {
         '@context': 'https://schema.org',
@@ -602,6 +623,7 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
       xDefaultUrl,
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
+      ...localeAndFeed,
       robots: 'index, follow',
       jsonLd: {
         '@context': 'https://schema.org',
@@ -635,7 +657,7 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
   }
 
   if (view === 'blog-post' && slug) {
-    const post = blogPosts.find((p) => p.slug === slug);
+    const post = loadedBlogPosts?.find((p) => p.slug === slug);
     const activeLang: Language = post?.supportedLanguages?.includes(lang)
       ? lang
       : lang === 'ru'
@@ -667,14 +689,13 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
           author: {
             '@type': 'Organization',
             name: 'Cyprus Airport Transfers',
+            url: `${SITE_URL}/`,
           },
           publisher: {
             '@type': 'Organization',
             name: 'Cyprus Airport Transfers',
-            logo: {
-              '@type': 'ImageObject',
-              url: `${SITE_URL}/logo.svg`,
-            },
+            url: `${SITE_URL}/`,
+            logo: RASTER_LOGO,
           },
         },
         {
@@ -725,6 +746,7 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
         xDefaultUrl,
         ogType: 'article',
         ogImage: postImage,
+        ...buildLocaleAndFeedMeta(activeLang, alternates),
         robots: 'index, follow',
         jsonLd: {
           '@context': 'https://schema.org',
@@ -742,6 +764,7 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
       xDefaultUrl: '',
       ogType: 'website',
       ogImage: DEFAULT_OG_IMAGE,
+      ...buildLocaleAndFeedMeta(activeLang, {}),
       robots: 'noindex, follow',
       jsonLd: null,
     };
@@ -757,6 +780,7 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
     xDefaultUrl,
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
+    ...localeAndFeed,
     robots: 'index, follow',
     jsonLd: {
       '@context': 'https://schema.org',
@@ -795,4 +819,13 @@ export function getPageSeo(pathname: string, search = ''): SeoMetadata {
       ],
     },
   };
+}
+
+export async function getPageSeoAsync(pathname: string, search = ''): Promise<SeoMetadata> {
+  const parsed = parseRoute(pathname, search);
+  if (parsed.view === 'blog-post' && parsed.slug) {
+    const { blogPosts } = await import('../data/blog');
+    return buildPageSeo(pathname, search, blogPosts);
+  }
+  return buildPageSeo(pathname, search);
 }

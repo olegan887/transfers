@@ -6,6 +6,7 @@
 
 const GOOGLE_ADS_ID = 'AW-17973746217';
 const GOOGLE_ADS_CONVERSION = 'AW-17973746217/CraTCN2Vs4wcEKm0xvpC';
+const GA4_ID = (((import.meta as any).env?.VITE_GA4_MEASUREMENT_ID as string | undefined) || '').trim();
 const CLARITY_ID = 'vzu4kcc9x2';
 const META_PIXEL_ID = '2782001655390125';
 
@@ -62,9 +63,12 @@ function injectExternalScripts(): void {
 
   const w = window as any;
 
-  // 1. Google Ads gtag.js
+  // 1. Google Ads + optional GA4 gtag.js
   w.gtag('js', new Date());
   w.gtag('config', GOOGLE_ADS_ID);
+  if (GA4_ID) {
+    w.gtag('config', GA4_ID);
+  }
   const gtagScript = document.createElement('script');
   gtagScript.async = true;
   gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`;
@@ -125,6 +129,44 @@ export function initDeferredAnalytics(): () => void {
   }
 
   return cleanup;
+}
+
+export function trackPageView(pagePath: string): void {
+  if (typeof window === 'undefined') return;
+  ensureStubs();
+  const w = window as any;
+  if (typeof w.gtag === 'function') {
+    w.gtag('event', 'page_view', {
+      page_path: pagePath,
+      page_location: window.location.href,
+      page_title: document.title,
+    });
+  }
+  if (typeof w.fbq === 'function') {
+    w.fbq('track', 'PageView');
+  }
+}
+
+export function reportContactClick(channel = 'whatsapp'): void {
+  ensureStubs();
+  const w = window as any;
+  if (typeof w.gtag_report_conversion === 'function') {
+    w.gtag_report_conversion();
+  }
+  if (typeof w.fbq === 'function') {
+    w.fbq('track', 'Contact', { content_name: channel });
+  }
+}
+
+export function reportLead(source = 'contact_form'): void {
+  ensureStubs();
+  const w = window as any;
+  if (typeof w.gtag_report_conversion === 'function') {
+    w.gtag_report_conversion();
+  }
+  if (typeof w.fbq === 'function') {
+    w.fbq('track', 'Lead', { content_name: source });
+  }
 }
 
 export function reportConversion(value?: number, currency = 'EUR'): void {

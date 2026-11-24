@@ -153,7 +153,8 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
                 alt={content.h1}
                 width={800}
                 height={600}
-                loading="lazy"
+                loading="eager"
+                fetchPriority="high"
                 decoding="async"
                 className="w-full h-64 lg:h-full object-cover"
               />

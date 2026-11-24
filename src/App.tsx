@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -7,22 +7,23 @@ import Features from './components/Features';
 import ContactForm from './components/ContactForm';
 import AirportFaqAndReviews from './components/AirportFaqAndReviews';
 import Footer from './components/Footer';
-import SuccessPage from './components/SuccessPage';
-import BlogList from './components/BlogList';
-import BlogPost from './components/BlogPost';
-import RouteLandingPage from './components/RouteLandingPage';
-import RoutesIndexPage from './components/RoutesIndexPage';
-import WidgetBuilderPage from './components/WidgetBuilderPage';
-import EmbedCalculator from './components/EmbedCalculator';
-import NotFoundPage from './components/NotFoundPage';
 import CookieConsent from './components/CookieConsent';
-import ExitIntentPopup from './components/ExitIntentPopup';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { DataProvider } from './context/DataContext';
 import { WHATSAPP_NUMBER, ENABLE_EXIT_INTENT_POPUP } from './config';
-import { initDeferredAnalytics, reportConversion } from './lib/analytics';
+import { initDeferredAnalytics, reportContactClick, trackPageView } from './lib/analytics';
 import { normalizePathname, parseRoute } from './lib/routing';
 import { useDocumentMeta } from './hooks/useDocumentMeta';
+
+const SuccessPage = lazy(() => import('./components/SuccessPage'));
+const BlogList = lazy(() => import('./components/BlogList'));
+const BlogPost = lazy(() => import('./components/BlogPost'));
+const RouteLandingPage = lazy(() => import('./components/RouteLandingPage'));
+const RoutesIndexPage = lazy(() => import('./components/RoutesIndexPage'));
+const WidgetBuilderPage = lazy(() => import('./components/WidgetBuilderPage'));
+const EmbedCalculator = lazy(() => import('./components/EmbedCalculator'));
+const NotFoundPage = lazy(() => import('./components/NotFoundPage'));
+const ExitIntentPopup = lazy(() => import('./components/ExitIntentPopup'));
 
 interface AppProps {
   initialPath?: string;
@@ -97,6 +98,15 @@ function AppContent({ initialPath, initialSearch }: AppProps) {
 
   useDocumentMeta(locationState.pathname, locationState.search);
 
+  const hasMountedRef = useRef(false);
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+    trackPageView(`${locationState.pathname}${locationState.search}`);
+  }, [locationState.pathname, locationState.search]);
+
   const [prefillRoute, setPrefillRoute] = useState({ from: '', to: '' });
 
   useEffect(() => {
@@ -111,31 +121,63 @@ function AppContent({ initialPath, initialSearch }: AppProps) {
   const parsed = parseRoute(locationState.pathname, locationState.search);
 
   if (parsed.view === 'success') {
-    return <SuccessPage />;
+    return (
+      <Suspense fallback={<div className="min-h-screen bg-white" />}>
+        <SuccessPage />
+      </Suspense>
+    );
   }
 
   if (parsed.view === 'embed') {
-    return <EmbedCalculator />;
+    return (
+      <Suspense fallback={<div className="min-h-screen bg-white" />}>
+        <EmbedCalculator />
+      </Suspense>
+    );
   }
 
   const renderContent = () => {
     if (parsed.view === 'widget') {
-      return <WidgetBuilderPage />;
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <WidgetBuilderPage />
+        </Suspense>
+      );
     }
     if (parsed.view === 'routes-index') {
-      return <RoutesIndexPage />;
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <RoutesIndexPage />
+        </Suspense>
+      );
     }
     if (parsed.view === 'route' && parsed.slug) {
-      return <RouteLandingPage slug={parsed.slug} />;
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <RouteLandingPage slug={parsed.slug} />
+        </Suspense>
+      );
     }
     if (parsed.view === 'blog-list') {
-      return <BlogList />;
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <BlogList />
+        </Suspense>
+      );
     }
     if (parsed.view === 'blog-post' && parsed.slug) {
-      return <BlogPost slug={parsed.slug} />;
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <BlogPost slug={parsed.slug} />
+        </Suspense>
+      );
     }
     if (parsed.view === 'not-found') {
-      return <NotFoundPage />;
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <NotFoundPage />
+        </Suspense>
+      );
     }
     return (
       <main>
@@ -160,7 +202,7 @@ function AppContent({ initialPath, initialSearch }: AppProps) {
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => {
-          reportConversion();
+          reportContactClick('whatsapp');
         }}
         className="fixed bottom-5 right-5 z-50 flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-150"
         aria-label="Chat on WhatsApp"
@@ -169,7 +211,11 @@ function AppContent({ initialPath, initialSearch }: AppProps) {
       </a>
 
       <CookieConsent />
-      {ENABLE_EXIT_INTENT_POPUP && <ExitIntentPopup />}
+      {ENABLE_EXIT_INTENT_POPUP && (
+        <Suspense fallback={null}>
+          <ExitIntentPopup />
+        </Suspense>
+      )}
     </div>
   );
 }

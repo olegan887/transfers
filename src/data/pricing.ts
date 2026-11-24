@@ -196,7 +196,7 @@ export const basePrices: Record<string, Record<string, number>> = {
     'paphos-city': 135,
     pfo: 140,
     'coral-bay': 150,
-    peyia: 155,
+    peyia: 160,
     polis: 180,
   },
   pfo: {
@@ -250,7 +250,7 @@ export const basePrices: Record<string, Record<string, number>> = {
     protaras: 200,
   },
   polis: {
-    lca: 200,
+    lca: 180,
     'larnaca-city': 200,
   },
 };
