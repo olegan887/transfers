@@ -20,6 +20,9 @@ const BlogList = lazy(() => import('./components/BlogList'));
 const BlogPost = lazy(() => import('./components/BlogPost'));
 const RouteLandingPage = lazy(() => import('./components/RouteLandingPage'));
 const RoutesIndexPage = lazy(() => import('./components/RoutesIndexPage'));
+const AboutPage = lazy(() => import('./components/AboutPage'));
+const ContactPage = lazy(() => import('./components/ContactPage'));
+const LegalPage = lazy(() => import('./components/LegalPage'));
 const WidgetBuilderPage = lazy(() => import('./components/WidgetBuilderPage'));
 const EmbedCalculator = lazy(() => import('./components/EmbedCalculator'));
 const NotFoundPage = lazy(() => import('./components/NotFoundPage'));
@@ -169,6 +172,34 @@ function AppContent({ initialPath, initialSearch }: AppProps) {
       return (
         <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
           <BlogPost slug={parsed.slug} />
+        </Suspense>
+      );
+    }
+    if (parsed.view === 'about') {
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <AboutPage />
+        </Suspense>
+      );
+    }
+    if (parsed.view === 'contact') {
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <ContactPage />
+        </Suspense>
+      );
+    }
+    if (parsed.view === 'privacy') {
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <LegalPage type="privacy" />
+        </Suspense>
+      );
+    }
+    if (parsed.view === 'terms') {
+      return (
+        <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+          <LegalPage type="terms" />
         </Suspense>
       );
     }

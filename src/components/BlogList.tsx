@@ -1,18 +1,19 @@
 import React from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { blogPosts } from '../data/blog';
-import { buildLocalizedPath } from '../lib/routing';
+import { buildLocalizedPath, isNoindexBlogSlug } from '../lib/routing';
 import { ArrowRight } from 'lucide-react';
 
 export default function BlogList() {
   const { language, t } = useLanguage();
   const homeHref = buildLocalizedPath('home', language);
 
-  const visiblePosts = blogPosts.filter((post) =>
-    post.supportedLanguages
+  const visiblePosts = blogPosts.filter((post) => {
+    if (isNoindexBlogSlug(post.slug)) return false;
+    return post.supportedLanguages
       ? post.supportedLanguages.includes(language)
-      : language === 'en' || language === 'ru'
-  );
+      : language === 'en' || language === 'ru';
+  });
 
   return (
     <main className="py-14 md:py-20 relative min-h-screen bg-white">

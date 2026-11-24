@@ -69,6 +69,9 @@ const content = `# Cyprus Airport Transfers (Limassol Base)
 - [Transfer Aeroporto Cipro — Home (IT)](${SITE_URL}/it/): Transfer privati a tariffa fissa da Limassol, Larnaca (LCA) e Paphos (PFO).
 - [All 30 Active Transfer Routes (EN)](${SITE_URL}/routes/): Filterable directory of all serviced airport and intercity routes with fixed EUR rates.
 - [All 30 Routes — DE / PL / FR / EL / IT / RU](${SITE_URL}/de/routes/): Localized route directories available under [DE](${SITE_URL}/de/routes/), [PL](${SITE_URL}/pl/routes/), [FR](${SITE_URL}/fr/routes/), [EL](${SITE_URL}/el/routes/), [IT](${SITE_URL}/it/routes/), and [RU](${SITE_URL}/ru/routes/).
+- [About Cyprus Airport Transfers](${SITE_URL}/about/): Limassol dispatch base, licensed sedan fleet, pricing rules & operational boundaries ([RU](${SITE_URL}/ru/about/) | [DE](${SITE_URL}/de/about/) | [PL](${SITE_URL}/pl/about/) | [FR](${SITE_URL}/fr/about/) | [EL](${SITE_URL}/el/about/) | [IT](${SITE_URL}/it/about/)).
+- [Contact 24/7 Dispatch](${SITE_URL}/contact/): WhatsApp (+357 96 867289), phone, email & custom 5+ passenger inquiries ([RU](${SITE_URL}/ru/contact/) | [DE](${SITE_URL}/de/contact/) | [PL](${SITE_URL}/pl/contact/) | [FR](${SITE_URL}/fr/contact/) | [EL](${SITE_URL}/el/contact/) | [IT](${SITE_URL}/it/contact/)).
+- [Privacy Policy](${SITE_URL}/privacy-policy/) & [Terms of Service](${SITE_URL}/terms/): Booking, 24-hour free cancellation & GDPR data policy.
 - [WhatsApp Dispatch (+357 96 867289)](https://wa.me/35796867289): Direct 24/7 booking support, child seats, and 5+ passenger inquiries.
 - [Free Website Calculator Widget (EN)](${SITE_URL}/widget/): Self-serve HTML iframe fare calculator in all 7 languages for Cyprus hotels, villas, and travel blogs.
 - [RSS 2.0 Feeds (EN / RU / DE / PL / FR / EL / IT)](${SITE_URL}/rss.xml): Automated syndication feeds for Cyprus travel guides and fixed transfer routes ([RU](${SITE_URL}/ru/rss.xml), [DE](${SITE_URL}/de/rss.xml), [PL](${SITE_URL}/pl/rss.xml), [FR](${SITE_URL}/fr/rss.xml), [EL](${SITE_URL}/el/rss.xml), [IT](${SITE_URL}/it/rss.xml)).
@@ -109,7 +112,7 @@ ${crossIslandRoutes.map(formatRouteLine).join('\n')}
 - [Cyprus Taxi & Transfer Price Guide](${SITE_URL}/blog/taxi-costs-in-cyprus/): Fixed EUR transfer rates, night tariff rules, and round-trip savings.
 - [Larnaca Airport (LCA) to Paphos Guide](${SITE_URL}/blog/larnaca-airport-to-paphos-transfer/): Route overview via Limassol (€135 fixed sedan rate).
 - [Private Transfer vs Local Taxi in Cyprus](${SITE_URL}/blog/private-transfer-vs-taxi-cyprus/): Why fixed pre-booked transfers beat airport rank meters.
-- [Paphos to Limassol Transfer Options](${SITE_URL}/blog/paphos-to-limassol-transfer-options/): Comparison of €75 private sedan vs intercity bus.
+- [How to Choose an Airport Transfer in Cyprus](${SITE_URL}/blog/how-to-choose-airport-transfer-cyprus/): Comparing fixed-price private transfers, flight tracking, and intercity buses.
 `;
 
 fs.writeFileSync(outPath, content, 'utf-8');

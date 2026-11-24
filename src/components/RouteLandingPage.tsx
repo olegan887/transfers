@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, CheckCircle2, Clock, MapPin, ChevronDown, Plane } from 'lucide-react';
 import { getAirportRouteBySlug, airportRoutes, getRouteContentForLanguage } from '../data/routes';
+import { getRouteEnrichment } from '../data/routeDetails';
 import { useLanguage } from '../i18n/LanguageContext';
 import { buildLocalizedPath } from '../lib/routing';
 import BookingWidget from './BookingWidget';
@@ -32,6 +33,8 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
   }
 
   const content = getRouteContentForLanguage(route, language);
+  const enrichment = getRouteEnrichment(route.slug, language);
+  const allFaqs = [...content.faqs, ...(enrichment?.extraFaqs || [])];
   const homeHref = buildLocalizedPath('home', language);
   const routesHref = buildLocalizedPath('routes-index', language);
   const returnPrice = Math.round(route.basePrice * 2 * 0.9);
@@ -163,6 +166,54 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
         </div>
       </section>
 
+      {/* Unique Route Enrichment (Top Commercial Routes) */}
+      {enrichment && (
+        <section className="py-14 bg-white border-b-4 border-black">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="max-w-4xl mb-8">
+              <h2 className="text-2xl md:text-3xl font-black text-black uppercase tracking-tight mb-4">
+                {enrichment.overviewHeading}
+              </h2>
+              <div className="space-y-4 text-gray-800 font-medium leading-relaxed text-base">
+                {enrichment.overviewParagraphs.map((paragraph, idx) => (
+                  <p key={idx}>{paragraph}</p>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-yellow-400 border-4 border-black p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+                <h3 className="text-lg font-black text-black uppercase tracking-tight mb-4">
+                  {enrichment.dropOffHeading}
+                </h3>
+                <ul className="space-y-2.5">
+                  {enrichment.dropOffAreas.map((area, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5 text-sm sm:text-base font-bold text-black">
+                      <MapPin className="w-4 h-4 shrink-0 mt-1 text-black" />
+                      <span>{area}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="bg-white border-4 border-black p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+                <h3 className="text-lg font-black text-black uppercase tracking-tight mb-4">
+                  {enrichment.tipsHeading}
+                </h3>
+                <ul className="space-y-3">
+                  {enrichment.tips.map((tip, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5 text-sm sm:text-base font-medium text-gray-800">
+                      <CheckCircle2 className="w-4 h-4 shrink-0 mt-1 text-black" />
+                      <span>{tip}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Route-Specific FAQ */}
       <section className="py-14 bg-white border-b-4 border-black">
         <div className="container mx-auto px-4 max-w-4xl">
@@ -171,7 +222,7 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
           </h2>
 
           <div className="space-y-4">
-            {content.faqs.map((faq, idx) => {
+            {allFaqs.map((faq, idx) => {
               const isOpen = openFaq === idx;
               return (
                 <div
@@ -191,11 +242,16 @@ export default function RouteLandingPage({ slug }: RouteLandingPageProps) {
                       }`}
                     />
                   </button>
-                  {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-gray-800 font-medium leading-relaxed border-t border-gray-200">
-                      {faq.a}
-                    </div>
-                  )}
+                  <div
+                    aria-hidden={!isOpen}
+                    className={
+                      isOpen
+                        ? 'px-5 pb-5 pt-1 text-gray-800 font-medium leading-relaxed border-t border-gray-200'
+                        : 'hidden'
+                    }
+                  >
+                    {faq.a}
+                  </div>
                 </div>
               );
             })}

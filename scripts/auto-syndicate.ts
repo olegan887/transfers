@@ -1,5 +1,6 @@
 import { airportRoutes } from '../src/data/routes';
 import { blogPosts } from '../src/data/blog';
+import { isNoindexBlogSlug } from '../src/lib/routing';
 
 const SITE_URL = 'https://cyprus-airport-transfer.co';
 
@@ -30,7 +31,9 @@ function buildPool(): SyndicationItem[] {
     highlightsRu: r.ru.highlights,
   }));
 
-  const blogPool: SyndicationItem[] = blogPosts.map((p) => ({
+  const blogPool: SyndicationItem[] = blogPosts
+    .filter((p) => !isNoindexBlogSlug(p.slug))
+    .map((p) => ({
     kind: 'blog',
     slug: p.slug,
     enTitle: p.title.en,

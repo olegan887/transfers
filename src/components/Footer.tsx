@@ -10,7 +10,7 @@ import {
   Language,
 } from '../lib/routing';
 import { airportRoutes } from '../data/routes';
-import LegalModal from './LegalModal';
+import { reportContactClick } from '../lib/analytics';
 import Logo from './Logo';
 
 interface FooterProps {
@@ -20,19 +20,10 @@ interface FooterProps {
 export default function Footer({ currentPath }: FooterProps = {}) {
   const { t, language, setLanguage } = useLanguage();
   const [year, setYear] = useState(2026);
-  const [legalModal, setLegalModal] = useState<{ isOpen: boolean; type: 'terms' | 'privacy' }>({
-    isOpen: false,
-    type: 'terms',
-  });
 
   useEffect(() => {
     setYear(new Date().getFullYear());
   }, []);
-
-  const openLegal = (e: React.MouseEvent, type: 'terms' | 'privacy') => {
-    e.preventDefault();
-    setLegalModal({ isOpen: true, type });
-  };
 
   const activePath = currentPath ?? (typeof window !== 'undefined' ? window.location.pathname : '/');
 
@@ -119,6 +110,22 @@ export default function Footer({ currentPath }: FooterProps = {}) {
               </li>
               <li>
                 <a
+                  href={buildLocalizedPath('about', language)}
+                  className="hover:text-yellow-600 transition-colors"
+                >
+                  {t('nav.about')}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={buildLocalizedPath('contact', language)}
+                  className="hover:text-yellow-600 transition-colors"
+                >
+                  {t('nav.contact')}
+                </a>
+              </li>
+              <li>
+                <a
                   href={buildLocalizedPath('widget', language)}
                   className="hover:text-yellow-600 transition-colors"
                 >
@@ -151,6 +158,7 @@ export default function Footer({ currentPath }: FooterProps = {}) {
                   href={`https://wa.me/${WHATSAPP_NUMBER}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => reportContactClick('whatsapp')}
                   className="flex items-center gap-2.5 hover:text-[#25D366] transition-colors"
                 >
                   <MessageCircle className="w-4 h-4 shrink-0" />
@@ -223,31 +231,21 @@ export default function Footer({ currentPath }: FooterProps = {}) {
             &copy; {year} Cyprus Airport Transfer .co. {t('footer.rights')}
           </p>
           <div className="flex gap-6">
-            <button
-              type="button"
-              onClick={(e) => openLegal(e, 'privacy')}
+            <a
+              href={buildLocalizedPath('privacy', language)}
               className="hover:text-yellow-600 transition-colors uppercase"
             >
               {t('footer.privacy')}
-            </button>
-            <button
-              type="button"
-              onClick={(e) => openLegal(e, 'terms')}
+            </a>
+            <a
+              href={buildLocalizedPath('terms', language)}
               className="hover:text-yellow-600 transition-colors uppercase"
             >
               {t('footer.terms')}
-            </button>
+            </a>
           </div>
         </div>
       </div>
-
-      {legalModal.isOpen && (
-        <LegalModal
-          isOpen={legalModal.isOpen}
-          type={legalModal.type}
-          onClose={() => setLegalModal({ ...legalModal, isOpen: false })}
-        />
-      )}
     </footer>
   );
 }

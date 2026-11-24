@@ -8,11 +8,23 @@ const __dirname = path.dirname(__filename);
 const blogFilePath = path.join(__dirname, 'src', 'data', 'blog.tsx');
 const flagshipBlogFilePath = path.join(__dirname, 'src', 'data', 'flagshipBlogPosts.tsx');
 const routesFilePath = path.join(__dirname, 'src', 'data', 'routes.ts');
+const routingFilePath = path.join(__dirname, 'src', 'lib', 'routing.ts');
 const sitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
 
 const blogContent = fs.readFileSync(blogFilePath, 'utf-8');
 const flagshipContent = fs.readFileSync(flagshipBlogFilePath, 'utf-8');
 const routesContent = fs.readFileSync(routesFilePath, 'utf-8');
+const routingContent = fs.readFileSync(routingFilePath, 'utf-8');
+
+const noindexMatch = routingContent.match(/NOINDEX_BLOG_SLUGS\s*=\s*\[([\s\S]*?)\]/);
+const noindexBlogSlugs = new Set();
+if (noindexMatch) {
+  const itemRegex = /['"]([^'"]+)['"]/g;
+  let itemMatch;
+  while ((itemMatch = itemRegex.exec(noindexMatch[1])) !== null) {
+    noindexBlogSlugs.add(itemMatch[1]);
+  }
+}
 
 const slugRegex = /slug:\s*['"]([^'"]+)['"]/g;
 const dateRegex = /date:\s*['"]([^'"]+)['"]/g;
@@ -38,6 +50,11 @@ while ((match = slugRegex.exec(blogContent)) !== null) {
 while ((match = dateRegex.exec(blogContent)) !== null) {
   legacyBlogDates.push(match[1]);
 }
+
+// Pair dates before filtering out noindex stubs so dates stay aligned
+const indexedLegacyArticles = legacyBlogSlugs
+  .map((slug, idx) => ({ slug, date: legacyBlogDates[idx] || today }))
+  .filter((item) => !noindexBlogSlugs.has(item.slug));
 
 const baseUrl = 'https://cyprus-airport-transfer.co';
 const today = new Date().toISOString().split('T')[0];
@@ -93,6 +110,12 @@ for (const slug of routeSlugs) {
   sitemap += buildMultiLangEntries(`/routes/${slug}`, CORE_LANGS, today, 'weekly', '0.9');
 }
 
+// Dedicated Trust & Legal Pages (7 core languages)
+sitemap += buildMultiLangEntries('/about', CORE_LANGS, today, 'monthly', '0.8');
+sitemap += buildMultiLangEntries('/contact', CORE_LANGS, today, 'monthly', '0.8');
+sitemap += buildMultiLangEntries('/privacy-policy', CORE_LANGS, today, 'yearly', '0.4');
+sitemap += buildMultiLangEntries('/terms', CORE_LANGS, today, 'yearly', '0.4');
+
 // Free Embeddable Calculator Widget Builder (7 core languages)
 sitemap += buildMultiLangEntries('/widget', CORE_LANGS, today, 'monthly', '0.7');
 
@@ -110,19 +133,23 @@ for (const article of flagshipArticles) {
   );
 }
 
-// Legacy Blog Articles (EN & RU only)
-for (let i = 0; i < legacyBlogSlugs.length; i++) {
-  const slug = legacyBlogSlugs[i];
-  const date = legacyBlogDates[i] || today;
-  sitemap += buildMultiLangEntries(`/blog/${slug}`, LEGACY_BLOG_LANGS, date, 'monthly', '0.7');
+// Indexed Legacy Blog Articles (EN & RU only)
+for (const article of indexedLegacyArticles) {
+  sitemap += buildMultiLangEntries(
+    `/blog/${article.slug}`,
+    LEGACY_BLOG_LANGS,
+    article.date,
+    'monthly',
+    '0.7'
+  );
 }
 
 sitemap += `</urlset>\n`;
 
 fs.writeFileSync(sitemapPath, sitemap);
-const totalCore = (3 + routeSlugs.length) * CORE_LANGS.length;
+const totalCore = (7 + routeSlugs.length) * CORE_LANGS.length;
 const totalFlagshipBlog = (1 + flagshipArticles.length) * CORE_LANGS.length;
-const totalLegacyBlog = legacyBlogSlugs.length * LEGACY_BLOG_LANGS.length;
+const totalLegacyBlog = indexedLegacyArticles.length * LEGACY_BLOG_LANGS.length;
 console.log(
   `Sitemap generated successfully! (${totalCore} core URLs + ${totalFlagshipBlog} 7-lang blog URLs + ${totalLegacyBlog} EN/RU legacy blog URLs = ${totalCore + totalFlagshipBlog + totalLegacyBlog} total URLs)`
 );

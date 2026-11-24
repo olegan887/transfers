@@ -1,4 +1,9 @@
-import { airportRoutes, getAirportRouteBySlug, getRouteContentForLanguage } from '../data/routes';
+import {
+  airportRoutes,
+  getAirportRouteBySlug,
+  getRouteContentForLanguage,
+  type RouteFaqItem,
+} from '../data/routes';
 import type { BlogPost } from '../data/blog';
 import { globalAirportFaqs } from '../data/seoContent';
 import { translations } from '../i18n/translations';
@@ -6,6 +11,7 @@ import {
   buildLocalizedPath,
   CORE_LANGUAGES,
   getAlternatePaths,
+  isNoindexBlogSlug,
   Language,
   parseRoute,
   SITE_URL,
@@ -65,6 +71,14 @@ interface LocalizedSeoCopy {
   blogListTitle: string;
   blogListDesc: string;
   blogName: string;
+  aboutTitle: string;
+  aboutDesc: string;
+  contactTitle: string;
+  contactDesc: string;
+  privacyTitle: string;
+  privacyDesc: string;
+  termsTitle: string;
+  termsDesc: string;
   blogNotFoundTitle: string;
   notFoundTitle: string;
   notFoundDesc: string;
@@ -96,6 +110,18 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     blogListDesc:
       'Helpful Cyprus travel guides: getting from Larnaca (LCA) and Paphos (PFO) airports, fixed transfer rates, night arrival rules, and resort comparisons.',
     blogName: 'Cyprus Airport Transfers Blog',
+    aboutTitle: 'About Us | Limassol Base & Fleet Standards — Cyprus Airport Transfers',
+    aboutDesc:
+      'Learn about our Limassol dispatch office (The Oval, Krinou 3), licensed Mercedes/Opel/Toyota sedans, fixed EUR tariffs, 24/7 flight tracking, and 30 active Cyprus routes.',
+    contactTitle: 'Contact 24/7 Limassol Dispatch | WhatsApp, Phone & Booking Support',
+    contactDesc:
+      'Contact Cyprus Airport Transfers 24/7 via WhatsApp (+357 96 867289), phone, or email for 5+ group quotes, child seats, flight changes, and Limassol pickup support.',
+    privacyTitle: 'Privacy Policy & GDPR Notice | Cyprus Airport Transfers',
+    privacyDesc:
+      'How Cyprus Airport Transfers collects, protects, and processes booking details and Stripe payments in compliance with EU/Cyprus GDPR standards.',
+    termsTitle: 'Terms of Service & Cancellation Policy | Cyprus Airport Transfers',
+    termsDesc:
+      'Booking terms, fixed EUR rates, +€10 night tariff (23:00–07:00), free 24-hour cancellation rules, and sedan luggage limits for Cyprus Airport Transfers.',
     blogNotFoundTitle: 'Article Not Found | Cyprus Airport Transfers',
     notFoundTitle: '404 — Page Not Found | Cyprus Airport Transfers',
     notFoundDesc: 'The requested page or transfer route could not be found.',
@@ -124,6 +150,18 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     blogListDesc:
       'Полезные гиды для туристов на Кипре: как добраться из аэропортов Ларнака и Пафос, ночной тариф, межгородские маршруты и сравнение с такси.',
     blogName: 'Блог Cyprus Airport Transfers',
+    aboutTitle: 'О компании | База в Лимассоле и автопарк — Cyprus Airport Transfers',
+    aboutDesc:
+      'Информация о диспетчерской службе в Лимассоле (The Oval, Krinou 3), автопарке седанов, фиксированных тарифах от €75, отслеживании рейсов 24/7 и 30 маршрутах по Кипру.',
+    contactTitle: 'Контакты 24/7 | WhatsApp, телефон и диспетчерская в Лимассоле',
+    contactDesc:
+      'Свяжитесь с Cyprus Airport Transfers круглосуточно по WhatsApp (+357 96 867289), телефону или email по вопросам групп от 5 человек, детских кресел и рейсов.',
+    privacyTitle: 'Политика конфиденциальности (GDPR) | Cyprus Airport Transfers',
+    privacyDesc:
+      'Правила обработки персональных данных бронирования и безопасных платежей Stripe в сервисе Cyprus Airport Transfers в соответствии с GDPR.',
+    termsTitle: 'Договор оферты и условия отмены | Cyprus Airport Transfers',
+    termsDesc:
+      'Условия заказа трансферов на Кипре: фиксированные цены, ночной тариф +€10 (23:00–07:00), бесплатная отмена за 24 часа и нормы багажа.',
     blogNotFoundTitle: 'Статья не найдена | Cyprus Airport Transfers',
     notFoundTitle: '404 — Страница не найдена | Cyprus Airport Transfers',
     notFoundDesc: 'Запрошенная страница или маршрут трансфера не найдены.',
@@ -152,6 +190,18 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     blogListDesc:
       'Aktuelle Reiseführer für Zypern: Festpreise ab Flughafen Larnaka (LCA) und Paphos (PFO) nach Limassol, Ayia Napa, Protaras & Regeln für Nachtankünfte.',
     blogName: 'Cyprus Airport Transfers Blog (DE)',
+    aboutTitle: 'Über uns | Basis Limassol & Flotte — Cyprus Airport Transfers',
+    aboutDesc:
+      'Alles über unseren Standort in Limassol (The Oval, Krinou 3), klimatisierte Limousinen, garantierte EUR-Festpreise, 24/7 Flugverfolgung und 30 aktive Strecken.',
+    contactTitle: 'Kontakt 24/7 Limassol | WhatsApp, Telefon & Support',
+    contactDesc:
+      'Erreichen Sie Cyprus Airport Transfers rund um die Uhr über WhatsApp (+357 96 867289), Telefon oder E-Mail für Gruppen ab 5 Personen, Kindersitze und Flug-Updates.',
+    privacyTitle: 'Datenschutzerklärung (DSGVO) | Cyprus Airport Transfers',
+    privacyDesc:
+      'Informationen zur DSGVO-konformen Verarbeitung von Buchungsdaten und sicheren Stripe-Zahlungen bei Cyprus Airport Transfers.',
+    termsTitle: 'Allgemeine Geschäftsbedingungen (AGB) | Cyprus Airport Transfers',
+    termsDesc:
+      'Buchungs- und Stornobedingungen: EUR-Festpreise, +€10 Nachttarif (23:00–07:00), kostenlose Stornierung bis 24 Std. vor Abholung und Gepäckgrenzen.',
     blogNotFoundTitle: 'Artikel nicht gefunden | Cyprus Airport Transfers',
     notFoundTitle: '404 — Seite nicht gefunden | Cyprus Airport Transfers',
     notFoundDesc: 'Die angeforderte Seite oder Transferstrecke wurde nicht gefunden.',
@@ -180,6 +230,18 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     blogListDesc:
       'Praktyczne przewodniki po Cyprze: dojazd z lotnisk Larnaka (LCA) i Pafos (PFO) do Limassol, Ayia Napa i Protaras, taryfa nocna oraz porównanie cen.',
     blogName: 'Blog Cyprus Airport Transfers (PL)',
+    aboutTitle: 'O nas | Baza w Limassol i flota — Cyprus Airport Transfers',
+    aboutDesc:
+      'Poznaj nasze biuro dyspozytorskie w Limassol (The Oval, Krinou 3), flotę sedanów, stałe ceny w EUR, śledzenie lotów 24/7 i 30 obsługiwanych tras na Cyprze.',
+    contactTitle: 'Kontakt 24/7 | WhatsApp, telefon i wsparcie z Limassol',
+    contactDesc:
+      'Skontaktuj się z Cyprus Airport Transfers przez WhatsApp (+357 96 867289), telefon lub e-mail w sprawie grup 5+, fotelików i zmian lotów.',
+    privacyTitle: 'Polityka prywatności (RODO) | Cyprus Airport Transfers',
+    privacyDesc:
+      'Zasady przetwarzania danych rezerwacji i bezpiecznych płatności Stripe w Cyprus Airport Transfers zgodnie z unijnym RODO.',
+    termsTitle: 'Regulamin świadczenia usług | Cyprus Airport Transfers',
+    termsDesc:
+      'Warunki rezerwacji i anulacji: stałe stawki EUR, taryfa nocna +€10 (23:00–07:00), darmowe odwołanie do 24 godz. i limity bagażu.',
     blogNotFoundTitle: 'Nie znaleziono artykułu | Cyprus Airport Transfers',
     notFoundTitle: '404 — Nie znaleziono strony | Cyprus Airport Transfers',
     notFoundDesc: 'Szukana strona lub trasa transferu nie została znaleziona.',
@@ -208,6 +270,18 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     blogListDesc:
       'Guides pratiques pour vos arrivées à Chypre : tarifs fixes depuis Larnaca (LCA) et Paphos (PFO) vers Limassol, Ayia Napa, Protaras et transferts de nuit.',
     blogName: 'Blog Cyprus Airport Transfers (FR)',
+    aboutTitle: 'À propos | Base de Limassol & Flotte — Cyprus Airport Transfers',
+    aboutDesc:
+      'Découvrez notre centre opérationnel à Limassol (The Oval, Krinou 3), nos berlines climatisées, tarifs fixes en EUR, suivi de vol 24/7 et nos 30 trajets actifs.',
+    contactTitle: 'Contact 24/7 | WhatsApp, téléphone & dispatch Limassol',
+    contactDesc:
+      'Contactez Cyprus Airport Transfers 24/7 via WhatsApp (+357 96 867289), téléphone ou e-mail pour groupes 5+, sièges auto et retards de vol.',
+    privacyTitle: 'Politique de confidentialité (RGPD) | Cyprus Airport Transfers',
+    privacyDesc:
+      'Traitement des données de réservation et sécurité des paiements Stripe chez Cyprus Airport Transfers conformément au RGPD européen.',
+    termsTitle: 'Conditions générales & Annulation | Cyprus Airport Transfers',
+    termsDesc:
+      'Modalités de réservation : tarifs fixes EUR, forfait nuit +10 € (23h00–07h00), annulation gratuite jusqu’à 24 h avant départ et capacité bagages.',
     blogNotFoundTitle: 'Article introuvable | Cyprus Airport Transfers',
     notFoundTitle: '404 — Page introuvable | Cyprus Airport Transfers',
     notFoundDesc: 'La page ou l’itinéraire de transfert demandé est introuvable.',
@@ -236,6 +310,18 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     blogListDesc:
       'Χρήσιμοι οδηγοί για Κύπρο: σταθερές τιμές από LCA και PFO προς Λεμεσό, Αγία Νάπα, Πρωταρά, Λευκωσία και κανόνες νυχτερινών αφίξεων.',
     blogName: 'Blog Cyprus Airport Transfers (EL)',
+    aboutTitle: 'Σχετικά με εμάς | Βάση Λεμεσού & Στόλος — Cyprus Airport Transfers',
+    aboutDesc:
+      'Γνωρίστε το γραφείο μας στη Λεμεσό (The Oval, Krinou 3), τον στόλο sedan, τις σταθερές χρεώσεις σε EUR, την παρακολούθηση πτήσεων 24/7 και τις 30 διαδρομές μας.',
+    contactTitle: 'Επικοινωνία 24/7 | WhatsApp, τηλέφωνο & βάση Λεμεσού',
+    contactDesc:
+      'Επικοινωνήστε με το Cyprus Airport Transfers όλο το 24ωρο στο WhatsApp (+357 96 867289), τηλεφωνικά ή μέσω email για παρέες 5+, παιδικά καθίσματα και πτήσεις.',
+    privacyTitle: 'Πολιτική Απορρήτου (GDPR) | Cyprus Airport Transfers',
+    privacyDesc:
+      'Πώς προστατεύουμε τα στοιχεία κράτησης και τις πληρωμές μέσω Stripe στο Cyprus Airport Transfers σύμφωνα με τον κανονισμό GDPR.',
+    termsTitle: 'Όροι Χρήσης & Πολιτική Ακύρωσης | Cyprus Airport Transfers',
+    termsDesc:
+      'Όροι κράτησης, σταθερές τιμές EUR, νυχτερινό τέλος +€10 (23:00–07:00), δωρεάν ακύρωση 24 ώρες πριν και όρια αποσκευών.',
     blogNotFoundTitle: 'Το άρθρο δεν βρέθηκε | Cyprus Airport Transfers',
     notFoundTitle: '404 — Η σελίδα δεν βρέθηκε | Cyprus Airport Transfers',
     notFoundDesc: 'Η σελίδα ή η διαδρομή μεταφοράς που ζητήσατε δεν βρέθηκε.',
@@ -264,6 +350,18 @@ const SEO_COPY: Record<Language, LocalizedSeoCopy> = {
     blogListDesc:
       'Guide pratiche per Cipro: tariffe fisse da Larnaca (LCA) e Paphos (PFO) a Limassol, Ayia Napa, Protaras, Nicosia e regole per arrivi notturni.',
     blogName: 'Blog Cyprus Airport Transfers (IT)',
+    aboutTitle: 'Chi siamo | Sede di Limassol & Flotta — Cyprus Airport Transfers',
+    aboutDesc:
+      'Scopri la nostra base operativa di Limassol (The Oval, Krinou 3), le berline climatizzate, le tariffe fisse EUR, il controllo voli 24/7 e le 30 tratte attive.',
+    contactTitle: 'Contatti 24/7 | WhatsApp, telefono e centrale Limassol',
+    contactDesc:
+      'Contatta Cyprus Airport Transfers 24/7 su WhatsApp (+357 96 867289), telefono o email per gruppi 5+, seggiolini e modifiche volo.',
+    privacyTitle: 'Privacy Policy & Informativa GDPR | Cyprus Airport Transfers',
+    privacyDesc:
+      'Come Cyprus Airport Transfers tutela i dati di prenotazione e i pagamenti sicuri con Stripe nel rispetto del regolamento europeo GDPR.',
+    termsTitle: 'Termini di servizio & Cancellazioni | Cyprus Airport Transfers',
+    termsDesc:
+      'Condizioni contrattuali: tariffe fisse EUR, supplemento notturno +€10 (23:00–07:00), cancellazione gratuita fino a 24 ore prima e limiti bagagli.',
     blogNotFoundTitle: 'Articolo non trovato | Cyprus Airport Transfers',
     notFoundTitle: '404 — Pagina non trovata | Cyprus Airport Transfers',
     notFoundDesc: 'La pagina o la tratta transfer richiesta non è stata trovata.',
@@ -284,6 +382,8 @@ function getBaseTaxiServiceSchema(lang: Language) {
     telephone: '+35796867289',
     email: 'info@cyprus-airport-transfer.co',
     priceRange: '€75 - €200',
+    currenciesAccepted: 'EUR',
+    paymentAccepted: 'Cash, Credit Card, Visa, Mastercard, Stripe',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'The Oval, Krinou 3, Agios Athanasios',
@@ -356,7 +456,12 @@ function buildLocaleAndFeedMeta(
   };
 }
 
-function buildPageSeo(pathname: string, search = '', loadedBlogPosts?: BlogPost[]): SeoMetadata {
+function buildPageSeo(
+  pathname: string,
+  search = '',
+  loadedBlogPosts?: BlogPost[],
+  extraRouteFaqs?: RouteFaqItem[]
+): SeoMetadata {
   const parsed = parseRoute(pathname, search);
   const { lang, view, slug } = parsed;
   const rawAlternates = getAlternatePaths(pathname, search);
@@ -481,6 +586,7 @@ function buildPageSeo(pathname: string, search = '', loadedBlogPosts?: BlogPost[
     const route = slug ? getAirportRouteBySlug(slug) : undefined;
     if (route) {
       const content = getRouteContentForLanguage(route, lang);
+      const combinedFaqs = [...content.faqs, ...(extraRouteFaqs || [])];
       const homeUrl = `${SITE_URL}${buildLocalizedPath('home', lang)}`;
       const routesUrl = `${SITE_URL}${buildLocalizedPath('routes-index', lang)}`;
       return {
@@ -515,7 +621,7 @@ function buildPageSeo(pathname: string, search = '', loadedBlogPosts?: BlogPost[
             },
             {
               '@type': 'FAQPage',
-              mainEntity: content.faqs.map((faq) => ({
+              mainEntity: combinedFaqs.map((faq) => ({
                 '@type': 'Question',
                 name: faq.q,
                 acceptedAnswer: {
@@ -656,6 +762,146 @@ function buildPageSeo(pathname: string, search = '', loadedBlogPosts?: BlogPost[
     };
   }
 
+  if (view === 'about') {
+    const homeUrl = `${SITE_URL}${buildLocalizedPath('home', lang)}`;
+    return {
+      lang,
+      title: copy.aboutTitle,
+      description: copy.aboutDesc,
+      canonicalUrl,
+      alternates,
+      xDefaultUrl,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      ...localeAndFeed,
+      robots: 'index, follow',
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@graph': [
+          getBaseTaxiServiceSchema(lang),
+          {
+            '@type': 'AboutPage',
+            name: copy.aboutTitle,
+            description: copy.aboutDesc,
+            url: canonicalUrl,
+            mainEntity: { '@id': `${SITE_URL}/#organization` },
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: trans.common.home,
+                item: homeUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: trans.nav.about,
+                item: canonicalUrl,
+              },
+            ],
+          },
+        ],
+      },
+    };
+  }
+
+  if (view === 'contact') {
+    const homeUrl = `${SITE_URL}${buildLocalizedPath('home', lang)}`;
+    return {
+      lang,
+      title: copy.contactTitle,
+      description: copy.contactDesc,
+      canonicalUrl,
+      alternates,
+      xDefaultUrl,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      ...localeAndFeed,
+      robots: 'index, follow',
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@graph': [
+          getBaseTaxiServiceSchema(lang),
+          {
+            '@type': 'ContactPage',
+            name: copy.contactTitle,
+            description: copy.contactDesc,
+            url: canonicalUrl,
+            mainEntity: { '@id': `${SITE_URL}/#organization` },
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: trans.common.home,
+                item: homeUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: trans.nav.contact,
+                item: canonicalUrl,
+              },
+            ],
+          },
+        ],
+      },
+    };
+  }
+
+  if (view === 'privacy' || view === 'terms') {
+    const homeUrl = `${SITE_URL}${buildLocalizedPath('home', lang)}`;
+    const isPrivacy = view === 'privacy';
+    const pageTitle = isPrivacy ? copy.privacyTitle : copy.termsTitle;
+    const pageDesc = isPrivacy ? copy.privacyDesc : copy.termsDesc;
+    const crumbName = isPrivacy ? trans.legal.privacyTitle : trans.legal.termsTitle;
+    return {
+      lang,
+      title: pageTitle,
+      description: pageDesc,
+      canonicalUrl,
+      alternates,
+      xDefaultUrl,
+      ogType: 'website',
+      ogImage: DEFAULT_OG_IMAGE,
+      ...localeAndFeed,
+      robots: 'index, follow',
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebPage',
+            name: pageTitle,
+            description: pageDesc,
+            url: canonicalUrl,
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: trans.common.home,
+                item: homeUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: crumbName,
+                item: canonicalUrl,
+              },
+            ],
+          },
+        ],
+      },
+    };
+  }
+
   if (view === 'blog-post' && slug) {
     const post = loadedBlogPosts?.find((p) => p.slug === slug);
     const activeLang: Language = post?.supportedLanguages?.includes(lang)
@@ -675,6 +921,23 @@ function buildPageSeo(pathname: string, search = '', loadedBlogPosts?: BlogPost[
       const postFaqs = post.faqs?.[activeLang] || [];
       const postImage = post.image.startsWith('http') ? post.image : `${SITE_URL}${post.image}`;
 
+      if (isNoindexBlogSlug(post.slug)) {
+        return {
+          lang: activeLang,
+          title: meta?.title || `${postTitle} | Cyprus Airport Transfers`,
+          description: meta?.description || postExcerpt,
+          canonicalUrl,
+          alternates: {},
+          xDefaultUrl: '',
+          ogType: 'article',
+          ogImage: postImage,
+          ...buildLocaleAndFeedMeta(activeLang, {}),
+          robots: 'noindex, follow',
+          jsonLd: null,
+        };
+      }
+
+      const aboutUrl = `${SITE_URL}${buildLocalizedPath('about', activeLang)}`;
       const graph: Record<string, any>[] = [
         {
           '@type': 'BlogPosting',
@@ -688,11 +951,13 @@ function buildPageSeo(pathname: string, search = '', loadedBlogPosts?: BlogPost[
           mainEntityOfPage: canonicalUrl,
           author: {
             '@type': 'Organization',
+            '@id': `${SITE_URL}/#organization`,
             name: 'Cyprus Airport Transfers',
-            url: `${SITE_URL}/`,
+            url: aboutUrl,
           },
           publisher: {
             '@type': 'Organization',
+            '@id': `${SITE_URL}/#organization`,
             name: 'Cyprus Airport Transfers',
             url: `${SITE_URL}/`,
             logo: RASTER_LOGO,
@@ -826,6 +1091,11 @@ export async function getPageSeoAsync(pathname: string, search = ''): Promise<Se
   if (parsed.view === 'blog-post' && parsed.slug) {
     const { blogPosts } = await import('../data/blog');
     return buildPageSeo(pathname, search, blogPosts);
+  }
+  if (parsed.view === 'route' && parsed.slug) {
+    const { getRouteEnrichment } = await import('../data/routeDetails');
+    const enrichment = getRouteEnrichment(parsed.slug, parsed.lang);
+    return buildPageSeo(pathname, search, undefined, enrichment?.extraFaqs);
   }
   return buildPageSeo(pathname, search);
 }

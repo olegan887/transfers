@@ -16,6 +16,8 @@ const BLOG_UI_COPY: Record<
     faqTitle: string;
     routesTitle: string;
     routesSubtitle: string;
+    bylinePrefix: string;
+    bylineTeam: string;
   }
 > = {
   en: {
@@ -23,42 +25,56 @@ const BLOG_UI_COPY: Record<
     faqTitle: 'Frequently Asked Questions',
     routesTitle: 'Book a Fixed-Price Cyprus Transfer (LCA, PFO & Limassol)',
     routesSubtitle: 'Choose a direct route below to view fixed prices and book online:',
+    bylinePrefix: 'Verified by',
+    bylineTeam: 'Cyprus Airport Transfers Dispatch Team (Limassol)',
   },
   ru: {
     notFound: 'Статья не найдена',
     faqTitle: 'Частые вопросы (FAQ)',
     routesTitle: 'Забронировать трансфер на Кипре (LCA, PFO и Лимассол)',
     routesSubtitle: 'Выберите популярный маршрут и зафиксируйте стоимость поездки онлайн:',
+    bylinePrefix: 'Подготовлено:',
+    bylineTeam: 'Диспетчерской службой Cyprus Airport Transfers (Лимассол)',
   },
   de: {
     notFound: 'Artikel nicht gefunden',
     faqTitle: 'Häufig gestellte Fragen (FAQ)',
     routesTitle: 'Zypern-Flughafentransfer zum Festpreis buchen (LCA, PFO & Limassol)',
     routesSubtitle: 'Wählen Sie eine direkte Strecke für Festpreise und Online-Buchung:',
+    bylinePrefix: 'Geprüft von',
+    bylineTeam: 'Cyprus Airport Transfers Dispo-Team (Limassol)',
   },
   pl: {
     notFound: 'Nie znaleziono artykułu',
     faqTitle: 'Najczęstsze pytania (FAQ)',
     routesTitle: 'Zarezerwuj transfer na Cyprze w stałej cenie (LCA, PFO i Limassol)',
     routesSubtitle: 'Wybierz popularną trasę poniżej, aby zobaczyć cenę i zarezerwować online:',
+    bylinePrefix: 'Sprawdzone przez',
+    bylineTeam: 'Zespół dyspozytorów Cyprus Airport Transfers (Limassol)',
   },
   fr: {
     notFound: 'Article introuvable',
     faqTitle: 'Questions fréquentes (FAQ)',
     routesTitle: 'Réserver un transfert à tarif fixe à Chypre (LCA, PFO & Limassol)',
     routesSubtitle: 'Sélectionnez un trajet direct pour consulter le tarif fixe et réserver :',
+    bylinePrefix: 'Rédigé et vérifié par',
+    bylineTeam: 'Équipe Dispatch Cyprus Airport Transfers (Limassol)',
   },
   el: {
     notFound: 'Το άρθρο δεν βρέθηκε',
     faqTitle: 'Συχνές ερωτήσεις (FAQ)',
     routesTitle: 'Κράτηση μεταφοράς σταθερής τιμής στην Κύπρο (LCA, PFO & Λεμεσός)',
     routesSubtitle: 'Επιλέξτε μια απευθείας διαδρομή παρακάτω για τιμή και online κράτηση:',
+    bylinePrefix: 'Επιμέλεια:',
+    bylineTeam: 'Ομάδα Συντονισμού Cyprus Airport Transfers (Λεμεσός)',
   },
   it: {
     notFound: 'Articolo non trovato',
     faqTitle: 'Domande frequenti (FAQ)',
     routesTitle: 'Prenota un transfer a Cipro a prezzo fisso (LCA, PFO & Limassol)',
     routesSubtitle: 'Scegli una tratta diretta per visualizzare il prezzo fisso e prenotare online:',
+    bylinePrefix: 'A cura di',
+    bylineTeam: 'Team Operativo Cyprus Airport Transfers (Limassol)',
   },
 };
 
@@ -126,9 +142,21 @@ export default function BlogPost({ slug }: BlogPostProps) {
         </a>
 
         <header className="mb-10">
-          <div className="flex items-center gap-2 text-gray-700 font-bold text-sm mb-4 tabular-nums">
-            <Calendar className="w-4 h-4 text-black" />
-            <time dateTime={post.date}>{post.date}</time>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-gray-700 font-bold text-sm mb-4">
+            <span className="inline-flex items-center gap-2 tabular-nums">
+              <Calendar className="w-4 h-4 text-black" />
+              <time dateTime={post.date}>{post.date}</time>
+            </span>
+            <span aria-hidden="true" className="text-gray-400">·</span>
+            <span>
+              {ui.bylinePrefix}{' '}
+              <a
+                href={buildLocalizedPath('about', activeLang)}
+                className="text-black underline hover:text-yellow-600"
+              >
+                {ui.bylineTeam}
+              </a>
+            </span>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-black mb-6 leading-tight tracking-tight uppercase">
             {postTitle}
@@ -180,11 +208,16 @@ export default function BlogPost({ slug }: BlogPostProps) {
                         }`}
                       />
                     </button>
-                    {isOpen && (
-                      <div className="px-5 pb-4 pt-2 border-t-2 border-black text-gray-800 text-sm sm:text-base font-medium leading-relaxed">
-                        {faq.a}
-                      </div>
-                    )}
+                    <div
+                      aria-hidden={!isOpen}
+                      className={
+                        isOpen
+                          ? 'px-5 pb-4 pt-2 border-t-2 border-black text-gray-800 text-sm sm:text-base font-medium leading-relaxed'
+                          : 'hidden'
+                      }
+                    >
+                      {faq.a}
+                    </div>
                   </div>
                 );
               })}

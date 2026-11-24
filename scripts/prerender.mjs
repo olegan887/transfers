@@ -215,6 +215,10 @@ async function runPrerender() {
     // Core site in 7 languages: en, ru, de, pl, fr, el, it
     ...CORE_LANGS.map((l) => (l === 'en' ? '/' : `/${l}/`)),
     ...CORE_LANGS.map((l) => (l === 'en' ? '/routes/' : `/${l}/routes/`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/about/' : `/${l}/about/`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/contact/' : `/${l}/contact/`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/privacy-policy/' : `/${l}/privacy-policy/`)),
+    ...CORE_LANGS.map((l) => (l === 'en' ? '/terms/' : `/${l}/terms/`)),
     ...CORE_LANGS.map((l) => (l === 'en' ? '/widget/' : `/${l}/widget/`)),
     ...CORE_LANGS.map((l) => (l === 'en' ? '/embed/' : `/${l}/embed/`)),
     ...CORE_LANGS.map((l) => (l === 'en' ? '/success/' : `/${l}/success/`)),

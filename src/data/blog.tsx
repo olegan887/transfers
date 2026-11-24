@@ -807,41 +807,64 @@ const legacyBlogPosts: BlogPost[] = [
       ru: 'Сколько стоит такси на Кипре? Гид по ценам 2026 года'
     },
     excerpt: {
-      en: 'Understand taxi tariffs, airport transfer costs, and how to avoid overpaying for transportation during your holiday in Cyprus.',
-      ru: 'Разберитесь в тарифах на такси, стоимости трансферов из аэропорта и узнайте, как не переплачивать за транспорт во время отпуска на Кипре.'
+      en: 'Compare Cyprus taximeter tariffs with fixed 2026 private sedan transfer prices from Larnaca (LCA), Paphos (PFO), and Limassol, plus night-rate and round-trip rules.',
+      ru: 'Сравнение официальных счётчиков такси на Кипре с фиксированными тарифами 2026 года из Ларнаки (LCA), Пафоса (PFO) и Лимассола, правила ночного тарифа и скидки −10%.'
     },
     content: {
       en: (
         <>
-          <p>Budgeting for transportation is an important part of planning your Cyprus holiday. While public buses are cheap, they are often infrequent and don't service all areas. Taxis and private transfers are the most convenient ways to get around. Here is what you need to know about pricing in 2026.</p>
-          <h2>Official Taxi Tariffs</h2>
-          <p>Urban taxis in Cyprus are required by law to use taximeters. The rates are strictly regulated by the government and are divided into two tariffs:</p>
+          <p>Knowing how taxi fares are calculated before you land in Cyprus helps you avoid surprise surcharges at the arrivals rank. Across the island, licensed urban taxis use government-regulated taximeters, whereas pre-booked private transfers lock in one transparent price per vehicle before takeoff.</p>
+
+          <h2>1. Official Cyprus Taximeter Tariffs (Day vs. Night)</h2>
+          <p>Standard rank taxis calculate fares by flag fall, distance, waiting time, and extras. Regulated street taxi charges typically follow two bands:</p>
           <ul>
-            <li><strong>Tariff 1 (Daytime: 06:00 - 20:30):</strong> Initial charge of ~€3.80, plus ~€0.95 per kilometer.</li>
-            <li><strong>Tariff 2 (Nighttime: 20:30 - 06:00):</strong> Initial charge of ~€4.80, plus ~€1.15 per kilometer.</li>
+            <li><strong>Tariff 1 (Daytime, 06:00–20:30):</strong> Base flag fall of ~€3.80 plus ~€0.95 per kilometer during smooth traffic.</li>
+            <li><strong>Tariff 2 (Nighttime, 20:30–06:00):</strong> Higher flag fall of ~€4.80 plus ~€1.15 per kilometer for evening and early-morning departures.</li>
+            <li><strong>Common Add-ons:</strong> Extra charges often apply for suitcases over 12 kg, public holidays, airport rank queues, and highway slowdowns.</li>
           </ul>
-          <p><em>Note: Extra charges apply for luggage over 12kg, waiting time, and travel on public holidays.</em></p>
-          <h2>Airport Transfer Costs vs. Metered Taxis</h2>
-          <p>Taking a metered taxi directly from the airport rank can be unpredictable. If there is heavy traffic or if your flight lands during the night tariff period, the cost can escalate quickly. Furthermore, intercity taxi rides (e.g., Larnaca to Paphos) are often negotiated rather than metered, which can lead to overcharging if you don't know the standard rates.</p>
-          <h2>1. Private Transfer (Best Value — Fixed €75)</h2>
-          <p>Our <a href="/routes/limassol-to-paphos/">Limassol ↔ Paphos private transfer</a> (and <a href="/routes/paphos-airport-to-limassol/">Paphos Airport PFO ↔ Limassol</a>) costs a fixed <strong>€75 per sedan</strong> (up to 4 passengers &amp; 3 bags) and takes ~45 minutes door to door along the A6 highway—especially cost-effective for 2–4 travelers.</p>
-          <h2>2. Intercity Bus</h2>
-          <p>The "Green Buses" run between the main bus stations in Paphos and Limassol. It is the cheapest option per person, but requires getting to the station and managing luggage transfers.</p>
-          <h2>3. Shared Taxi (Travel Express)</h2>
-          <p>A middle-ground option that picks up several passengers. Cheaper per seat than a private car, but less flexible with pickup times and direct hotel stops.</p>
-          <p><strong>Book with us:</strong> Lock in our fixed <strong>€75</strong> rate for <a href="/routes/limassol-to-paphos/">Paphos ↔ Limassol</a> or <a href="/routes/paphos-airport-to-limassol/">Paphos Airport ↔ Limassol</a> online 24/7.</p>
+          <p>Because traffic delays, coastal detours, or luggage surcharges push metered totals higher, an airport rank taxi from Larnaca or Paphos frequently costs more than travelers expect—especially after dark.</p>
+
+          <h2>2. Fixed-Price Cyprus Airport &amp; Intercity Sedan Rates (2026)</h2>
+          <p>With our Limassol-based private transfer fleet (Mercedes E-Class, Opel Insignia, and Toyota Camry sedans for up to 4 passengers and 3 suitcases), you know the exact total upfront before entering the arrivals hall:</p>
+          <ul>
+            <li><a href="/routes/larnaca-airport-to-limassol/">Larnaca Airport (LCA) ↔ Limassol</a>: <strong>€75</strong> (~50 min, 67 km via A5 &amp; A1)</li>
+            <li><a href="/routes/paphos-airport-to-limassol/">Paphos Airport (PFO) ↔ Limassol</a>: <strong>€75</strong> (~45 min, 63 km via A6)</li>
+            <li><a href="/routes/larnaca-airport-to-paphos/">Larnaca Airport (LCA) ↔ Paphos</a>: <strong>€135</strong> (~90 min, 135 km via Limassol)</li>
+            <li><a href="/routes/paphos-airport-to-larnaca-city/">Paphos Airport (PFO) ↔ Larnaca City</a>: <strong>€135</strong> (~90 min, 132 km via Limassol)</li>
+            <li><a href="/routes/paphos-airport-to-nicosia/">Paphos Airport (PFO) ↔ Nicosia</a>: <strong>€150</strong> (~100 min, 145 km via A6 &amp; A1)</li>
+            <li><a href="/routes/paphos-airport-to-ayia-napa/">Paphos Airport (PFO) ↔ Ayia Napa</a>: <strong>€180</strong> (~120 min, 175 km direct highway)</li>
+          </ul>
+
+          <h2>3. Night Tariff, Round-Trip Discount &amp; Deposit Rules</h2>
+          <p>Unlike taximeters that compound per-kilometer night rates, our overnight flights between <strong>23:00 and 07:00</strong> add only a flat <strong>+€10</strong> night tariff regardless of route distance. Booking an outbound and return trip together automatically unlocks <strong>10% off the round-trip booking</strong>, and you can reserve with either a <strong>€20 Stripe deposit</strong> (paying the balance to the driver) or full online settlement with free cancellation up to 24 hours prior. Need room for 5+ passengers? Message us on WhatsApp in advance for a custom quote.</p>
         </>
       ),
       ru: (
         <>
-          <p>Маршрут между Пафосом и Лимассолом — один из самых востребованных на острове. Независимо от того, переезжаете ли вы между отелями или прилетаете в аэропорт, важно выбрать оптимальный способ поездки.</p>
-          <h2>1. Индивидуальный трансфер (Лучший выбор — фиксированно €75)</h2>
-          <p>Частный <a href="/ru/routes/limassol-to-paphos/">трансфер Лимассол ↔ Пафос</a> (как и <a href="/ru/routes/paphos-airport-to-limassol/">Аэропорт Пафос PFO ↔ Лимассол</a>) стоит фиксированные <strong>€75 за весь седан</strong> (до 4 человек и 3 чемоданов) и занимает около 45 минут по трассе A6 от двери до двери.</p>
-          <h2>2. Междугородний автобус</h2>
-          <p>"Зеленые автобусы" курсируют между главными автостанциями Пафоса и Лимассола. Это самый бюджетный вариант для одного, но нужно самостоятельно добираться до остановок с багажом.</p>
-          <h2>3. Маршрутное такси (Travel Express)</h2>
-          <p>Промежуточный вариант, который собирает нескольких пассажиров по городу. Дешевле индивидуальной машины на 1 человека, но менее гибко по времени и адресу подачи.</p>
-          <p><strong>Забронируйте онлайн:</strong> Фиксированный тариф <strong>€75</strong> на <a href="/ru/routes/limassol-to-paphos/">Пафос ↔ Лимассол</a> или <a href="/ru/routes/paphos-airport-to-limassol/">аэропорт Пафос (PFO) ↔ Лимассол</a> с круглосуточной подачей.</p>
+          <p>Перед прилётом на Кипр важно понимать, как формируется цена поездки. Официальные городские такси у терминалов работают по государственным счётчикам, где итоговая сумма зависит от времени суток, пробок и багажа. Предварительный индивидуальный трансфер фиксирует финальную стоимость за всю машину ещё до вылета.</p>
+
+          <h2>1. Официальные тарифы счётчиков такси на Кипре (Тариф 1 и Тариф 2)</h2>
+          <p>Лицензированные уличные такси на Кипре используют два регулируемых тарифа:</p>
+          <ul>
+            <li><strong>Тариф 1 (дневной, 06:00–20:30):</strong> посадка около €3.80 и примерно €0.95 за каждый километр пути.</li>
+            <li><strong>Тариф 2 (ночной, 20:30–06:00):</strong> посадка около €4.80 и примерно €1.15 за километр, что заметно увеличивает чек на длинных перегонах.</li>
+            <li><strong>Дополнительные надбавки:</strong> доплаты за багаж тяжелее 12 кг, ожидание в пробках, праздничные дни и подачу со стоянки аэропорта.</li>
+          </ul>
+          <p>На междугородних дистанциях вроде переезда между Ларнакой, Лимассолом и Пафосом поездка по счётчику ночью или в пиковый сезон нередко обходится ощутимо дороже заранее зафиксированного трансфера.</p>
+
+          <h2>2. Фиксированные цены на трансферы из аэропортов и по Кипру (2026)</h2>
+          <p>Наша служба с базой в Лимассоле работает на комфортных седанах Mercedes E-Class, Opel Insignia и Toyota Camry (до 4 пассажиров и 3 чемоданов). Актуальные фиксированные тарифы за весь автомобиль в одну сторону:</p>
+          <ul>
+            <li><a href="/ru/routes/larnaca-airport-to-limassol/">Аэропорт Ларнака (LCA) ↔ Лимассол</a>: <strong>€75</strong> (~50 мин, 67 км)</li>
+            <li><a href="/ru/routes/paphos-airport-to-limassol/">Аэропорт Пафос (PFO) ↔ Лимассол</a>: <strong>€75</strong> (~45 мин, 63 км)</li>
+            <li><a href="/ru/routes/larnaca-airport-to-paphos/">Аэропорт Ларнака (LCA) ↔ Пафос</a>: <strong>€135</strong> (~90 мин, 135 км через Лимассол)</li>
+            <li><a href="/ru/routes/paphos-airport-to-larnaca-city/">Аэропорт Пафос (PFO) ↔ Ларнака (город)</a>: <strong>€135</strong> (~90 мин, 132 км)</li>
+            <li><a href="/ru/routes/paphos-airport-to-nicosia/">Аэропорт Пафос (PFO) ↔ Никосия</a>: <strong>€150</strong> (~100 мин, 145 км)</li>
+            <li><a href="/ru/routes/paphos-airport-to-ayia-napa/">Аэропорт Пафос (PFO) ↔ Айя-Напа</a>: <strong>€180</strong> (~120 мин, 175 км)</li>
+          </ul>
+
+          <h2>3. Ночной тариф, скидка туда-обратно и условия оплаты</h2>
+          <p>В отличие от счётчика, где ночной коэффициент умножает каждый километр, на ночные рейсы с <strong>23:00 до 07:00</strong> у нас действует единая доплата <strong>+€10</strong> за всю поездку независимо от расстояния. При бронировании маршрута «туда и обратно» автоматически применяется <strong>скидка 10% на обратный путь</strong>. Для подтверждения можно оплатить <strong>депозит €20 через Stripe</strong> (остаток — водителю при встрече) или внести всю сумму онлайн; отмена за 24 часа бесплатна. Для групп от 5 пассажиров просто напишите нам в WhatsApp заранее.</p>
         </>
       )
     }

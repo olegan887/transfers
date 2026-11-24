@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { blogPosts } from '../src/data/blog';
 import { airportRoutes, getRouteContentForLanguage } from '../src/data/routes';
-import { CORE_LANGUAGES, Language, SITE_URL } from '../src/lib/routing';
+import { CORE_LANGUAGES, isNoindexBlogSlug, Language, SITE_URL } from '../src/lib/routing';
 
 const publicDir = path.resolve(process.cwd(), 'public');
 
@@ -151,11 +151,12 @@ function buildItems(lang: Language): FeedItem[] {
   const prefix = lang === 'en' ? '' : `/${lang}`;
   const meta = FEED_META[lang];
 
-  const filteredPosts = blogPosts.filter((post) =>
-    post.supportedLanguages
+  const filteredPosts = blogPosts.filter((post) => {
+    if (isNoindexBlogSlug(post.slug)) return false;
+    return post.supportedLanguages
       ? post.supportedLanguages.includes(lang)
-      : lang === 'en' || lang === 'ru'
-  );
+      : lang === 'en' || lang === 'ru';
+  });
 
   const blogItems: FeedItem[] = filteredPosts.map((post) => {
     const url = `${SITE_URL}${prefix}/blog/${post.slug}/?utm_source=rss&utm_medium=syndication`;

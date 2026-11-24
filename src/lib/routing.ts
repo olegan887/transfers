@@ -9,6 +9,32 @@ export const MULTILINGUAL_BLOG_SLUGS = [
   'cyprus-night-airport-transfer-flight-delays-guide',
 ] as const;
 
+export const NOINDEX_BLOG_SLUGS = [
+  'driving-in-cyprus-tips',
+  'cyprus-for-digital-nomads',
+  'best-seafood-restaurants-paphos',
+  'shopping-in-cyprus-guide',
+  'cyprus-nightlife-guide',
+  'akamas-peninsula-adventure-guide',
+  'lefkara-village-guide',
+  'cyprus-for-couples-romantic-spots',
+  'golfing-in-cyprus-best-courses',
+  'cyprus-history-overview',
+  'traveling-to-cyprus-in-winter-guide',
+  'cyprus-festivals-events-2026',
+  'best-spas-in-cyprus-guide',
+  'cyprus-for-solo-travelers-guide',
+  'scuba-diving-cyprus-zenobia-wreck',
+  'cyprus-real-estate-for-tourists-guide',
+  'public-transport-in-cyprus-guide',
+  'hidden-gems-of-cyprus-guide',
+] as const;
+
+export function isNoindexBlogSlug(slug?: string): boolean {
+  if (!slug) return false;
+  return (NOINDEX_BLOG_SLUGS as readonly string[]).includes(slug);
+}
+
 export const LANGUAGE_LABELS: Record<Language, { code: string; native: string; bcp47: string }> = {
   en: { code: 'EN', native: 'English', bcp47: 'en-GB' },
   ru: { code: 'RU', native: 'Русский', bcp47: 'ru-RU' },
@@ -25,6 +51,10 @@ export type RouteView =
   | 'route'
   | 'blog-list'
   | 'blog-post'
+  | 'about'
+  | 'contact'
+  | 'privacy'
+  | 'terms'
   | 'widget'
   | 'embed'
   | 'success'
@@ -92,6 +122,22 @@ export function parseRoute(pathname: string, search = ''): ParsedRoute {
 
   if (subPath === '/embed') {
     return { lang: detectedLang, view: 'embed', cleanPath: `${prefix}/embed/` };
+  }
+
+  if (subPath === '/about') {
+    return { lang: detectedLang, view: 'about', cleanPath: `${prefix}/about/` };
+  }
+
+  if (subPath === '/contact') {
+    return { lang: detectedLang, view: 'contact', cleanPath: `${prefix}/contact/` };
+  }
+
+  if (subPath === '/privacy-policy') {
+    return { lang: detectedLang, view: 'privacy', cleanPath: `${prefix}/privacy-policy/` };
+  }
+
+  if (subPath === '/terms') {
+    return { lang: detectedLang, view: 'terms', cleanPath: `${prefix}/terms/` };
   }
 
   if (subPath === '/routes') {
@@ -172,6 +218,14 @@ export function buildLocalizedPath(view: RouteView, lang: Language, slug?: strin
       return `${prefix}/blog/`;
     case 'blog-post':
       return slug ? `${prefix}/blog/${slug}/` : `${prefix}/blog/`;
+    case 'about':
+      return `${prefix}/about/`;
+    case 'contact':
+      return `${prefix}/contact/`;
+    case 'privacy':
+      return `${prefix}/privacy-policy/`;
+    case 'terms':
+      return `${prefix}/terms/`;
     case 'widget':
       return `${prefix}/widget/`;
     case 'embed':
@@ -190,7 +244,8 @@ export function getAlternatePaths(
   if (
     parsed.view === 'not-found' ||
     parsed.view === 'embed' ||
-    parsed.view === 'success'
+    parsed.view === 'success' ||
+    (parsed.view === 'blog-post' && isNoindexBlogSlug(parsed.slug))
   ) {
     return {};
   }

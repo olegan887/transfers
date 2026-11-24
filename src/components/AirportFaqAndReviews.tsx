@@ -98,11 +98,16 @@ export default function AirportFaqAndReviews() {
                       }`}
                     />
                   </button>
-                  {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-gray-800 font-medium leading-relaxed border-t border-gray-200">
-                      {faq.a[language] || faq.a.en}
-                    </div>
-                  )}
+                  <div
+                    aria-hidden={!isOpen}
+                    className={
+                      isOpen
+                        ? 'px-5 pb-5 pt-1 text-gray-800 font-medium leading-relaxed border-t border-gray-200'
+                        : 'hidden'
+                    }
+                  >
+                    {faq.a[language] || faq.a.en}
+                  </div>
                 </div>
               );
             })}

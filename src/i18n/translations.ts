@@ -7,7 +7,9 @@ const baseEn = {
     destinations: 'Destinations',
     routes: 'All Routes',
     features: 'Features',
+    about: 'About',
     blog: 'Blog',
+    contact: 'Contact',
     widget: 'Free Route Widget',
   },
   hero: {
@@ -261,7 +263,9 @@ export const translations: Record<Language, TranslationSchema> = {
       destinations: 'Направления',
       routes: 'Все маршруты',
       features: 'Преимущества',
+      about: 'О нас',
       blog: 'Блог',
+      contact: 'Контакты',
       widget: 'Виджет для сайтов',
     },
     hero: {
@@ -508,7 +512,9 @@ export const translations: Record<Language, TranslationSchema> = {
       destinations: 'Ziele',
       routes: 'Alle Strecken',
       features: 'Vorteile',
+      about: 'Über uns',
       blog: 'Blog',
+      contact: 'Kontakt',
       widget: 'Website-Widget',
     },
     hero: {
@@ -755,7 +761,9 @@ export const translations: Record<Language, TranslationSchema> = {
       destinations: 'Kierunki',
       routes: 'Wszystkie trasy',
       features: 'Zalety',
+      about: 'O nas',
       blog: 'Blog',
+      contact: 'Kontakt',
       widget: 'Widżet na stronę',
     },
     hero: {
@@ -1000,7 +1008,9 @@ export const translations: Record<Language, TranslationSchema> = {
       destinations: 'Destinations',
       routes: 'Tous les trajets',
       features: 'Avantages',
+      about: 'À propos',
       blog: 'Blog',
+      contact: 'Contact',
       widget: 'Widget gratuit',
     },
     hero: {
@@ -1245,7 +1255,9 @@ export const translations: Record<Language, TranslationSchema> = {
       destinations: 'Προορισμοί',
       routes: 'Όλες οι διαδρομές',
       features: 'Πλεονεκτήματα',
+      about: 'Σχετικά',
       blog: 'Blog',
+      contact: 'Επικοινωνία',
       widget: 'Δωρεάν Widget',
     },
     hero: {
@@ -1490,7 +1502,9 @@ export const translations: Record<Language, TranslationSchema> = {
       destinations: 'Destinazioni',
       routes: 'Tutte le tratte',
       features: 'Vantaggi',
+      about: 'Chi siamo',
       blog: 'Blog',
+      contact: 'Contatti',
       widget: 'Widget gratuito',
     },
     hero: {

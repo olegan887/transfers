@@ -81,8 +81,9 @@ export default function Header({ currentPath: propPath }: HeaderProps = {}) {
   const homeHref = buildLocalizedPath('home', language);
   const routesHref = buildLocalizedPath('routes-index', language);
   const blogHref = buildLocalizedPath('blog-list', language);
+  const aboutHref = buildLocalizedPath('about', language);
+  const contactHref = buildLocalizedPath('contact', language);
   const destinationsHref = `${homeHref}#destinations`;
-  const featuresHref = `${homeHref}#features`;
 
   return (
     <>
@@ -120,16 +121,22 @@ export default function Header({ currentPath: propPath }: HeaderProps = {}) {
               {t('nav.routes')}
             </a>
             <a
-              href={featuresHref}
+              href={aboutHref}
               className="text-sm font-bold text-black hover:text-yellow-600 transition-colors whitespace-nowrap shrink-0"
             >
-              {t('nav.features')}
+              {t('nav.about')}
             </a>
             <a
               href={blogHref}
               className="text-sm font-bold text-black hover:text-yellow-600 transition-colors whitespace-nowrap shrink-0"
             >
               {t('nav.blog')}
+            </a>
+            <a
+              href={contactHref}
+              className="text-sm font-bold text-black hover:text-yellow-600 transition-colors whitespace-nowrap shrink-0"
+            >
+              {t('nav.contact')}
             </a>
 
             <div className="flex items-center gap-3 ml-1 pl-4 border-l-2 border-black shrink-0">
@@ -251,11 +258,11 @@ export default function Header({ currentPath: propPath }: HeaderProps = {}) {
                 {t('nav.routes')}
               </a>
               <a
-                href={featuresHref}
+                href={aboutHref}
                 className="py-3 px-4 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {t('nav.features')}
+                {t('nav.about')}
               </a>
               <a
                 href={blogHref}
@@ -263,6 +270,13 @@ export default function Header({ currentPath: propPath }: HeaderProps = {}) {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t('nav.blog')}
+              </a>
+              <a
+                href={contactHref}
+                className="py-3 px-4 text-black hover:bg-yellow-100 rounded-xl transition-colors font-bold"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t('nav.contact')}
               </a>
 
               {/* Mobile 7-Language Selector Grid */}
